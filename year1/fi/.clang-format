@@ -1,0 +1,15 @@
+BasedOnStyle: Google
+IndentWidth: 4
+TabWidth: 4
+ColumnLimit: 100
+#AlignConsecutiveAssignments: true
+#AlignConsecutiveMacros: true
+#SpacesInContainerLiterals: true
+#AlignAfterOpenBracket: Align
+#AllowAllArgumentsOnNextLine: false
+#AllowShortLoopsOnASingleLine: true
+#Cpp11BracedListStyle: false
+#AllowAllParametersOfDeclarationOnNextLine: false
+#AllowShortBlocksOnASingleLine: Always
+#AllowShortIfStatementsOnASingleLine: WithoutElse
+#AlwaysBreakTemplateDeclarations: Yes
