@@ -21,7 +21,7 @@ il sottoprogramma restituisce la stringa “XX=X+”. */
 void compare(char[], char[], char[]);
 
 int main(int argc, char* argv[]) {
-    char ris[MAX_LEN];
+    char ris[MAX_LEN + 1];
     if (argc == 3) {
         compare(argv[1], argv[2], ris);
         printf("%s\n", ris);
