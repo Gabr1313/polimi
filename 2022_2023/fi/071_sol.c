@@ -46,4 +46,5 @@ void compare(char tentativo[], char soluzione[], char ris[]) {
             if (!found)
                 ris[i] = DIFF;
         }
+   ris[i] = '\0';
 }
