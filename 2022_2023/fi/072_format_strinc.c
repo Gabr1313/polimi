@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
             printf(KO);
         printf("\n");
     } else
-        printf("Not valid arguments");
+        printf("Not valid arguments\n");
 
     return 0;
 }
@@ -48,7 +48,7 @@ int check(char stin[], char form[]) {
     char array_voc[] = VOC_ARR;
 
     ris = 1;
-    for (i = 0; stin[i] && ris; ++i) {
+    for (i = 0; stin[i] && form[i] && ris; ++i) {
         if (stin[i] >= S_N && stin[i] <= E_N)
             c_form = NUM;
         else if (stin[i] >= S_C && stin[i] <= E_C) {
@@ -60,5 +60,9 @@ int check(char stin[], char form[]) {
         if (ris) ris = (form[i] == c_form);
     }
 
-    return ris;
+    if (!stin[i] && !form[i])
+        return ris;
+    else 
+        return 0;
+
 }

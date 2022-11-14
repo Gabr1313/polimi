@@ -16,6 +16,7 @@ A: 1 17 6 5 4 11 6 b: 3 5 8
 1 3 8 2 4 12 16
 il sottoprogramma restituisce 2.
 
+prova input mia:
 5 7 3 10 4 7 3 8 4 5 2 1 3 8 5 5 9 1 17 6 5 4 11 6 3 7 3 8 3 8 5 1 3 8 2 4 12 16 3 8 5
 */
 
@@ -41,15 +42,18 @@ int main(int argc, char *argv[]) {
 }
 
 int find_arr(int mat[][M], int n, int m, int arr[], int l) {
-    int i, j, k, equal, ris;
+    int i, m_min, j, k, equal, ris;
 
+    m_min = m - l;
     ris = 0;
-    for (i = 0; i < n; ++i)
-        for (j = 0; j < m - l + 1; ++j) {
+    for (i = 0; i < n; ++i){
+        equal = 0;
+        for (j = 0; j <= m_min && !equal; ++j) {
             equal = 1;
             for (k = 0; k < l && equal; ++k) equal = (mat[i][j + k] == arr[k]);
-            if (equal) ++ris;
+            ris += equal;
         }
+    }
     return ris;
 }
 
