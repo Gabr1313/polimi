@@ -1,7 +1,6 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
-
 #define VOC "aeiouAEIOU"
 
 char* solo_cons(char*);
@@ -23,7 +22,6 @@ int main(int argc, char* argv[]) {
 char* solo_cons(char* s) {
     int i, ncons, j;
     char* sc;
-
     for (i = 0, ncons = 0; *(s + i); ++i) ncons += isCons(*(s + i));
     if ((sc = malloc(ncons * sizeof(char)))) {
         j = 0;
