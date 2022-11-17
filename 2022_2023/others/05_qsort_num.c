@@ -12,17 +12,20 @@ int main(int argc, char *argv[]) {
 
     len = argc - 1;
     if (len > 1) {
-        arr = malloc((len) * sizeof(int));
-        for (i = 0; i < len; i++) {
-            arr[i] = atoi(argv[i + 1]);
-        }
-        qsort(arr, len, sizeof(int), cmp);
-        view_arr(arr, len);
-        free(arr);
 
-    } else {
-        printf("Pattern: nval val1 val2 ...\n");
-    }
+        if ((arr = malloc((len) * sizeof(int)))) {
+            for (i = 0; i < len; i++) {
+                arr[i] = atoi(argv[i + 1]);
+            }
+            qsort(arr, len, sizeof(int), cmp);
+            view_arr(arr, len);
+            free(arr);
+
+        } else
+            printf("Problem allocating %d int", len);
+
+    } else
+        printf("Usage: %s val1 val2 ...\n", argv[0]);
 
     return 0;
 }
