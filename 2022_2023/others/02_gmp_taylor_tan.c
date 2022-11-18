@@ -1,7 +1,7 @@
 #include <gmp.h>
 #include <stdio.h>
 #include <stdlib.h>
-#define DER_MAX 1024 
+#define DER_MAX 1024
 
 typedef unsigned long int ui;
 
@@ -11,7 +11,7 @@ void deriva(mpz_t[], mpz_t[], ui);
 void stampa_min_termini(mpz_t, ui);
 void copia(mpz_t[], mpz_t[], ui);
 ui min_com_mul(mpz_t, ui);
-void libera(mpz_t [], ui);
+void libera(mpz_t[], ui);
 
 int main(int argc, char *argv[]) {
     int prova;
@@ -39,6 +39,7 @@ void stampa_coeff(ui depth) {
     if ((vett_coeff = malloc(sizeof(mpz_t) * (depth + 2))) &&
         (vett_coeff_nuovi = malloc(sizeof(mpz_t) * (depth + 2)))) {
         inizializza(vett_coeff, depth + 2);
+        inizializza(vett_coeff_nuovi, depth + 2);
         mpz_set_ui(vett_coeff[1], 1);
 
         for (der = 1; der <= depth; ++der) {
@@ -58,7 +59,7 @@ void inizializza(mpz_t vett[], ui len) {
     for (i = 0; i < len; ++i) mpz_init(vett[i]);
 }
 
-void libera(mpz_t vett[], ui len){
+void libera(mpz_t vett[], ui len) {
     ui i;
     for (i = 0; i < len; ++i) mpz_clear(vett[i]);
 }
@@ -68,7 +69,7 @@ void deriva(mpz_t vett_coeff[], mpz_t vett_coeff_nuovi[], ui len) {
     mpz_t coeff;
     mpz_init(coeff);
 
-    inizializza(vett_coeff_nuovi, len);
+    for (i = 0; i < len; ++i) mpz_set_ui(vett_coeff_nuovi[i], 0);
 
     for (i = 1; i < len - 1; ++i) {
         /* la derivata di a*tg(x)^b = a*b*tg(x)^(b-1) + a*b*tg(x)^(b+1) */
