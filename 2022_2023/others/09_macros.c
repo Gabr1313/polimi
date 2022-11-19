@@ -2,16 +2,18 @@
 #define LEN 64
 
 /* macros */
-#define func(x) x *x + 2
-#define printExpr(x) (printf("f(%d) = %d\n", (x), func(x)))
-#define printExpr2(x) (printf("inoltre...\n%s = %d\n", #x, (x)))
+#define func(x) (x * x + 2)
+#define printExpr(x)                                                           \
+  do { printf("f(%d) = %d\n", (x), func(x)); } while (0)
+#define printExpr2(x)                                                          \
+  do { printf("inoltre...\n%s = %d\n", #x, (x)); } while (0)
 
 int main(int argc, char *argv[]) {
-    int val;
+  int val;
 
-    scanf("%d", &val);
-    printExpr(val);
-    printExpr2(2 + 2);
+  scanf("%d", &val);
+  printExpr(val);
+  printExpr2(2 + 2);
 
-    return 0;
+  return 0;
 }
