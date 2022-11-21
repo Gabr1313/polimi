@@ -1,20 +1,22 @@
-/*
- * data una stringa di parole, trovare quante volte compare una sottostringa
- */
-
 #define P1 257
 #define P2 263
 #define PM 269
+#define HASH_CMP(a, b) (a.val1 == b.val1 && a.val2 == b.val2)
 
+#include <math.h>
 #include <stdio.h>
 #include <string.h>
-#include <math.h>
+
+typedef struct hash_s {
+  int val1, val2, exp1, exp2;
+} hash_t;
 
 int num_repetition(char[], char[]);
-int add_hash (int, char, int, int);
-int del_hash (int, char, int, int);
+void init_hash(hash_t *, char[], int);
+void hash_add(hash_t *, char);
+void hash_del(hash_t *, char);
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
   int ris;
   if (argc == 3) {
     ris = num_repetition(argv[1], argv[2]);
@@ -25,58 +27,56 @@ int main(int argc, char* argv[]) {
 }
 
 int num_repetition(char a[], char b[]) {
-  int ris, len_a, len_b, i;
-  int hash_a_1, hash_a_2, hash_b_1, hash_b_2, exp_1, exp_2;
+  int i, ris, len_a, len_b, diff;
+  hash_t hash_a, hash_b;
 
   len_a = strlen(a);
   len_b = strlen(b);
-  if (len_a < len_b) return 0;
-
-  hash_a_1 = 0;
-  hash_a_2 = 0;
-  hash_b_1 = 0;
-  hash_b_2 = 0;
-  for (i = 0; i < len_b; i++) {
-    hash_a_1 = add_hash(hash_a_1, a[i], P1, PM);
-    hash_a_2 = add_hash(hash_a_2, a[i], P2, PM);
-    hash_b_1 = add_hash(hash_b_1, b[i], P1, PM);
-    hash_b_2 = add_hash(hash_b_2, b[i], P2, PM);
-  }
-
-  len_b --;
-  exp_1 = 1;
-  exp_2 = 1;
-  for (i = 0; i < len_b; i++){
-    exp_1 = (exp_1 * P1) % PM;
-    exp_2 = (exp_2 * P2) % PM;
-  }
-  len_b ++;
-
-  printf("%d %d\n", hash_a_1, hash_a_2);
 
   ris = 0;
-  if (hash_a_1 == hash_b_1 && hash_a_2 == hash_b_2) ris++;
-  for (i = len_b; i < len_a; i++) {
-    hash_b_1 = del_hash(hash_b_1, b[i - len_a - 1], exp_1, PM);
-    hash_b_2 = del_hash(hash_b_2, b[i - len_a - 1], exp_2, PM);
-    hash_b_1 = add_hash(hash_b_1, b[i], P1, PM);
-    hash_b_2 = add_hash(hash_b_2, b[i], P2, PM);
+  diff = len_a - len_b;
+  if (diff >= 0) {
+    init_hash(&hash_a, a, len_b);
+    init_hash(&hash_b, b, len_b);
 
-    printf("%d %d %c %d\n", hash_b_1, hash_b_2, b[i - len_a - 1], i);
+    ris += HASH_CMP(hash_a, hash_b);
 
-    if (hash_a_1 == hash_b_1 && hash_a_2 == hash_b_2) ris++;
+    for (i = 0; i < diff; i++) {
+      hash_del(&hash_a, a[i]);
+      hash_add(&hash_a, a[i + len_b]);
+      ris += HASH_CMP(hash_a, hash_b);
+    }
   }
 
   return ris;
 }
 
-int add_hash (int hash, char c, int p, int q){
-  return ((hash * p) % q + c) % q;
+void init_hash(hash_t *hash, char a[], int len) {
+  int i;
+
+  hash->val1 = 0;
+  hash->val2 = 0;
+  hash_add(hash, a[0]);
+  hash->exp1 = 1;
+  hash->exp2 = 1;
+  for (i = 1; i < len; i++) {
+    hash_add(hash, a[i]);
+    hash->exp1 = (hash->exp1 * P1) % PM;
+    hash->exp2 = (hash->exp2 * P2) % PM;
+  }
 }
 
-int del_hash (int hash, char c, int k, int q){
-  hash -= ((k * c) % q);
-  if (hash > 0)
-    return hash;
-  return hash + q;
+void hash_add(hash_t *hash, char c) {
+  hash->val1 = (hash->val1 * P1 + c) % PM;
+  hash->val2 = (hash->val2 * P2 + c) % PM;
 }
+
+void hash_del(hash_t *hash, char c) {
+  hash->val1 = (hash->val1 - (hash->exp1 * c)) % PM;
+  hash->val2 = hash->val2 - (hash->exp2 * c) % PM;
+  if (hash->val1 < 0)
+    hash->val1 += PM;
+  if (hash->val2 < 0)
+    hash->val2 += PM;
+}
+
