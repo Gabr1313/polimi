@@ -104,8 +104,11 @@ int llen(ilist_t* h) {
 
 void lprintf(ilist_t* h) {
   if (h) {
-    printf("%d ", h->val);
-    while ((h = h->next)) printf("%d ", h->val);
+    while (h->next) {
+      printf("%d -> ", h->val);
+      h = h->next;
+    }
+    printf("%d\n", h->val);
   }
 }
 
