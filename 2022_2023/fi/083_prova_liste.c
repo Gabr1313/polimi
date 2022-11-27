@@ -1,9 +1,10 @@
 #include <stdio.h>
+
 #include "ilist.h"
 #include "vect.h"
 
-int main (){
-  ilist_t * h = NULL;
+int main() {
+  ilist_t* h = NULL;
   h = lappend(h, 3);
   h = lappend(h, 6);
   h = lappend(h, 7);

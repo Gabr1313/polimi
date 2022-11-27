@@ -29,39 +29,39 @@ int find_arr(int[][M], int, int, int[], int);
 void populate_mat_vet(char *[], int[][M], int, int, int[], int);
 
 int main(int argc, char *argv[]) {
-    int mat[N][M], arr[N];
-    int n, m, l;
-    n = atoi(argv[1]);
-    m = atoi(argv[2]);
-    l = atoi(argv[3]);
-    populate_mat_vet(argv, mat, n, m, arr, l);
+  int mat[N][M], arr[N];
+  int n, m, l;
+  n = atoi(argv[1]);
+  m = atoi(argv[2]);
+  l = atoi(argv[3]);
+  populate_mat_vet(argv, mat, n, m, arr, l);
 
-    printf("%d\n", find_arr(mat, n, m, arr, l));
+  printf("%d\n", find_arr(mat, n, m, arr, l));
 
-    return 0;
+  return 0;
 }
 
 int find_arr(int mat[][M], int n, int m, int arr[], int l) {
-    int i, m_min, j, k, equal, ris;
+  int i, m_min, j, k, equal, ris;
 
-    m_min = m - l;
-    ris = 0;
-    for (i = 0; i < n; ++i){
-        equal = 0;
-        for (j = 0; j <= m_min && !equal; ++j) {
-            equal = 1;
-            for (k = 0; k < l && equal; ++k) equal = (mat[i][j + k] == arr[k]);
-            ris += equal;
-        }
+  m_min = m - l;
+  ris = 0;
+  for (i = 0; i < n; ++i) {
+    equal = 0;
+    for (j = 0; j <= m_min && !equal; ++j) {
+      equal = 1;
+      for (k = 0; k < l && equal; ++k) equal = (mat[i][j + k] == arr[k]);
+      ris += equal;
     }
-    return ris;
+  }
+  return ris;
 }
 
 void populate_mat_vet(char *argv[], int mat[][M], int n, int m, int arr[], int l) {
-    int i, j;
+  int i, j;
 
-    for (i = 0; i < n; i++)
-        for (j = 0; j < m; j++) mat[i][j] = atoi(argv[4 + i * m + j]);
+  for (i = 0; i < n; i++)
+    for (j = 0; j < m; j++) mat[i][j] = atoi(argv[4 + i * m + j]);
 
-    for (i = i * m + 4, j = 0; j < l; i++, j++) arr[j] = atoi(argv[i]);
+  for (i = i * m + 4, j = 0; j < l; i++, j++) arr[j] = atoi(argv[i]);
 }

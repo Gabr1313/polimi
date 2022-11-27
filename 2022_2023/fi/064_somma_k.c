@@ -13,28 +13,27 @@ necessario, restituisce 1 o 0 nel caso trovi i due valori la cui somma è k. */
 int cerca_somma(int[], int, int);
 
 int main(int argc, char* argv[]) {
-    int val, ris, array[MAX_LEN], i, sum;
+  int val, ris, array[MAX_LEN], i, sum;
 
+  scanf("%d", &val);
+  while (val > 0 && i < MAX_LEN) {
+    array[i] = val;
+    i++;
     scanf("%d", &val);
-    while (val > 0 && i < MAX_LEN) {
-        array[i] = val;
-        i++;
-        scanf("%d", &val);
-    }
+  }
 
-    scanf("%d", &sum);
+  scanf("%d", &sum);
 
-    ris = cerca_somma(array, i, sum);
+  ris = cerca_somma(array, i, sum);
 
-    printf("%d\n", ris);
-    return 0;
+  printf("%d\n", ris);
+  return 0;
 }
 
 int cerca_somma(int array[], int len, int sum) {
-    int i, j;
-    for (i = 0; i < len - 1; i++)
-        for (j = i; j < len; j++)
-            if (array[i] + array[j] == sum)
-                return 1;
-    return 0;
+  int i, j;
+  for (i = 0; i < len - 1; i++)
+    for (j = i; j < len; j++)
+      if (array[i] + array[j] == sum) return 1;
+  return 0;
 }

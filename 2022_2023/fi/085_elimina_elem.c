@@ -25,8 +25,8 @@ ilist_t *lcompact(ilist_t *h) {
   h = ldelete(h, 0);
   el = h;
   while (el) {
-    tmp = ldelete(el -> next, el->val);
-    el -> next = tmp;
+    tmp = ldelete(el->next, el->val);
+    el->next = tmp;
     el = tmp;
   }
   return h;

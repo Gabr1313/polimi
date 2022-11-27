@@ -20,14 +20,14 @@ album, si visualizzi il primo. */
 #define MAX_ALBUM 100
 
 typedef struct {
-    int ore, minuti, secondi;
+  int ore, minuti, secondi;
 } tempo_t;
 
 typedef struct {
-    char titolo[MAX_LEN + 1], autore[MAX_LEN + 1];
-    int anno, ntracce;
-    tempo_t durata;
-    float prezzo;
+  char titolo[MAX_LEN + 1], autore[MAX_LEN + 1];
+  int anno, ntracce;
+  tempo_t durata;
+  float prezzo;
 } album;
 
 void fill_album(album[], int);
@@ -36,93 +36,93 @@ void vis_album(album[], int, char[]);
 void vis_aut_max(album[], int);
 
 int main(int argc, char *argv[]) {
-    int num;
-    char autore[MAX_LEN + 1];
-    album array[MAX_ALBUM];
+  int num;
+  char autore[MAX_LEN + 1];
+  album array[MAX_ALBUM];
 
-    scanf("%d", &num);
-    fill_album(array, num);
+  scanf("%d", &num);
+  fill_album(array, num);
 
-    vis_dur_max(array, num);
+  vis_dur_max(array, num);
 
-    scanf("%s", autore);
-    vis_album(array, num, autore);
+  scanf("%s", autore);
+  vis_album(array, num, autore);
 
-    vis_aut_max(array, num);
+  vis_aut_max(array, num);
 
-    return 0;
+  return 0;
 }
 
 void fill_album(album array[], int num) {
-    int i;
-    for (i = 0; i < num; i++) {
-        scanf("%s", array[i].titolo);
-        scanf("%s", array[i].autore);
-        scanf("%d", &array[i].anno);
-        scanf("%d", &array[i].ntracce);
-        scanf("%d", &array[i].durata.ore);
-        scanf("%d", &array[i].durata.minuti);
-        scanf("%d", &array[i].durata.secondi);
-        scanf("%f", &array[i].prezzo);
-    }
+  int i;
+  for (i = 0; i < num; i++) {
+    scanf("%s", array[i].titolo);
+    scanf("%s", array[i].autore);
+    scanf("%d", &array[i].anno);
+    scanf("%d", &array[i].ntracce);
+    scanf("%d", &array[i].durata.ore);
+    scanf("%d", &array[i].durata.minuti);
+    scanf("%d", &array[i].durata.secondi);
+    scanf("%f", &array[i].prezzo);
+  }
 }
 
 void vis_dur_max(album array[], int num) {
-    int i, max;
+  int i, max;
 
-    max = 0;
-    for (i = 1; i < num; i++) {
-        if (array[max].durata.ore < array[i].durata.ore)
-            max = i;
-        else if (array[max].durata.ore == array[i].durata.ore &&
-                 array[max].durata.minuti < array[i].durata.minuti)
-            max = i;
-        else if (array[max].durata.ore == array[i].durata.ore &&
-                 array[max].durata.minuti == array[i].durata.minuti &&
-                 array[max].durata.secondi < array[i].durata.secondi)
-            max = i;
-    }
-    printf("\n");
-    printf("%s ", array[max].titolo);
-    printf("%s ", array[max].autore);
-    printf("%d ", array[max].anno);
-    printf("%d ", array[max].ntracce);
-    printf("%d ", array[max].durata.ore);
-    printf("%d ", array[max].durata.minuti);
-    printf("%d ", array[max].durata.secondi);
-    printf("%g ", array[max].prezzo);
-    printf("\n");
+  max = 0;
+  for (i = 1; i < num; i++) {
+    if (array[max].durata.ore < array[i].durata.ore)
+      max = i;
+    else if (array[max].durata.ore == array[i].durata.ore &&
+             array[max].durata.minuti < array[i].durata.minuti)
+      max = i;
+    else if (array[max].durata.ore == array[i].durata.ore &&
+             array[max].durata.minuti == array[i].durata.minuti &&
+             array[max].durata.secondi < array[i].durata.secondi)
+      max = i;
+  }
+  printf("\n");
+  printf("%s ", array[max].titolo);
+  printf("%s ", array[max].autore);
+  printf("%d ", array[max].anno);
+  printf("%d ", array[max].ntracce);
+  printf("%d ", array[max].durata.ore);
+  printf("%d ", array[max].durata.minuti);
+  printf("%d ", array[max].durata.secondi);
+  printf("%g ", array[max].prezzo);
+  printf("\n");
 }
 
 void vis_album(album array[], int num, char autore[]) {
-    int i;
+  int i;
 
-    for (i = 0; i < num; i++) {
-        if (!strcmp(array[i].autore, autore)) printf("%s ", array[i].titolo);
-    }
-    printf("\n");
+  for (i = 0; i < num; i++) {
+    if (!strcmp(array[i].autore, autore)) printf("%s ", array[i].titolo);
+  }
+  printf("\n");
 }
 
 void vis_aut_max(album array[], int num) {
-    int nalbum[MAX_ALBUM], found, i, j, len, j_max;
-    char nome[MAX_ALBUM][MAX_LEN + 1];
+  int nalbum[MAX_ALBUM], found, i, j, len, j_max;
+  char nome[MAX_ALBUM][MAX_LEN + 1];
 
-    for (i = 0; i < num; i++) nalbum[i] = 0;
+  for (i = 0; i < num; i++) nalbum[i] = 0;
 
-    for (i = 0, len = 0, j_max = 0; i < num; i++) {
-        found = 0;
-        for (j = 0; j < len && !found; j++)
-            if (!strcmp(nome[j], array[i].autore)) {
-                found = 1;
-                ++nalbum[j];
-                if (nalbum[j] > nalbum[j_max]) j_max = j;
-            }
-        if (!found) {
-            nalbum[len] = 1;
-            strcpy(nome[len], array[i].autore);
-            ++len;
-        }
+  for (i = 0, len = 0, j_max = 0; i < num; i++) {
+    found = 0;
+    for (j = 0; j < len && !found; j++)
+      if (!strcmp(nome[j], array[i].autore)) {
+        found = 1;
+        ++nalbum[j];
+        if (nalbum[j] > nalbum[j_max]) j_max = j;
+      }
+    if (!found) {
+      nalbum[len] = 1;
+      strcpy(nome[len], array[i].autore);
+      ++len;
     }
+  }
 
-    printf("%s\n", nome[j_max]);
+  printf("%s\n", nome[j_max]);
 }

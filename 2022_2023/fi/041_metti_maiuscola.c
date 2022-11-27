@@ -6,31 +6,26 @@
 #define DIFF 'A' - 'a'
 #define SEP ' '
 
-void metti_maiuscole (char []);
+void metti_maiuscole(char[]);
 
-int main (int argc, char *argv[]){
-    char frase[MAX_LEN];
-    
-    gets(frase);
+int main(int argc, char *argv[]) {
+  char frase[MAX_LEN];
 
-    metti_maiuscole(frase);
+  gets(frase);
 
-    puts(frase);
-    return 0;
+  metti_maiuscole(frase);
+
+  puts(frase);
+  return 0;
 }
 
-void metti_maiuscole (char frase[]){
-    int i;
+void metti_maiuscole(char frase[]) {
+  int i;
 
-    if (frase[0] >= INIZIO && frase[0] <= FINE)
-        frase[0] += DIFF;
-    for (i = 1; frase[i] != '\0'; i++)
-        if (frase[i - 1] == SEP){
-            if (frase[i] >= INIZIO && frase [i] <= FINE)
-                frase[i] += DIFF;
-        }
-        else if (frase[i] >= INIZIO + DIFF && frase [i] <= FINE + DIFF)
-            frase[i] -= DIFF;
+  if (frase[0] >= INIZIO && frase[0] <= FINE) frase[0] += DIFF;
+  for (i = 1; frase[i] != '\0'; i++)
+    if (frase[i - 1] == SEP) {
+      if (frase[i] >= INIZIO && frase[i] <= FINE) frase[i] += DIFF;
+    } else if (frase[i] >= INIZIO + DIFF && frase[i] <= FINE + DIFF)
+      frase[i] -= DIFF;
 }
-        
-

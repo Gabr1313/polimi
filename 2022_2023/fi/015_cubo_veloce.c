@@ -1,52 +1,46 @@
 #include <stdio.h>
 
-int main (int argc, char*argv[]){
-	int val, min, sign, max, med, prova, ris, isCubo;
-	scanf ("%d", &val);
-	if (val == 0){
-		isCubo = 1;
-		ris = 0;
-		sign = 0;
-	} else {
-		if (val < 0){
-			sign = -1;
-			val = -val;
-		} else 	
-			sign = 1;
+int main(int argc, char* argv[]) {
+  int val, min, sign, max, med, prova, ris, isCubo;
+  scanf("%d", &val);
+  if (val == 0) {
+    isCubo = 1;
+    ris = 0;
+    sign = 0;
+  } else {
+    if (val < 0) {
+      sign = -1;
+      val = -val;
+    } else
+      sign = 1;
 
-		max = 1;
-		prova = 1;
-		while (prova < val){ 
-			max *= 2;
-			prova = max * max * max;
-		}
-		min = max / 2;
+    max = 1;
+    prova = 1;
+    while (prova < val) {
+      max *= 2;
+      prova = max * max * max;
+    }
+    min = max / 2;
 
-		if (val == prova){
-			isCubo = 1;
-			ris = max * sign;
-		} else {
-			
-			isCubo = 0;
-			while (!isCubo && max - min > 1){
-				med = (max + min) / 2;
-				prova = med * med * med;
-				if (prova < val)
-					min = med;
-				else if (prova > val)
-					max = med;
-				else 
-					isCubo = 1;
-			}
-			ris = med * sign;
-		}
-	}
+    if (val == prova) {
+      isCubo = 1;
+      ris = max * sign;
+    } else {
+      isCubo = 0;
+      while (!isCubo && max - min > 1) {
+        med = (max + min) / 2;
+        prova = med * med * med;
+        if (prova < val)
+          min = med;
+        else if (prova > val)
+          max = med;
+        else
+          isCubo = 1;
+      }
+      ris = med * sign;
+    }
+  }
 
-	printf ("%d\t%d\n", isCubo, ris);
-	return 0;
+  printf("%d\t%d\n", isCubo, ris);
+  return 0;
 }
-
-
-
-
-

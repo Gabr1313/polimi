@@ -23,77 +23,77 @@ void mix(int[], int[], int[], int, int *);
 void view_arr(int[], int);
 
 int main(int argc, char *argv[]) {
-    int a[MAX_LEN], b[MAX_LEN], c[MAX_LEN * 2], len_c;
+  int a[MAX_LEN], b[MAX_LEN], c[MAX_LEN * 2], len_c;
 
-    input_array(a, MAX_LEN);
-    input_array(b, MAX_LEN);
-    mix(a, b, c, MAX_LEN, &len_c);
+  input_array(a, MAX_LEN);
+  input_array(b, MAX_LEN);
+  mix(a, b, c, MAX_LEN, &len_c);
 
-    view_arr(c, len_c);
+  view_arr(c, len_c);
 
-    return 0;
+  return 0;
 }
 
 void input_array(int array[], int len) {
-    int i;
-    for (i = 0; i < len; i++) scanf("%d", &array[i]);
+  int i;
+  for (i = 0; i < len; i++) scanf("%d", &array[i]);
 }
 
 void mix(int a[], int b[], int c[], int len, int *len_c) {
-    int i, pos_a, pos_b;
+  int i, pos_a, pos_b;
 
-    sortarr(a, len, 1);
-    sortarr(b, len, 1);
+  sortarr(a, len, 1);
+  sortarr(b, len, 1);
 
-    pos_a = 0;
-    pos_b = 0;
-    i     = 0;
+  pos_a = 0;
+  pos_b = 0;
+  i = 0;
 
-    if (a[pos_a] < b[pos_b])
+  if (a[pos_a] < b[pos_b])
+    c[i++] = a[pos_a++];
+  else
+    c[i++] = b[pos_b++];
+  while (pos_a < len || pos_b < len) {
+    while (pos_a < len && a[pos_a] == c[i - 1]) pos_a++;
+    while (pos_b < len && b[pos_b] == c[i - 1]) pos_b++;
+    if (pos_a < len && pos_b < len) {
+      if (a[pos_a] < b[pos_b])
         c[i++] = a[pos_a++];
-    else
+      else
         c[i++] = b[pos_b++];
-    while (pos_a < len || pos_b < len) {
-        while (pos_a < len && a[pos_a] == c[i - 1]) pos_a++;
-        while (pos_b < len && b[pos_b] == c[i - 1]) pos_b++;
-        if (pos_a < len && pos_b < len) {
-            if (a[pos_a] < b[pos_b])
-                c[i++] = a[pos_a++];
-            else
-                c[i++] = b[pos_b++];
-        } else if (pos_a == len)
-            c[i++] = b[pos_b++];
-        else /* if pos_b == len */
-            c[i++] = a[pos_a++];
-    }
+    } else if (pos_a == len)
+      c[i++] = b[pos_b++];
+    else /* if pos_b == len */
+      c[i++] = a[pos_a++];
+  }
 
-    *len_c = i;
+  *len_c = i;
 }
 
 void sortarr(int array[], int len, int updown) {
-    int i, j, temp;
+  int i, j, temp;
 
-    if (updown == 1) {
-        for (i = 1; i < len; i++)
-            for (j = i - 1; j >= 0; j--)
-                if (array[j] > array[j + 1]) {
-                    temp         = array[j];
-                    array[j]     = array[j + 1];
-                    array[j + 1] = temp;
-                }
-    } else if (updown == -1) {
-        for (i = 1; i < len; i++)
-            for (j = i - 1; j >= 0; j--)
-                if (array[j] < array[j + 1]) {
-                    temp         = array[j];
-                    array[j]     = array[j + 1];
-                    array[j + 1] = temp;
-                }
-    }
+  if (updown == 1) {
+    for (i = 1; i < len; i++)
+      for (j = i - 1; j >= 0; j--)
+        if (array[j] > array[j + 1]) {
+          temp = array[j];
+          array[j] = array[j + 1];
+          array[j + 1] = temp;
+        }
+  } else if (updown == -1) {
+    for (i = 1; i < len; i++)
+      for (j = i - 1; j >= 0; j--)
+        if (array[j] < array[j + 1]) {
+          temp = array[j];
+          array[j] = array[j + 1];
+          array[j + 1] = temp;
+        }
+  }
 }
 
 void view_arr(int array[], int len) {
-    int i;
-    for (i = 0; i < len; i++) printf("%d ", array[i]);
-    printf("\n");
+  int i;
+  for (i = 0; i < len; i++) printf("%d ", array[i]);
+  printf("\n");
 }

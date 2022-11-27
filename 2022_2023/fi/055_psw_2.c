@@ -35,33 +35,32 @@ I vincoli per la validità del nome utente sono una lunghezza compresa nell’in
 int valido(char[], int, int, char[]);
 
 int main(int argc, char *argv[]) {
-    char username[MAX_LEN + 1], isValid;
+  char username[MAX_LEN + 1], isValid;
 
-    do {
-        scanf("%s", username);
-        isValid = valido(username, MIN, MAX, SPECIAL);
-    } while (!isValid);
+  do {
+    scanf("%s", username);
+    isValid = valido(username, MIN, MAX, SPECIAL);
+  } while (!isValid);
 
-    /*
-    StartApp(username);
-     */
+  /*
+  StartApp(username);
+   */
 
-    return 0;
+  return 0;
 }
 
 int valido(char username[], int min, int max, char speciali[]) {
-    int i, j, ris, isSpec;
+  int i, j, ris, isSpec;
 
-    isSpec = 0;
-    for (i = 0; username[i] != '\0' && i < max; i++)
-        for (j = 0; speciali[j] != '\0' && !isSpec; j++)
-            if (username[i] == speciali[j])
-                isSpec = 1;
+  isSpec = 0;
+  for (i = 0; username[i] != '\0' && i < max; i++)
+    for (j = 0; speciali[j] != '\0' && !isSpec; j++)
+      if (username[i] == speciali[j]) isSpec = 1;
 
-    if (i == max || i < min)
-        ris = 0;
-    else
-        ris = isSpec;
+  if (i == max || i < min)
+    ris = 0;
+  else
+    ris = isSpec;
 
-    return ris;
+  return ris;
 }

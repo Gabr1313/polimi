@@ -22,40 +22,34 @@ out: -1
 #include <stdio.h>
 #define LEN_MAX 100
 
-int trovaBaricentro(int [], int);
+int trovaBaricentro(int[], int);
 
-int main(int argc, char *argv[]){
-    int array[LEN_MAX], len, i, ris;
+int main(int argc, char *argv[]) {
+  int array[LEN_MAX], len, i, ris;
 
-    do scanf("%d", &len);
-    while (len < 0 || len > LEN_MAX);
-    for (i = 0; i < len; i++)
-        scanf("%d", &array[i]);
+  do scanf("%d", &len);
+  while (len < 0 || len > LEN_MAX);
+  for (i = 0; i < len; i++) scanf("%d", &array[i]);
 
-    ris = trovaBaricentro(array, len);
+  ris = trovaBaricentro(array, len);
 
-    printf("%d\n", ris);
-    return 0;
+  printf("%d\n", ris);
+  return 0;
 }
 
-int trovaBaricentro(int array[], int len){
-    int sommaTot, sommaI, sommaF, i;
+int trovaBaricentro(int array[], int len) {
+  int sommaTot, sommaI, sommaF, i;
 
-    sommaTot = 0;
-    for (i = 0; i < len; i++)
-        sommaTot += array[i];
+  sommaTot = 0;
+  for (i = 0; i < len; i++) sommaTot += array[i];
 
-    sommaI = 0;
-    sommaF = sommaTot;
-    for (i = 0; i < len && sommaI != sommaF; i++){
-        sommaI += array[i];
-        sommaF -= array[i];
-    }
+  sommaI = 0;
+  sommaF = sommaTot;
+  for (i = 0; i < len && sommaI != sommaF; i++) {
+    sommaI += array[i];
+    sommaF -= array[i];
+  }
 
-    if (i == len)
-        return -1;
-    return i;
+  if (i == len) return -1;
+  return i;
 }
-
-
-

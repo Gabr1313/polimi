@@ -17,30 +17,30 @@ invoca il sottoprogramma sopra definito e visualizza il risultato.
 char *rep(char[], int);
 
 int main(int argc, char *argv[]) {
-    char *ris;
-    int rip;
-    if (argc == 3) {
-        rip = atoi(argv[2]);
-        if ((ris = rep(argv[1], rip))) {
-            printf("%s\n", ris);
-            free(ris);
-        }
-    } else
-        printf("Usage: %s string number\n", argv[0]);
-    return 0;
+  char *ris;
+  int rip;
+  if (argc == 3) {
+    rip = atoi(argv[2]);
+    if ((ris = rep(argv[1], rip))) {
+      printf("%s\n", ris);
+      free(ris);
+    }
+  } else
+    printf("Usage: %s string number\n", argv[0]);
+  return 0;
 }
 
 char *rep(char a[], int rip) {
-    char *ris;
-    int i, j, len;
+  char *ris;
+  int i, j, len;
 
-    len = strlen(a);
-    if ((ris = malloc(sizeof(char) * (rip * len + 1)))) {
-        for (i = 0; i < rip; i++)
-            for (j = 0; j < len; j++) *(ris + i * len + j) = a[j];
-        *(ris + i * len + 1) = '\0';
-    } else
-        printf("Allocation error of %d char", (rip * len + 1));
+  len = strlen(a);
+  if ((ris = malloc(sizeof(char) * (rip * len + 1)))) {
+    for (i = 0; i < rip; i++)
+      for (j = 0; j < len; j++) *(ris + i * len + j) = a[j];
+    *(ris + i * len + 1) = '\0';
+  } else
+    printf("Allocation error of %d char", (rip * len + 1));
 
-    return ris;
+  return ris;
 }

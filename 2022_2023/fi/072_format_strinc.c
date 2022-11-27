@@ -31,38 +31,37 @@ dalla seconda stringa, KO in caso contrario. */
 int check(char[], char[]);
 
 int main(int argc, char* argv[]) {
-    if (argc == 3) {
-        if (check(argv[1], argv[2]))
-            printf(OK);
-        else
-            printf(KO);
-        printf("\n");
-    } else
-        printf("Not valid arguments\n");
+  if (argc == 3) {
+    if (check(argv[1], argv[2]))
+      printf(OK);
+    else
+      printf(KO);
+    printf("\n");
+  } else
+    printf("Not valid arguments\n");
 
-    return 0;
+  return 0;
 }
 
 int check(char stin[], char form[]) {
-    int i, j, ris, c_form;
-    char array_voc[] = VOC_ARR;
+  int i, j, ris, c_form;
+  char array_voc[] = VOC_ARR;
 
-    ris = 1;
-    for (i = 0; stin[i] && form[i] && ris; ++i) {
-        if (stin[i] >= S_N && stin[i] <= E_N)
-            c_form = NUM;
-        else if (stin[i] >= S_C && stin[i] <= E_C) {
-            c_form = CON;
-            for (j = 0; array_voc[j] && c_form != VOC; ++j)
-                if (array_voc[j] == stin[i]) c_form = VOC;
-        } else
-            ris = 0;
-        if (ris) ris = (form[i] == c_form);
-    }
+  ris = 1;
+  for (i = 0; stin[i] && form[i] && ris; ++i) {
+    if (stin[i] >= S_N && stin[i] <= E_N)
+      c_form = NUM;
+    else if (stin[i] >= S_C && stin[i] <= E_C) {
+      c_form = CON;
+      for (j = 0; array_voc[j] && c_form != VOC; ++j)
+        if (array_voc[j] == stin[i]) c_form = VOC;
+    } else
+      ris = 0;
+    if (ris) ris = (form[i] == c_form);
+  }
 
-    if (!stin[i] && !form[i])
-        return ris;
-    else 
-        return 0;
-
+  if (!stin[i] && !form[i])
+    return ris;
+  else
+    return 0;
 }

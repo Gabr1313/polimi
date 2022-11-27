@@ -21,30 +21,29 @@ il sottoprogramma restituisce la stringa “XX=X+”. */
 void compare(char[], char[], char[]);
 
 int main(int argc, char* argv[]) {
-    char ris[MAX_LEN + 1];
-    if (argc == 3) {
-        compare(argv[1], argv[2], ris);
-        printf("%s\n", ris);
-    } else
-        printf("Not valid arguments");
+  char ris[MAX_LEN + 1];
+  if (argc == 3) {
+    compare(argv[1], argv[2], ris);
+    printf("%s\n", ris);
+  } else
+    printf("Not valid arguments");
 
-    return 0;
+  return 0;
 }
 
 void compare(char tentativo[], char soluzione[], char ris[]) {
-    int i, j, found;
-    for (i = 0; tentativo[i]; ++i)
-        if (tentativo[i] == soluzione[i])
-            ris[i] = EQUAL;
-        else {
-            found = 0;
-            for (j = 0; soluzione[j] && !found; j++)
-                if (soluzione[j] == tentativo[i]) {
-                    found = 1;
-                    ris[i] = OTHER;
-                }
-            if (!found)
-                ris[i] = DIFF;
+  int i, j, found;
+  for (i = 0; tentativo[i]; ++i)
+    if (tentativo[i] == soluzione[i])
+      ris[i] = EQUAL;
+    else {
+      found = 0;
+      for (j = 0; soluzione[j] && !found; j++)
+        if (soluzione[j] == tentativo[i]) {
+          found = 1;
+          ris[i] = OTHER;
         }
-   ris[i] = '\0';
+      if (!found) ris[i] = DIFF;
+    }
+  ris[i] = '\0';
 }

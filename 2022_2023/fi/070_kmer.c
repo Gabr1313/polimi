@@ -51,80 +51,80 @@ int distanza_mag(char[], char[], int, int);
 int conta_d(char[], char[], int);
 
 int main(int argc, char *argv[]) {
-    char seq[LEN_MAX_SEQ], kmer[LEN_MAX_KMER];
-    int d, ris1, ris2;
+  char seq[LEN_MAX_SEQ], kmer[LEN_MAX_KMER];
+  int d, ris1, ris2;
 
-    scanf("%s %s %d", seq, kmer, &d);
+  scanf("%s %s %d", seq, kmer, &d);
 
-    ris1 = conta(seq, kmer);
-    ris2 = conta_d(seq, kmer, d) - ris1;
-    printf("%d %d\n", ris1, ris2);
-    return 0;
+  ris1 = conta(seq, kmer);
+  ris2 = conta_d(seq, kmer, d) - ris1;
+  printf("%d %d\n", ris1, ris2);
+  return 0;
 }
 
 int conta(char seq[], char kmer[]) {
-    int diff, count, i, len_seq, len_kmer;
-    char test[LEN_MAX_KMER];
+  int diff, count, i, len_seq, len_kmer;
+  char test[LEN_MAX_KMER];
 
-    len_seq = strlen(seq);
-    len_kmer = strlen(kmer);
-    diff = len_seq - len_kmer;
+  len_seq = strlen(seq);
+  len_kmer = strlen(kmer);
+  diff = len_seq - len_kmer;
 
-    count = 0;
-    for (i = 0; i <= diff; i++) {
-        strncpy(test, seq + i, len_kmer);
-        count += (!strcmp(test, kmer));
-    }
+  count = 0;
+  for (i = 0; i <= diff; i++) {
+    strncpy(test, seq + i, len_kmer);
+    count += (!strcmp(test, kmer));
+  }
 
-    return count;
+  return count;
 }
 
 int distanza(char seq1[], char seq2[]) {
-    /* non capisco perche' le due stringhe potrebbero avere lunghezze diverse... */
-    int diff, dist_min, len1, len2;
+  /* non capisco perche' le due stringhe potrebbero avere lunghezze diverse... */
+  int diff, dist_min, len1, len2;
 
-    len1 = strlen(seq1);
-    len2 = strlen(seq2);
-    diff = len1 - len2;
-    if (diff == 0)
-        dist_min = distanza_mag(seq1, seq2, len2, diff);
-    else if (diff > 0)
-        dist_min = distanza_mag(seq1, seq2, len2, diff);
-    else
-        dist_min = distanza_mag(seq2, seq1, len1, -diff);
+  len1 = strlen(seq1);
+  len2 = strlen(seq2);
+  diff = len1 - len2;
+  if (diff == 0)
+    dist_min = distanza_mag(seq1, seq2, len2, diff);
+  else if (diff > 0)
+    dist_min = distanza_mag(seq1, seq2, len2, diff);
+  else
+    dist_min = distanza_mag(seq2, seq1, len1, -diff);
 
-    return dist_min;
+  return dist_min;
 }
 
 int distanza_mag(char seqA[], char seqB[], int lenB, int diff) {
-    int i, j, dist_prova, dist_min;
+  int i, j, dist_prova, dist_min;
 
-    dist_min = 0;
-    for (j = 0; j < lenB; ++j) dist_min += (seqA[j] != seqB[j]);
+  dist_min = 0;
+  for (j = 0; j < lenB; ++j) dist_min += (seqA[j] != seqB[j]);
 
-    for (i = 1; i <= diff; i++) {
-        dist_prova = 0;
-        for (j = 0; j < lenB; j++) dist_prova += (seqA[i + j] != seqB[j]);
-        if (dist_prova < dist_min) dist_min = dist_prova;
-    }
+  for (i = 1; i <= diff; i++) {
+    dist_prova = 0;
+    for (j = 0; j < lenB; j++) dist_prova += (seqA[i + j] != seqB[j]);
+    if (dist_prova < dist_min) dist_min = dist_prova;
+  }
 
-    return dist_min;
+  return dist_min;
 }
 
 int conta_d(char seq[], char kmer[], int d) {
-    int hamming, diff, count, i, len_seq, len_kmer;
-    char test[LEN_MAX_KMER];
+  int hamming, diff, count, i, len_seq, len_kmer;
+  char test[LEN_MAX_KMER];
 
-    len_seq = strlen(seq);
-    len_kmer = strlen(kmer);
-    diff = len_seq - len_kmer;
+  len_seq = strlen(seq);
+  len_kmer = strlen(kmer);
+  diff = len_seq - len_kmer;
 
-    count = 0;
-    for (i = 0; i <= diff; i++) {
-        strncpy(test, seq + i, len_kmer);
-        hamming = distanza(test, kmer);
-        if (hamming <= d) count++;
-    }
+  count = 0;
+  for (i = 0; i <= diff; i++) {
+    strncpy(test, seq + i, len_kmer);
+    hamming = distanza(test, kmer);
+    if (hamming <= d) count++;
+  }
 
-    return count;
+  return count;
 }

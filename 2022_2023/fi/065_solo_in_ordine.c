@@ -19,37 +19,36 @@ int fill_arr_ord(int[], int);
 void view_arr(int[], int);
 
 int main(int argc, char* argv[]) {
-    int array[LEN_MAX], len, len_2;
+  int array[LEN_MAX], len, len_2;
 
-    scanf("%d", &len);
-    len_2 = fill_arr_ord(array, len);
+  scanf("%d", &len);
+  len_2 = fill_arr_ord(array, len);
 
-    printf("%d\n", len_2);
-    view_arr(array, len_2);
+  printf("%d\n", len_2);
+  view_arr(array, len_2);
 
-    return 0;
+  return 0;
 }
 
 int fill_arr_ord(int array[], int len) {
-    int i, val, len_2;
+  int i, val, len_2;
 
-    scanf("%d", &array[0]);
-    len_2 = 1;
-    for (i = 1; i < len; i++) {
-        scanf("%d", &val);
-        if (val > array[len_2]) {
-            array[len_2] = val;
-            ++len_2;
-        }
+  scanf("%d", &array[0]);
+  len_2 = 1;
+  for (i = 1; i < len; i++) {
+    scanf("%d", &val);
+    if (val > array[len_2]) {
+      array[len_2] = val;
+      ++len_2;
     }
+  }
 
-    return len_2;
+  return len_2;
 }
 
 void view_arr(int array[], int len) {
-    int i;
+  int i;
 
-    for (i = 0; i < len; i++)
-        printf("%d ", array[i]);
-    printf("\n");
+  for (i = 0; i < len; i++) printf("%d ", array[i]);
+  printf("\n");
 }

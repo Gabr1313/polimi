@@ -7,30 +7,30 @@ opportuno. */
 #define LEN_MAX 30
 
 int main(int argc, char *argv[]) {
-    char str[LEN_MAX];
-    int i, max, prova, i_max, i_prova;
+  char str[LEN_MAX];
+  int i, max, prova, i_max, i_prova;
 
-    scanf("%s", str);
+  scanf("%s", str);
 
-    max     = 1;
-    prova   = 1;
-    i_max   = 0;
-    i_prova = 0;
-    for (i = 1; str[i]; i++) {
-        if (str[i] != str[i - 1]) {
-            prova++;
-            if (prova > max) {
-                max   = prova;
-                i_max = i_prova;
-            }
-        } else {
-            prova   = 1;
-            i_prova = i;
-        }
+  max = 1;
+  prova = 1;
+  i_max = 0;
+  i_prova = 0;
+  for (i = 1; str[i]; i++) {
+    if (str[i] != str[i - 1]) {
+      prova++;
+      if (prova > max) {
+        max = prova;
+        i_max = i_prova;
+      }
+    } else {
+      prova = 1;
+      i_prova = i;
     }
+  }
 
-    for (i = i_max; i < max + i_max; i++) printf("%c", str[i]);
-    printf("\n");
+  for (i = i_max; i < max + i_max; i++) printf("%c", str[i]);
+  printf("\n");
 
-    return 0;
+  return 0;
 }

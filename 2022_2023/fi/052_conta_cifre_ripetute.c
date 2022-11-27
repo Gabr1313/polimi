@@ -10,37 +10,29 @@ valore 2, perché la cifra 8 e 2 compaiono entrambe più di una volta.
 
 int contaDoppie(int);
 
-int main (int argc, char *argv[]){
-    int num, ris;
+int main(int argc, char *argv[]) {
+  int num, ris;
 
-    do scanf("%d", &num);
-    while (num < 0);
-    
-    ris = contaDoppie(num);
+  do scanf("%d", &num);
+  while (num < 0);
 
-    printf("%d\n", ris);
-    return 0;
+  ris = contaDoppie(num);
+
+  printf("%d\n", ris);
+  return 0;
 }
 
-int contaDoppie(int num){
-    int doppie, cifra, i,  contaRip[BASE];
-    for (i = 0; i < BASE; i++)
+int contaDoppie(int num) {
+  int doppie, cifra, i, contaRip[BASE];
+  for (i = 0; i < BASE; i++) contaRip[i] = 0;
 
-        contaRip[i] = 0;
+  doppie = 0;
+  while (num > 0) {
+    cifra = num % BASE;
+    contaRip[cifra]++;
+    if (contaRip[cifra] == 2) doppie++;
+    num /= BASE;
+  }
 
-    doppie = 0;
-    while (num > 0){
-        cifra = num % BASE;
-        contaRip[cifra]++;
-        if (contaRip[cifra] == 2)
-            doppie++;
-        num /= BASE;
-    }
-
-    return doppie;
+  return doppie;
 }
-
-
-
-
-    

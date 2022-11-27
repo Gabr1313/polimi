@@ -74,9 +74,6 @@ void hash_add(hash_t *hash, char c) {
 void hash_del(hash_t *hash, char c) {
   hash->val1 = (hash->val1 - (hash->exp1 * c)) % PM;
   hash->val2 = hash->val2 - (hash->exp2 * c) % PM;
-  if (hash->val1 < 0)
-    hash->val1 += PM;
-  if (hash->val2 < 0)
-    hash->val2 += PM;
+  if (hash->val1 < 0) hash->val1 += PM;
+  if (hash->val2 < 0) hash->val2 += PM;
 }
-

@@ -47,89 +47,89 @@ int count_max(int[], int[], int, int);
 void inizializza(int[], int);
 
 int main(int argc, char* argv[]) {
-    int array[LEN], type[LEN];
+  int array[LEN], type[LEN];
 
-    populate(array, LEN);
-    find_type(array, type, LEN);
-    view_arr(array, LEN);
-    view_arr(type, LEN);
-    view_istogramma(type, LEN);
+  populate(array, LEN);
+  find_type(array, type, LEN);
+  view_arr(array, LEN);
+  view_arr(type, LEN);
+  view_istogramma(type, LEN);
 
-    return 0;
+  return 0;
 }
 
 void populate(int array[], int len) {
-    int i;
+  int i;
 
-    for (i = 0; i < len; ++i) scanf("%d", &array[i]);
+  for (i = 0; i < len; ++i) scanf("%d", &array[i]);
 }
 
 void find_type(int array[], int type[], int len) {
-    int i, sum_div;
+  int i, sum_div;
 
-    for (i = 0; i < len; ++i) {
-        if (array[i] <= 0)
-            type[i] = 0;
-        else {
-            sum_div = somma_divisori(array[i]);
-            if (sum_div == array[i])
-                type[i] = 1;
-            else if (sum_div > array[i])
-                type[i] = 2;
-            else
-                type[i] = 3;
-        }
+  for (i = 0; i < len; ++i) {
+    if (array[i] <= 0)
+      type[i] = 0;
+    else {
+      sum_div = somma_divisori(array[i]);
+      if (sum_div == array[i])
+        type[i] = 1;
+      else if (sum_div > array[i])
+        type[i] = 2;
+      else
+        type[i] = 3;
     }
+  }
 }
 
 int somma_divisori(int num) {
-    int i, ris;
+  int i, ris;
 
-    ris = -num;
-    for (i = 1; i * i < num; i++)
-        if (num % i == 0) ris += (i + num / i);
+  ris = -num;
+  for (i = 1; i * i < num; i++)
+    if (num % i == 0) ris += (i + num / i);
 
-    return ris;
+  return ris;
 }
 
 void view_arr(int array[], int len) {
-    int i;
-    for (i = 0; i < len; i++) printf("%d ", array[i]);
-    printf("\n");
+  int i;
+  for (i = 0; i < len; i++) printf("%d ", array[i]);
+  printf("\n");
 }
 
 void view_istogramma(int type[], int len) {
-    int i, count[NTYPE], max, j;
+  int i, count[NTYPE], max, j;
 
-    max = count_max(type, count, len, NTYPE);
+  max = count_max(type, count, len, NTYPE);
 
+  printf("\n");
+  for (i = max; i > 0; --i) {
+    for (j = 0; j < NTYPE; j++)
+      if (count[j] >= i)
+        printf("%c", FULL);
+      else
+        printf("%c", EMPTY);
     printf("\n");
-    for (i = max; i > 0; --i) {
-        for (j = 0; j < NTYPE; j++)
-            if (count[j] >= i)
-                printf("%c", FULL);
-            else
-                printf("%c", EMPTY);
-        printf("\n");
-    }
+  }
 }
 
 int count_max(int type[], int count[], int len, int len_2) {
-    int i, max;
+  int i, max;
 
-    inizializza(count, len_2);
-    max = 0;
-    for (i = 0; i < len; i++)
-        if (type[i]) {
-            ++count[type[i] - 1];
-            if (count[type[i] - 1] > max) max = count[type[i] - 1];
-        }
+  inizializza(count, len_2);
+  max = 0;
+  for (i = 0; i < len; i++)
+    if (type[i]) {
+      ++count[type[i] - 1];
+      if (count[type[i] - 1] > max) max = count[type[i] - 1];
+    }
 
-    return max;
+  return max;
 }
 
 void inizializza(int array[], int len) {
-    int i;
+  int i;
 
-    for (i = 0; i < len; i++) array[i] = 0;
+  for (i = 0; i < len; i++) array[i] = 0;
 }
