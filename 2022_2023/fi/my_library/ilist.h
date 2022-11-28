@@ -47,11 +47,20 @@ ilist_t* linsert_in_order(ilist_t* h, int num) {
   ilist_t *el, *n;
   if ((n = malloc(sizeof(ilist_t)))) {
     n->val = num;
-    el = h;
-    while ((el = el->next) && el->val < num)
-      ;
-    n->next = el;
-    el = n;
+    if (!h) {
+      h = n;
+      h->next = NULL;
+    } else if (num < h->val) {
+      n->next = h;
+      h = n;
+    } else {
+      el = h;
+      while (el->next && num > el->next->val)
+        el = el -> next;
+      n -> next = el -> next;
+      el -> next = n;
+    }
+
   } else
     printf("linsert_in_order: allocation problem\n");
   return h;
@@ -127,7 +136,7 @@ ilist_t* lpop(ilist_t* h, int pos) {
       el->next = del->next;
       free(del);
     } else
-      printf("Pop: index out of range\n");
+      printf("lpop: index out of range\n");
   } else {
     el = h;
     del = el->next;
