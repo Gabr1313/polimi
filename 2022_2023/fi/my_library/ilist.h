@@ -11,10 +11,11 @@ ilist_t* lpush(ilist_t*, int);
 ilist_t* linsert_in_order(ilist_t*, int);
 ilist_t* lfind(ilist_t*, int);
 ilist_t* ldelete(ilist_t*, int);
-void free_list(ilist_t*);
+ilist_t* lfree(ilist_t*);
 int llen(ilist_t*);
 void lprintf(ilist*);
-ilist_t* lpop(ilist_t*, int);
+ilist_t* pop(ilist_t**);
+ilist_t* lremove(ilist_t*, int);
 */
 ilist_t* lappend(ilist_t* h, int num) {
   ilist_t *el, *n;
@@ -47,20 +48,15 @@ ilist_t* linsert_in_order(ilist_t* h, int num) {
   ilist_t *el, *n;
   if ((n = malloc(sizeof(ilist_t)))) {
     n->val = num;
-    if (!h) {
+    if (!h || (num <= h->val)) {
       h = n;
       h->next = NULL;
-    } else if (num < h->val) {
-      n->next = h;
-      h = n;
     } else {
       el = h;
-      while (el->next && num > el->next->val)
-        el = el -> next;
-      n -> next = el -> next;
-      el -> next = n;
+      while (el->next && num > el->next->val) el = el->next;
+      n->next = el->next;
+      el->next = n;
     }
-
   } else
     printf("linsert_in_order: allocation problem\n");
   return h;
@@ -95,12 +91,13 @@ ilist_t* ldelete(ilist_t* h, int num) {
   return h;
 }
 
-void lfree(ilist_t* h) {
+ilist_t* lfree(ilist_t* h) {
   ilist_t* del;
   while ((del = h)) {
     h = h->next;
     free(del);
   }
+  return h;
 }
 
 int llen(ilist_t* h) {
@@ -112,6 +109,14 @@ int llen(ilist_t* h) {
 }
 
 void lprintf(ilist_t* h) {
+  ilist_t* el;
+  for (el = h; el; el = el->next) {
+    printf("%d -> ", el->val);
+  }
+  printf("|\n");
+}
+
+/* void lprintf(ilist_t* h) {
   if (h) {
     while (h->next) {
       printf("%d -> ", h->val);
@@ -119,9 +124,16 @@ void lprintf(ilist_t* h) {
     }
     printf("%d\n", h->val);
   }
+} */
+
+ilist_t* pop(ilist_t** h) {
+  ilist_t* el;
+  el = (*h);
+  *h = (*h)->next;
+  return el;
 }
 
-ilist_t* lpop(ilist_t* h, int pos) {
+ilist_t* lremove(ilist_t* h, int pos) {
   ilist_t *el, *del;
   int i;
   if (!pos) {
@@ -136,7 +148,7 @@ ilist_t* lpop(ilist_t* h, int pos) {
       el->next = del->next;
       free(del);
     } else
-      printf("lpop: index out of range\n");
+      printf("lremove: index out of range\n");
   } else {
     el = h;
     del = el->next;
