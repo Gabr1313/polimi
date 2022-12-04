@@ -109,8 +109,9 @@ int llen(ilist_t* h) {
 }
 
 void lprintf(ilist_t* h) {
-  for (; h; h = h->next) {
-    printf("%d -> ", h->val);
+  ilist_t* el;
+  for (el = h; el; el = el->next) {
+    printf("%d -> ", el->val);
   }
   printf("|\n");
 }
