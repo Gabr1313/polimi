@@ -3,7 +3,6 @@
 
 #define LEN 25
 
-int cmp(const void *, const void *);
 int calcola_prod(int[], int);
 
 int main(int argc, char *argv[]) {
@@ -17,22 +16,46 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
-int cmp(const void *a, const void *b) { return (*(int *)a > *(int *)b) - (*(int *)a < *(int *)b); }
-
 int calcola_prod(int v[], int len) {
-  int *copia, i, p1, p2;
+  int p1, p2, max1, max2, max3, min1, min2, i;
 
-  if ((copia = malloc(sizeof(int) * len))) {
-    for (i = 0; i < len; i++) copia[i] = v[i];
-    qsort(copia, len, sizeof(int), cmp);
-    p1 = copia[len - 1] * copia[len - 2] * copia[len - 3];
-    p2 = copia[0] * copia[1] * copia[len - 1];
-    printf("%d %d\n", p1, p2);
-    free (copia);
-  } else {
-    printf("Memory allocation problem\n");
-    return -1;
+  max1 = v[0];
+  if (v[1] > max1) {
+    max2 = max1;
+    max1 = v[1];
+  } else
+    max2 = v[1];
+  if (v[2] > max1) {
+    max3 = max2;
+    max2 = max1;
+    max1 = v[2];
+  } else if (v[2] > max2) {
+    max3 = max2;
+    max2 = v[2];
+  } else
+    max3 = v[2];
+  min1 = max3;
+  min2 = max2;
+
+  for (i = 3; i < len; i++) {
+    if (v[i] > max1) {
+      max3 = max2;
+      max2 = max1;
+      max1 = v[i];
+    } else if (v[i] > max2) {
+      max3 = max2;
+      max2 = v[i];
+    } else if (v[i] > max3)
+      max3 = v[i];
+    else if (v[i] < min1) {
+      min2 = min1;
+      min1 = v[i];
+    } else if (v[i] < min2)
+      min2 = v[i];
   }
+
+  p1 = max1 * max2 * max3;
+  p2 = max1 * min1 * min2;
 
   return (p1 > p2 ? p1 : p2);
 }
