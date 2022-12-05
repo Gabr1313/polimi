@@ -11,18 +11,15 @@ int kcon(ilist_t* h, int k) {
   return kcon(h->next, k);
 }
 
-int isthere(ilist_t* h, int k) {
-  while (h) {
-    if (h->val == k) return 1;
+ilist_t* whereis(ilist_t* h, int k) {
+  while (h && h->val != k) {
     h = h->next;
   }
-  return 0;
+  return h;
 }
 
 int knocon(ilist_t* h, int k) {
-  while (h) {
-    if (h->val == k && h->next && isthere(h->next->next, k)) return 1;
-    h = h->next;
-  }
+  ilist_t* num;
+  if ((num = whereis(h, k)) && num->next && whereis(num->next->next, k)) return 1;
   return 0;
 }
