@@ -8,26 +8,34 @@
 } ilist_t; */
 
 int kcon(ilist_t* h, int k) {
-  if (!(h && h->next)) return 0;
-  if (h && h->next && h->val == k && h->next->val == k) return 1;
-  return kcon(h->next, k);
+  int ris;
+  if (!(h && h->next))
+    ris = 0;
+  else if (h && h->next && h->val == k && h->next->val == k)
+    ris = 1;
+  else
+    ris = kcon(h->next, k);
+  return ris;
 }
 
-int isthere(ilist_t* h, int k) {
-  while (h) {
-    if (h->val == k) return 1;
-    h = h->next;
-  }
-  return 0;
+int knocon_n(ilist_t* h, int k, int rip) {
+  int ris;
+  if (h) {
+    if (h->val == k) {
+      if (rip == 1)
+        ris = 1;
+      else if (h->next)
+        ris = knocon_n(h->next->next, k, --rip);
+      else
+        ris = 0;
+    } else
+      ris = knocon_n(h->next, k, rip);
+  } else
+    ris = 0;
+  return ris;
 }
 
-int knocon(ilist_t* h, int k) {
-  while (h) {
-    if (h->val == k && h->next && isthere(h->next->next, k)) return 1;
-    h = h->next;
-  }
-  return 0;
-}
+int knocon(ilist_t* h, int k) { return knocon_n(h, k, 2); }
 
 int main(int argc, char* argv[]) {
   ilist_t* h = NULL;

@@ -6,20 +6,31 @@ typedef struct ilist_s {
 } ilist_t;
 
 int kcon(ilist_t* h, int k) {
-  if (!(h && h->next)) return 0;
-  if (h && h->next && h->val == k && h->next->val == k) return 1;
-  return kcon(h->next, k);
+  int ris;
+  if (!(h && h->next))
+    ris = 0;
+  else if (h && h->next && h->val == k && h->next->val == k)
+    ris = 1;
+  else
+    ris = kcon(h->next, k);
+  return ris;
 }
 
-ilist_t* whereis(ilist_t* h, int k) {
-  while (h && h->val != k) {
-    h = h->next;
-  }
-  return h;
+int knocon_n(ilist_t* h, int k, int rip) {
+  int ris;
+  if (h) {
+    if (h->val == k) {
+      if (rip == 1)
+        ris = 1;
+      else if (h->next)
+        ris = knocon_n(h->next->next, k, --rip);
+      else
+        ris = 0;
+    } else
+      ris = knocon_n(h->next, k, rip);
+  } else
+    ris = 0;
+  return ris;
 }
 
-int knocon(ilist_t* h, int k) {
-  ilist_t* num;
-  if ((num = whereis(h, k)) && num->next && whereis(num->next->next, k)) return 1;
-  return 0;
-}
+int knocon(ilist_t* h, int k) { return knocon_n(h, k, 2); }
