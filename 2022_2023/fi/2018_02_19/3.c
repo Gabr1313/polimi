@@ -47,7 +47,7 @@ int calcola_prod(int v[], int len) {
       max2 = v[i];
     } else if (v[i] > max3)
       max3 = v[i];
-    else if (v[i] < min1) {
+    if (v[i] < min1) {
       min2 = min1;
       min1 = v[i];
     } else if (v[i] < min2)
