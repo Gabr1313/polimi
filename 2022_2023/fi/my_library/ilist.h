@@ -1,10 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#if !defined(ILIST_T_LIB)
+#define ILIST_T_LIB
+
 typedef struct ilist_s {
   int val;
   struct ilist_s* next;
 } ilist_t;
+
 /*
 ilist_t* lappend(ilist_t*, int);
 ilist_t* lpush(ilist_t*, int);
@@ -17,6 +21,7 @@ void lprintf(ilist*);
 ilist_t* pop(ilist_t**);
 ilist_t* lremove(ilist_t*, int);
 */
+
 ilist_t* lappend(ilist_t* h, int num) {
   ilist_t *el, *n;
   if ((n = malloc(sizeof(ilist_t)))) {
@@ -49,8 +54,8 @@ ilist_t* linsert_in_order(ilist_t* h, int num) {
   if ((n = malloc(sizeof(ilist_t)))) {
     n->val = num;
     if (!h || (num <= h->val)) {
-      h = n;
-      h->next = NULL;
+      n->next = h;
+      h = h;
     } else {
       el = h;
       while (el->next && num > el->next->val) el = el->next;
@@ -160,3 +165,5 @@ ilist_t* lremove(ilist_t* h, int pos) {
   }
   return h;
 }
+
+#endif
