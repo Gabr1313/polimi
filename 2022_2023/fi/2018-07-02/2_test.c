@@ -1,13 +1,4 @@
-#include <stdio.h>
-
-void shift(char s[]) {
-  char c;
-  int i;
-
-  c = s[0];
-  for (i = 1; s[i]; i++) s[i - 1] = s[i];
-  s[i - 1] = c;
-}
+#include "2.c"
 
 int main(int argc, char* argv[]) {
   char* s;

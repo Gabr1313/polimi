@@ -1,6 +1,6 @@
+#define BASE 10
 #include <stdio.h>
 
-#define BASE 10
 
 int count_cfr_div(int n) {
   int div, count, tmp;

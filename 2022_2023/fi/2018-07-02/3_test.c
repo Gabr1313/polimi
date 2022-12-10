@@ -1,21 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "3.c"
 
 #define BASE 10
 
-int count_cfr_div(int n) {
-  int div, count, tmp;
-
-  tmp = n;
-  count = 0;
-  while (tmp > 0) {
-    div = tmp % BASE;
-    if (!(n % div)) count++;
-    tmp /= BASE;
-  }
-
-  return count;
-}
 
 int main(int argc, char* argv[]) {
   if (argc == 2) {

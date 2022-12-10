@@ -10,7 +10,7 @@ ilist_t *select_items(ilist_t * or, int min, int max) {
 
   while (or) {
     if (or->val < max && or->val > min) {
-      h = insertup(h, or->val);
+      h = linsert_in_order(h, or->val);
     }
     or = or->next;
   }
