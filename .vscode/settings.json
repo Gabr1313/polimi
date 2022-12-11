@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "ilist.h": "c",
+        "stdlib.h": "c",
+        "varargs.h": "c"
+    }
+}
