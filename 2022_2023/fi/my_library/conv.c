@@ -138,7 +138,11 @@ int convertion(char *s0, char *s1, char *s2, char *s3, char *s4, char *type_in, 
           point_counter = 0;
           for (i = 1; s3[i]; i++) {
             if (s3[i] == '.') {
-              point_counter++;
+              if (point_counter) {
+                wrong_input(s0);
+                return 1;
+              }
+              point_counter = 1;
               continue;
             }
             if ((s3[i] < '0' || s3[i] > '9')) {
