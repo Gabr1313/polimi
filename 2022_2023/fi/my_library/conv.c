@@ -318,7 +318,6 @@ int check_of(char *s0, char *s2, char *s3, char *s5, char *s6, int num1, int num
 
   COUNT_SHIFT(ris, count_r, tmp);
 
-  printf("%d %d %d\n", count_1, count_2, count_r);
   return (count_r < count_1 && count_r < count_2);
 }
 
