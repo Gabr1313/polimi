@@ -240,7 +240,9 @@ int operation(char *s0, char *s1, char *s2, char *s3, char *s4, char *s5, char *
     case MINUS:
       switch (type) {
         case INTEGER:
-          ris = num1 - num2;
+          num2 = -num2;
+          ris = num1 + num2;
+          if (check_of(num1, num2, ris)) printf("OF\n");
           break;
 
         case FLOAT:
