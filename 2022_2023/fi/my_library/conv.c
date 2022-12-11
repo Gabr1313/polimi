@@ -334,8 +334,10 @@ void help(char *s) {
   printf("  x = hexadecimal\n");
   printf("\n");
 
-  printf("With <format> b and x you can also use the MS base putting a + or - before the number\n");
-  printf("If not specified the default base is 2c2");
+  printf(
+      "With <format> b and x you can also use the MS base putting a + or - in the first position "
+      "of the <number>\n");
+  printf("If not specified the default base is 2c2\n");
   printf("\n");
 
   printf("For example:\n");
