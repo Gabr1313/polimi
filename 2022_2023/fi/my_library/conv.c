@@ -26,29 +26,21 @@
     }                                        \
   } while (0)
 
-#define COUNT_SHIFT(num, count)                                 \
-  if ((num) < 0)                                                \
-    while ((num)&0x80000000) { /* while the first bit is one */ \
-      (num) <<= 1;                                              \
-      (count)++;                                                \
-    }                                                           \
-  else                                                          \
-    while (~(num)&0x80000000) {                                 \
-      (num) <<= 1;                                              \
-      (count)++;                                                \
-    }
-
-#define BYTE_TO_BINARY_PATTERN "%c%c%c%c%c%c%c%c"
-#define BYTE_TO_BINARY(byte)                                                           \
-  (byte & 0x80 ? '1' : '0'), (byte & 0x40 ? '1' : '0'), (byte & 0x20 ? '1' : '0'),     \
-      (byte & 0x10 ? '1' : '0'), (byte & 0x08 ? '1' : '0'), (byte & 0x04 ? '1' : '0'), \
-      (byte & 0x02 ? '1' : '0'), (byte & 0x01 ? '1' : '0')
-
-#define PRINTF_BYTE_4(num)                                                               \
-  printf(BYTE_TO_BINARY_PATTERN " " BYTE_TO_BINARY_PATTERN " " BYTE_TO_BINARY_PATTERN    \
-                                " " BYTE_TO_BINARY_PATTERN "\n",                         \
-         BYTE_TO_BINARY(num >> 24), BYTE_TO_BINARY(num >> 16), BYTE_TO_BINARY(num >> 8), \
-         BYTE_TO_BINARY(num))
+#define COUNT_SHIFT(num, count, t)                              \
+  do {                                                          \
+    count = 0;                                                  \
+    t = num;                                                    \
+    if ((t) < 0)                                                \
+      while ((t)&0x80000000) { /* while the first bit is one */ \
+        (count)++;                                              \
+        (t) <<= 1;                                              \
+      }                                                         \
+    else                                                        \
+      while (~(t)&0x80000000) {                                 \
+        (count)++;                                              \
+        (t) <<= 1;                                              \
+      }                                                         \
+  } while (0)
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -155,9 +147,33 @@ int convertion(char *s0, char *s1, char *s2, char *s3, char *s4, char *type_in, 
 }
 
 int print_num(char *s0, char type, char format, int num) {
+  int tmp;
+  char count, i, tot;
   switch (format) {
     case BINARY:
-      PRINTF_BYTE_4(num);
+      switch (type) {
+        case INTEGER:
+          COUNT_SHIFT(num, count, tmp);
+          tmp = num << (--count); /* also print the sign */
+          tot = 32 - count;
+          for (i = 0; i < tot; i++, tmp <<= 1) printf("%d", tmp & 0x80000000 ? 1 : 0);
+          printf("\n");
+          tmp <<= 1;
+          break;
+        case FLOAT:
+          tmp = num;
+          printf("%d", tmp & 0x80000000 ? 1 : 0);
+          tmp <<= 1;
+          printf(" ");
+          for (i = 0; i < 8; i++, tmp <<= 1) printf("%d", tmp & 0x80000000 ? 1 : 0);
+          printf(" ");
+          for (i = 0; i < 23; i++, tmp <<= 1) printf("%d", tmp & 0x80000000 ? 1 : 0);
+          printf("\n");
+          break;
+        default:
+          wrong_input(s0);
+          return 1;
+      }
       break;
 
     case DECIMAL:
@@ -252,13 +268,14 @@ int operation(char *s0, char *s1, char *s2, char *s3, char *s4, char *s5, char *
 }
 
 int check_of(int a, int b, int c) {
-  int count_a = 0, count_b = 0, count_c = 0;
+  int tmp;
+  char count_a, count_b, count_c;
 
   if ((a < 0 && b > 0) || (a > 0 && b < 0) || a == 0 || b == 0) return 0;
 
-  COUNT_SHIFT(a, count_a);
-  COUNT_SHIFT(b, count_b);
-  COUNT_SHIFT(c, count_c);
+  COUNT_SHIFT(a, count_a, tmp);
+  COUNT_SHIFT(b, count_b, tmp);
+  COUNT_SHIFT(c, count_c, tmp);
 
   return (count_c < count_b && count_c < count_a);
 }
