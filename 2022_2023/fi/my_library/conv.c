@@ -52,7 +52,7 @@ int convertion(char *, char *, char *, char *, char *, char *, char *, int *);
 int operation(char *, char *, char *, char *, char *, char *, char *, char *, char *, char *,
               int *);
 int print_num(char *, char, char, int);
-int check_of(int, int, int);
+int check_of(char *, char *, char *, char *, char *, int, int, int);
 
 int main(int argc, char *argv[]) {
   char format, type, check = 0;
@@ -103,7 +103,25 @@ int convertion(char *s0, char *s1, char *s2, char *s3, char *s4, char *type_in, 
 
   switch (format_1) {
     case BINARY:
-      TO_NUM(num, s3, check, 2);
+      if (s3[0] == '0' || s3[0] == '+' || s3[0] == '-')
+        num = 0;
+      else if (s3[0] == '1')
+        num = -1;
+      else {
+        wrong_input(s0);
+        return 1;
+      }
+
+      for (i = 1; s3[i]; i++) {
+        num <<= 1;
+        if (s3[i] == '1')
+          num += 1;
+        else if (s3[i] != '0') {
+          wrong_input(s0);
+          return 1;
+        }
+      }
+      if (s3[0] == '-') num = -num;
       break;
 
     case DECIMAL:
@@ -221,7 +239,7 @@ int operation(char *s0, char *s1, char *s2, char *s3, char *s4, char *s5, char *
       switch (type) {
         case INTEGER:
           ris = num1 + num2;
-          if (check_of(num1, num2, ris)) printf("OF\n");
+          if (check_of(s0, s2, s3, s5, s6, num1, num2, ris)) printf("OF\n");
           break;
 
         case FLOAT:
@@ -242,7 +260,7 @@ int operation(char *s0, char *s1, char *s2, char *s3, char *s4, char *s5, char *
         case INTEGER:
           num2 = -num2;
           ris = num1 + num2;
-          if (check_of(num1, num2, ris)) printf("OF\n");
+          if (check_of(s0, s2, s3, s5, s6, num1, num2, ris)) printf("OF\n");
           break;
 
         case FLOAT:
@@ -269,17 +287,28 @@ int operation(char *s0, char *s1, char *s2, char *s3, char *s4, char *s5, char *
   return 0;
 }
 
-int check_of(int a, int b, int c) {
+int check_of(char *s0, char *s2, char *s3, char *s5, char *s6, int num1, int num2, int ris) {
   int tmp;
-  char count_a, count_b, count_c;
+  char count_1, count_2, count_r, type;
 
-  if ((a < 0 && b > 0) || (a > 0 && b < 0) || a == 0 || b == 0) return 0;
+  if ((num1 < 0 && num2 > 0) || (num1 > 0 && num2 < 0) || num1 == 0 || num2 == 0) return 0;
 
-  COUNT_SHIFT(a, count_a, tmp);
-  COUNT_SHIFT(b, count_b, tmp);
-  COUNT_SHIFT(c, count_c, tmp);
+  TO_CHAR(s2, type, s0);
+  if (type == 'b')
+    count_1 = 33 - strlen(s3);
+  else
+    COUNT_SHIFT(num1, count_1, tmp);
 
-  return (count_c < count_b && count_c < count_a);
+  TO_CHAR(s5, type, s0);
+  if (type == 'b')
+    count_2 = 33 - strlen(s6);
+  else
+    COUNT_SHIFT(num2, count_2, tmp);
+
+  COUNT_SHIFT(ris, count_r, tmp);
+
+  printf("%d %d %d\n", count_1, count_2, count_r);
+  return (count_r < count_1 && count_r < count_2);
 }
 
 void help(char *s) {
@@ -293,6 +322,10 @@ void help(char *s) {
   printf("  b = binary\n");
   printf("  d = decimal\n");
   printf("  x = hexadecimal\n");
+  printf("\n");
+
+  printf("With <format> b and x you can also use the MS base putting a + or - before the number\n");
+  printf("If not specified the default base is 2c2");
   printf("\n");
 
   printf("For example:\n");
