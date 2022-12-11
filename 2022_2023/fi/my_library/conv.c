@@ -92,7 +92,7 @@ void wrong_input(char *s) {
 
 int convertion(char *s0, char *s1, char *s2, char *s3, char *s4, char *type_in, char *format_in,
                int *num_in) {
-  char type, format_1, format_2;
+  char type, format_1, format_2, point_counter;
   int num; /* also floats have 32 bit, so there's no problem */
   int i;
   char *check;
@@ -135,11 +135,18 @@ int convertion(char *s0, char *s1, char *s2, char *s3, char *s4, char *type_in, 
             wrong_input(s0);
             return 1;
           }
-          for (i = 1; s3[i]; i++)
-            if (s3[i] < '0' || s3[i] > '9') {
+          point_counter = 0;
+          for (i = 1; s3[i]; i++) {
+            if (s3[i] == '.') {
+              point_counter++;
+              continue;
+            }
+            if ((s3[i] < '0' || s3[i] > '9')) {
+              printf("arrived %d\n", s3[i]);
               wrong_input(s0);
               return 1;
             }
+          }
           sscanf(s3, "%f", (float *)&num);
           break;
 
