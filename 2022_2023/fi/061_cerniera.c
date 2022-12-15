@@ -40,6 +40,7 @@ int main(int argc, char *argv[]) {
     printf("%s\n", ris);
   }
   if (ris[0]) return 0;
+  return 0;
 }
 
 int cercaCerniera(char s1[], char s2[]) {
