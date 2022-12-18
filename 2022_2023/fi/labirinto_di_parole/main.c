@@ -7,6 +7,7 @@
 #define MENU_SOL '2'
 #define MENU_NEW '3'
 #define MENU_FIND '4'
+#define MENU_FIND_ALL '5'
 #define MIN_WORD 4
 #define LEN_ALP ('z' - 'a' + 1)
 #define CHAR_CHANGE_MAX 1
@@ -33,8 +34,9 @@ char is_char_change(char[], char[]);
 char is_char_add(char[], char[]);
 char is_char_del(char[], char[]);
 void clean_buffer(void);
-void print_solution(wlist_t *);
+void print_solution(wlist_t *, char);
 char find_solution_recursive(wlist_t *, wlist_t *, wlist_t *);
+char print_all_solution_recursive(wlist_t *, wlist_t *, wlist_t *, wlist_t *);
 
 int main(void) {
   char exit;
@@ -153,7 +155,11 @@ char load_game(wlist_t *original) {
         exit = 1;
         break;
       case MENU_FIND:
-        print_solution(original);
+        print_solution(original, MENU_FIND);
+        restart = 1;
+        break;
+      case MENU_FIND_ALL:
+        print_solution(original, MENU_FIND_ALL);
         restart = 1;
         break;
       default:
@@ -169,7 +175,8 @@ void print_menu(void) {
   printf("%c. view word list\n", MENU_VIS);
   printf("%c. check a solution\n", MENU_SOL);
   printf("%c. insert new sequence\n", MENU_NEW);
-  printf("%c. find the solution\n", MENU_FIND);
+  printf("%c. find one solution\n", MENU_FIND);
+  printf("%c. find all solution\n", MENU_FIND_ALL);
   printf("%c. exit\n", MENU_EXIT);
   printf(">> ");
 }
@@ -256,7 +263,8 @@ void clean_buffer(void) {
     ;
 }
 
-void print_solution(wlist_t *original) {
+void print_solution(wlist_t *original, char choice) {
+  int tot;
   wlist_t *start = NULL, *end = NULL, *remaning = NULL;
 
   remaning = list_copy(original);
@@ -264,11 +272,24 @@ void print_solution(wlist_t *original) {
   start->next = NULL;
   end = list_pop_tail(&remaning);
   end->next = NULL;
-  if ((find_solution_recursive(start, end, remaning))) {
-    list_printf(start);
-    list_free(start);
-  } else {
-    printf("\nSolution does not exists\n");
+
+  if (choice == MENU_FIND) {
+    if ((find_solution_recursive(start, end, remaning))) {
+      list_printf(start);
+    } else {
+      printf("\nSolution does not exists\n");
+      list_free(start);
+      list_free(end);
+      list_free(remaning);
+    }
+  } else if (choice == MENU_FIND_ALL) {
+    tot = print_all_solution_recursive(start, end, remaning, start);
+    if (tot == 0)
+      printf("\nNo solution were found\n");
+    else if (tot == 1)
+      printf("\nThere is only one solution!\n");
+    else
+      printf("\nThere are %d solutions!\n", tot);
     list_free(start);
     list_free(end);
     list_free(remaning);
@@ -309,6 +330,47 @@ char find_solution_recursive(wlist_t *start, wlist_t *end, wlist_t *remaning) {
           elem->next = prev->next;
           prev->next = elem;
         }
+      }
+      prev = elem;
+    }
+  }
+
+  return ris;
+}
+
+char print_all_solution_recursive(wlist_t *start, wlist_t *end, wlist_t *remaning,
+                                  wlist_t *stampa) {
+  char ris;
+  wlist_t *elem, *prev;
+
+  ris = 0;
+  if (!remaning) {
+    if (ARE_SIMILAR(start->word, end->word)) {
+      start->next = end;
+      list_printf(stampa);
+      start->next = NULL;
+      ris = 1;
+    }
+  } else {
+    if (ARE_SIMILAR(start->word, remaning->word)) {
+      elem = list_pop_head(&remaning);
+      elem->next = NULL;
+      start->next = elem;
+      ris += print_all_solution_recursive(elem, end, remaning, stampa);
+      start->next = NULL;
+      elem->next = remaning;
+      remaning = elem;
+    }
+    prev = remaning;
+    while ((elem = prev->next)) {
+      if (ARE_SIMILAR(start->word, elem->word)) {
+        prev->next = elem->next;
+        elem->next = NULL;
+        start->next = elem;
+        ris += print_all_solution_recursive(elem, end, remaning, stampa);
+        start->next = NULL;
+        elem->next = prev->next;
+        prev->next = elem;
       }
       prev = elem;
     }
