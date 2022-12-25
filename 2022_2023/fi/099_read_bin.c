@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/* prova of something */
 int pop_arr_file(FILE *, int **);
 
 int main(int argc, char *argv[]) {
