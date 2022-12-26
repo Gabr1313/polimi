@@ -20,11 +20,11 @@ OBJ = $(SRC:.c=.o)
 default : debug
 
 release: $(SRC) $(HDR)
-	$(CC) $(CFLAGS) $(RLSFLAGS) -o $@ $(SRC)
+	$(CC) $(CFLAGS) $(RLSFLAGS) -o $@.out $(SRC)
 
 debug: $(OBJ) $(HDR)
-	$(CC) $(CFLAGS) $(DBGFLAGS) -o $@ $(OBJ)
-	./debug
+	$(CC) $(CFLAGS) $(DBGFLAGS) -o $@.out $(OBJ)
+	./debug.out
 
 clean:
 	rm -f debug release *.o
