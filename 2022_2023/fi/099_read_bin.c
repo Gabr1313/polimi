@@ -1,13 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* prova of something */
 int pop_arr_file(FILE *, int **);
 
 int main(int argc, char *argv[]) {
   FILE *in;
   int *v, len, i;
-
   if (argc == 2) {
     if ((in = fopen(argv[1], "rb"))) {
       len = pop_arr_file(in, &v);

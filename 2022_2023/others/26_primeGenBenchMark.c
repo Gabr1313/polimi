@@ -10,15 +10,14 @@ typedef unsigned char u8;
 typedef unsigned long int u64;
 typedef u64 bitSet_t;
 
-int main_program(u64);
-u64 generatePrimes(u64 **, u64);
-void printfArrayUl(u64 *, u64);
+u64 generatePrimes(bitSet_t **, u64);
+void printfArrayUl(bitSet_t *, u64);
 u64 findPrimes(bitSet_t *, u64);
-void fillPrimes(u64 *, u64, bitSet_t *);
 u64 crossMultiple(bitSet_t *, u64, u64);
 void bit_to0(bitSet_t *, u64);
 void bit_AllTo1(bitSet_t *, u64);
 u8 bit_getValue(bitSet_t *, u64);
+int main_program(u64);
 
 int main(int argc, char *argv[]) {
   u64 i, maxValue;
@@ -44,79 +43,69 @@ int main(int argc, char *argv[]) {
 }
 
 int main_program(u64 maxValue) {
-  u64 *primes, numberOfPrimes;
-  numberOfPrimes = generatePrimes(&primes, maxValue);
-  /* printfArrayUl(primes, numberOfPrimes); */
-  printf("Total prime found: %-16lu\t", numberOfPrimes);
-  free(primes);
+  u64 numberOfPrimes;
+  bitSet_t *primesBool;
+  numberOfPrimes = generatePrimes(&primesBool, maxValue);
+  /* printfArrayUl(primesBool, numberOfPrimes); */
+  printf("Total: %-16lu", numberOfPrimes);
+  free(primesBool);
   return 0;
 }
 
-u64 generatePrimes(u64 **primes_p, u64 maxValue) {
-  u64 *primes = NULL, numberOfElem, numberOfPrimes, len;
-  bitSet_t *crossedOut;
+u64 generatePrimes(u64 **primesBool_p, u64 maxValue) {
+  u64 numberOfElem, numberOfPrimes, len;
+  bitSet_t *primesBool = NULL;
   if (maxValue >= 2) {
     len = maxValue + 1;
     numberOfElem = len / SIZE_BITS + 1;
-    crossedOut = malloc(sizeof(bitSet_t) * numberOfElem);
-    if (crossedOut) {
-      bit_AllTo1(crossedOut, maxValue + 1);
-      numberOfPrimes = findPrimes(crossedOut, len);
-      primes = malloc(sizeof(u64) * numberOfPrimes);
-      if (primes)
-        fillPrimes(primes, numberOfPrimes, crossedOut);
-      else
-        printf("generatePrimes: memory allocation problem\n");
-      free(crossedOut);
+    primesBool = malloc(sizeof(bitSet_t) * numberOfElem);
+    if (primesBool) {
+      bit_AllTo1(primesBool, maxValue + 1);
+      numberOfPrimes = findPrimes(primesBool, len);
     } else
       printf("generatePrimes: memory allocation problem\n");
   } else
     numberOfPrimes = 0;
-  *primes_p = primes;
+  *primesBool_p = primesBool;
   return numberOfPrimes;
 }
 
-u64 findPrimes(bitSet_t *crossedOut, u64 len) {
+u64 findPrimes(bitSet_t *primesBool, u64 len) {
   u64 i, numberOfPrimes, crossedNew;
   numberOfPrimes = len;
   for (i = 0; i < 2; i++) {
-    bit_to0(crossedOut, i);
+    bit_to0(primesBool, i);
     numberOfPrimes--;
   }
   for (; i * i < len; i++) {
-    if (bit_getValue(crossedOut, i)) {
-      crossedNew = crossMultiple(crossedOut, len, i);
+    if (bit_getValue(primesBool, i)) {
+      crossedNew = crossMultiple(primesBool, len, i);
       numberOfPrimes -= crossedNew;
     }
   }
   return numberOfPrimes;
 }
 
-u64 crossMultiple(bitSet_t *crossedOut, u64 len, u64 multiple) {
+u64 crossMultiple(bitSet_t *primesBool, u64 len, u64 multiple) {
   u64 i, crossedNew;
   crossedNew = 0;
   for (i = 2 * multiple; i < len; i += multiple) {
-    if (bit_getValue(crossedOut, i)) {
-      bit_to0(crossedOut, i);
+    if (bit_getValue(primesBool, i)) {
+      bit_to0(primesBool, i);
       crossedNew++;
     }
   }
   return crossedNew;
 }
 
-void fillPrimes(u64 *primes, u64 numberOfPrimes, bitSet_t *crossedOut) {
+void printfArrayUl(u64 *primesBool, u64 numberOfPrimes) {
   u64 i, j;
   i = 1;
   for (j = 0; j < numberOfPrimes; j++) {
-    for (i++; !bit_getValue(crossedOut, i); i++)
+    for (i++; !bit_getValue(primesBool, i); i++)
       ;
-    primes[j] = i;
+    printf("%lu ", i);
   }
-}
-
-void printfArrayUl(u64 *arr, u64 len) {
-  u64 i;
-  for (i = 0; i < len; i++) printf("%lu ", arr[i]);
   printf("\n");
 }
 
@@ -145,3 +134,4 @@ u8 bit_getValue(bitSet_t *bits, u64 pos) {
   bitCompared = (bitSet_t)1 << smallPos;
   return !!(*(bits + bigPos) & bitCompared);
 }
+
