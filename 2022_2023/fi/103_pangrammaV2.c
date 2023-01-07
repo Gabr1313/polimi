@@ -10,7 +10,6 @@ problem Valore restituito: 0 */
 
 #include <ctype.h>
 #include <stdio.h>
-#include <string.h>
 
 #define LEN 255
 #define START 'a'

@@ -1,4 +1,4 @@
-# ANALISI MATEMATICA 1
+# FONDAMENTI DI INFORMATICA
 
 ### Professore:
 > Bolchini Cristiana
