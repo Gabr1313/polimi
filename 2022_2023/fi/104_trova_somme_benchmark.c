@@ -15,7 +15,8 @@ poiché le combinazioni sono: [0, 1, 2], [0, 3], [1, 2], [3]
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#define LEN 10
+
+#define LEN 20
 
 int cmp(const void *, const void *);
 int *ordina(int[], int);

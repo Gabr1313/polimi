@@ -15,7 +15,7 @@ ilist_t* listInsertInOrder(ilist_t*, int);
 ilist_t* listFind(ilist_t*, int);
 ilist_t* listRemoveInt(ilist_t*, int);
 ilist_t* listRemovePos(ilist_t*, int);
-ilist_t* listFree(ilist_t*);
+void listFree(ilist_t*);
 int listLen(ilist_t*);
 void listPrintf(ilist_t*);
 ilist_t* listPopHead(ilist_t**);

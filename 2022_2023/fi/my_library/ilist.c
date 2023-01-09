@@ -103,13 +103,12 @@ ilist_t* listRemovePos(ilist_t* h, int pos) {
   return h;
 }
 
-ilist_t* listFree(ilist_t* h) {
+void listFree(ilist_t* h) {
   ilist_t* del;
   while ((del = h)) {
     h = h->next;
     free(del);
   }
-  return h;
 }
 
 int listLen(ilist_t* h) {
