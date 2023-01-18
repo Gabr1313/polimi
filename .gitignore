@@ -3,7 +3,7 @@
 *.gch
 *.bin
 *.csv
-*.pdf
+.pdf
 *.o
 *.json
 *.vscode
