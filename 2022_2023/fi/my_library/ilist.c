@@ -48,7 +48,7 @@ ilist_t* listInsertInOrder(ilist_t* h, int num) {
 ilist_t* listFind(ilist_t* h, int num) {
   ilist_t* el;
   el = h;
-  if (h)
+  if (h && h->val != num)
     while ((el = el->next) && el->val != num)
       ;
   return el;

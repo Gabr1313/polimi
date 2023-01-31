@@ -1,7 +1,8 @@
 #include <stdio.h>
 #define NCOL 10
 
-void findIndexSum(int mat[][NCOL], int rows, int cols, int val, int * iRis, int * jRis){
+void findIndexSum(int mat[][NCOL], int rows, int cols, int val, int* iRis,
+                  int* jRis) {
   int i, j, found, sum;
 
   found = 0;
@@ -9,9 +10,9 @@ void findIndexSum(int mat[][NCOL], int rows, int cols, int val, int * iRis, int 
   *iRis = -1;
   *jRis = -1;
   for (i = 0; i < rows && !found; i++)
-    for (j = 0; j < cols && !found; j++){
+    for (j = 0; j < cols && !found; j++) {
       sum += mat[i][j];
-      if (sum > val){
+      if (sum > val) {
         *iRis = i;
         *jRis = j;
         found = 1;
@@ -19,13 +20,13 @@ void findIndexSum(int mat[][NCOL], int rows, int cols, int val, int * iRis, int 
     }
 }
 
-int main(void){
+int main(void) {
   int mat[NCOL][NCOL], val, i, j, iMax, jMax, iRis, jRis;
 
   scanf("%d", &val);
   scanf("%d%d", &iMax, &jMax);
   for (i = 0; i < iMax; i++)
-    for (j = 0; j < jMax; j++){
+    for (j = 0; j < jMax; j++) {
       scanf("%d", &mat[i][j]);
     }
 
@@ -34,6 +35,3 @@ int main(void){
 
   return 0;
 }
-
-
-
