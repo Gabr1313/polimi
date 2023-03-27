@@ -42,8 +42,6 @@ int initBit() {
   int bitCmp;
   char i;
   bitCmp = 0;
-  for (i = 'a'; i <= 'z'; i++)
-    bitCmp |= (1 << (i % 32));
+  for (i = 'a'; i <= 'z'; i++) bitCmp |= (1 << (i % 32));
   return bitCmp;
 }
-

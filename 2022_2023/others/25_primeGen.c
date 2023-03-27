@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
     maxValue = strtoul(argv[1], &check, BASE);
     if (!*check) {
       numberOfPrimes = generatePrimes(&primesBool, maxValue);
-      printfArrayUl(primesBool, numberOfPrimes);
+//      printfArrayUl(primesBool, numberOfPrimes);
       printf("Total: %lu\n", numberOfPrimes);
       free(primesBool);
     } else
