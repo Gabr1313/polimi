@@ -7,6 +7,8 @@
 
 // PER L'UTILIZZO
 // negli errori, per mettere l'ultimo pacchetto scrivere `0`, penultimo `-1` etc.
+// nel timeout, per mettere un multimplo dell'rtt indicarlo con un un numero negativo:
+// ad esempio per scrivere 3rtt, scrivere `-3.0` 
 
 // PER L'ANALISI
 // per comprendere il programma consiglio di eliminare inizialmente la parte riguardante gli errori
@@ -144,7 +146,7 @@ fn main() {
     let file_dim = 20_000 * 8;
     let tau = vec![1e-3, 1e-3];
     let c = vec![5e6, 10e6];
-    let err = [];
+    let err = [5];
     let mut timeout = -3.0; // 3rtt
 
 
