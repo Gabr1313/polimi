@@ -1,0 +1,37 @@
+Q1. Indicare gli errori che ci sono nello script Server (2 punti)
+
+Client
+from socket import * 
+clientSocket = socket(AF_INET, SOCK_DGRAM)
+clientSocket.settimeout(1)
+try:
+    while 1:
+    message = raw_input('Input a Country name, or Close to finish this client:')
+    if message == ‘Close’:
+        break
+          clientSocket.sendto(message, ('localhost', 2018))
+    modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
+          if modifiedMessage
+
+Server
+from socket import *
+import requests
+import json
+serverSocket = socket(AF_INET, SOCK_STREAM)
+serverSocket.bind(('localhost', 2018))
+while 1:
+    try:
+        message, clientAddress = serverSocket.recvfrom(2048)
+        modifiedMessage = message.title()
+        #title() ritorna una copia della stringa in cui il primo carattere di tutte le
+        #        parole è maiuscolo
+        r = requests.get('http://api.football-data.org/v1/competitions/467/teams')
+        teams_qualificati = parseRisposta(r.json())
+        t = ‘0’
+        for team in teams_qualificati:
+            if team == modifiedMessage:
+                t = ‘1’
+        serverSocket.sendto(t, clientAddress)
+    finally:
+        serverSocket.close()
+

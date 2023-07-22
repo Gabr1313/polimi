@@ -1,0 +1,49 @@
+Il codice riportato rappresenta una versione semplificata del videogioco Pokèmon GO.
+Periodicamente l’applicazione dell’utente (client) invia le proprie coordinate GPS al server, che risponde con l’elenco dei Pokèmon presenti nelle vicinanze.
+Il diagramma in figura mostra il protocollo applicativo, in 3 fasi, tra Client e Server.
+Q1 Completare il codice mancante nel Server e nel Client per implementare la fase 3 del protocollo
+Q2 Quanti utenti si possono accodare nel Server in attesa di essere serviti?
+Q3 Che protocollo di trasporto è utilizzato?  Perché la comunicazione tra server e client richiede tale protocollo? 
+
+from socket import *
+def get_GPS_coord():
+	return (5,10) 
+serverName = 'localhost'
+serverPort = 12000
+clSock = socket(AF_INET, SOCK_STREAM)
+clSock.connect((serverName, serverPort))
+# Invia coordinate GPS al server
+(latitudine,longitudine) = get_GPS_coord()
+clSock.send(str(latitudine))
+message = clSock.recv(2)
+if message == 'OK':
+	clSock.send(str(longitudine))
+# Legge dal server il numero di Pokemon nelle vicinanze da richiedere al server
+numero_pokemon = int( clSock.recv(100) )
+lista_pokemon = []
+# Richiede, uno alla volta, la lista dei pokemon al server
+for i in range(numero_pokemon):
+	lista_pokemon.append( pokemon )
+print lista_pokemon
+clSock.close()
+
+from socket import *
+def get_list_from_GPS(latitudine,longitudine):
+	return ["Pikachu","Charmander"]
+serverPort = 12000
+servSock = socket(AF_INET, SOCK_STREAM)
+servSock.bind(('', serverPort))
+servSock.listen(5)
+print 'Server Pokemon GO pronto!'
+while True:
+	clSock,  clAddr= servSock.accept()
+	print "Connection form: ", clAddr 
+	# Riceve dal client le coordinate GPS
+	lat = int( clSock.recv(100) )
+	clSock.send("OK")
+	long = int( clSock.recv(100) )
+	# Calcola la lista dei Pokemon
+	lista_pkmn = get_list_from_GPS(lat,long)
+	clSock.send(str(len(lista_pokemon)))
+	for pokemon in lista_pkmn:
+	clSock.close()

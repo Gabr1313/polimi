@@ -1,0 +1,90 @@
+
+La seguente applicazione simula l’utilizzo di un servizio di acquisti online. L’utente deve prima inserire la località da cui acquista, così da acquisire la lista di servizi disponibili. Successivamente, indica il servizio e sceglie il prodotto da acquistare, che verrà consegnato se disponibile. Si risponda alle seguenti domande.
+NB:  Un dizionario in Python è una struttura del tipo: 
+dict = {"FirstKey" : [1,2], "SecondKey" : [3,4]} 
+“FirstKey" e “SecondKey" sono le chiavi del dizionario, ottenibili come lista tramite il comando:
+list(dict.keys())
+Scelta la chiave, si accede all’oggetto corrispondente, es. :
+dict[“FirstKey”] (ritorna la lista [1,2])
+
+Domande:
+Q1) Che tipo di Protocollo di Trasporto viene utilizzato? (1 punto)
+Q2) Completare il codice del: (1 punto)
+	Client:
+
+	Server:
+
+Q3) Scrivere l’output del client quando viene ordinata una “Sedia” a “Roma”: (1 punto)
+
+Script Client:
+from socket import *
+serverName = 'localhost'
+serverPort = 12001
+clientSocket = socket(AF_INET, SOCK_DGRAM)
+clientSocket.settimeout(5)
+message = input('Inserisci una Location:')
+clientSocket.sendto(message.encode('utf-8'), (serverName, serverPort))
+reply, serverAddress = clientSocket.recvfrom(2048)
+reply = reply.decode('utf-8')
+if reply not in 'KO':
+    print('Scegli un servizio tra quelli disponibili: ', reply)
+    indice = input('Inserisci servizio:')
+    clientSocket.sendto(                                   )
+    reply2, serverAddress = clientSocket.recvfrom(2048)
+    reply2 = reply2.decode('utf-8')
+    if reply2 not in 'KO':
+        print('Prodotti Disponibili: ', reply2)
+        indice2 = input('Inserisci Prodotto:')
+        clientSocket.sendto(indice2.encode('utf-8'), (serverName, serverPort))
+        reply3, serverAddress = clientSocket.recvfrom(2048)
+        reply3 = reply3.decode('utf-8')
+        if reply3 not in 'KO':
+            print('Prodotto in Arrivo!')
+        else:
+            print('Prodotto non Disponibile (Non in Listino o Fine Stock), chiusura sessione')
+    else:
+        print('Servizio non presente in questa località, chiusura sessione')
+else:
+    print('Nessun Servizio in questa località, chiusura sessione')
+clientSocket.close()
+
+
+Script Server:
+from socket import *
+servizi = {"Milano": ["VendoLibri","MobilePhones"],
+           "Roma": ["MobilePhones","ArticoliCasa"],
+           "Napoli": ["ArticoliCasa","VendoLibri"]}
+prodotti = {"VendoLibri": ["HarryPotter","GameOfThrones"],
+            "MobilePhones": ["Iphone","HuaweiMate"],
+            "ArticoliCasa": ["Sedia","Tavolo"]}
+
+disponibilità = {"VendoLibri": [3,0],
+                 "MobilePhones": [2,1],
+                 "ArticoliCasa": [0,5]}
+serverName = 'localhost'
+serverPort = 12001
+serverSocket = socket(AF_INET, SOCK_DGRAM)
+serverSocket.bind(('', serverPort))
+while 1:
+    location, clientAddress = serverSocket.recvfrom(2048)
+    location = location.decode('utf-8')
+    status = 'KO'
+    if location in list(servizi.keys()):
+        serverSocket.sendto(str(servizi[location]).encode('utf-8'),
+                            clientAddress)
+        srv, clientAddress =
+        srv = str(srv.decode('utf-8'))
+        if srv in list(servizi[location]):
+            print(prodotti[srv])
+            serverSocket.sendto(str(prodotti[srv]).encode('utf-8'),
+                                clientAddress)
+            prd, clientAddress = serverSocket.recvfrom(2048)
+            prd = str(prd.decode('utf-8'))
+            if prd in list(prodotti[srv]):
+                index = prodotti[srv].index(prd)
+                if disponibilità[srv][index] > 0:
+                    status = 'OK'
+                    disponibilità[srv][index] -=1
+    serverSocket.sendto(status.encode('utf-8'),
+                        clientAddress)
+

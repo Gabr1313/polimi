@@ -8,8 +8,8 @@
 
 ## Secondo semestre
 
-|                 Corso                    |   Professore                    | CFU |
-| :-:                                      | :-:                             | :-: |
-| Elettrotecnica                           | Linaro Daniele                  | 10  |
-| Fondamenti di comunicazioni e Internet   | Cesana Matteo                   | 10  |
-| Fisica                                   | Crespi Andrea                   | 12  |
+|                 Corso                                  |   Professore                    | CFU |
+| :-:                                                    | :-:                             | :-: |
+| Elettrotecnica [_(ET)_](et/)                           | Linaro Daniele                  | 10  |
+| Fondamenti di comunicazioni e Internet [_(FCI)_](fci/) | Cesana Matteo                   | 10  |
+| Fisica 1 [_(F1)_](f1/)                                 | Crespi Andrea                   | 12  |

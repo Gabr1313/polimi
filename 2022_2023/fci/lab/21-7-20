@@ -1,0 +1,85 @@
+Il codice sotto riportato rappresenta un’applicazione semplificata per il calcolo dell’area di alcuni selezionati poligoni. Un utente valuta se nella lista di poligoni supportati dall’applicazione c’è quello di cui vuole calcolare l’area. In caso affermativo, specifica i dati necessari per il calcolo dell’area e ottiene la soluzione dal server. Si risponda ai seguenti quesiti:
+Q1 Completare il codice mancante nel Server e nel Client in maniera tale che :
+        1. Il server sia in ascolto sulla porta 13001
+        2. Il servizio di trasporto utilizzato sia TCP
+Q2 Si riporti ciò che appare sul terminale client nella situazione in cui il client voglia calcolare l’area di un Triangolo di base = 2 [m] e altezza = 1[m] 
+
+#Script client
+
+from socket import *
+
+serverName = 'localhost'
+serverPort =
+ClientSock = socket(AF_INET,)
+ClientSock.connect((serverName, serverPort))
+print('Ciao!')
+pol_disp = ClientSock.recv(100)
+print('Sono supportati i seguenti Poligoni: ')
+print(pol_disp)
+decisione = input('Vuoi Calcolare l\'area [si/no]? ')
+if decisione == 'si':
+    # Selezione una delle scelte disponibili
+    poligono = input('Scegli un poligono nella lista proposta: ')
+    ClientSock.send(poligono.encode('utf-8'))
+    flag = ClientSock.recv(100).decode('utf-8')
+    if flag == 'ok':
+        base = input('Inserisci un valore numerico per la base (U. di misura: metro)): ')
+        ClientSock.send(base.encode('utf-8'))
+        altezza = input('Inserisci un valore numerico per l\'altezza (U. di misura: metro): ')
+        ClientSock.send(altezza.encode('utf-8'))
+        risposta = ClientSock.recv(100).decode('utf-8')
+        if risposta == 'ok':
+            area = ClientSock.recv(100).decode('utf-8')
+            print('L\'area del poligono considerato è: '+str(area)+' m^2')
+        else:
+            print('Base o Altezza sono errate (devono essere numeri). Chiusura Sessione')
+    else:
+        print('Soluzione non disponibile, chiusura sessione.')
+elif decisione == 'no':
+    ClientSock.send('no'.encode('utf-8'))
+    print('Arrivederci!')
+else:
+    print('Scelta errata, chiusura sessione!')
+ClientSock.close()
+
+#Script server
+
+from socket import *
+def lista_poligoni():
+    return ['Triangolo', 'Rettangolo']
+def area_triangolo(base, altezza):
+    return base*altezza*0.5
+def area_rettangolo(base, altezza):
+    return base*altezza
+serverPort =
+serverSock = socket(AF_INET,            )
+serverSock.bind(('', serverPort))
+serverSock.listen(1)
+print('Il server è pronto a ricevere')
+while True:
+    clSock, clAddr= serverSock.accept()
+    print("Connection from: ", clAddr)
+    # Invia Al Client i Poligoni disponibili
+    poligons = str(lista_poligoni())
+    clSock.send(poligons.encode('utf-8'))
+    selezione = clSock.recv(1024).decode('utf-8')
+    if str(selezione) in poligons:
+        clSock.send('ok'.encode('utf-8'))
+        base = clSock.recv(1024).decode('utf-8')
+        altezza = clSock.recv(1024).decode('utf-8')
+        try:
+            base = float(base)
+            altezza = float(altezza)
+            clSock.send('ok'.encode('utf-8'))
+            if str(selezione) in ['Triangolo']:
+                area = area_triangolo(base,altezza)
+            elif str(selezione) in ['Rettangolo']:
+                area = area_rettangolo(base, altezza)
+            clSock.send(str(area).encode('utf-8'))
+        except:
+            clSock.send('Errore'.encode('utf-8'))
+    elif str(selezione) == 'no':
+        print('')
+    else:
+        clSock.send('Errore'.encode('utf-8'))
+clSock.close()

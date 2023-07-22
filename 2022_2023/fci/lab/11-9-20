@@ -1,0 +1,45 @@
+Si vuole scrivere un'applicazione client/server UDP che riconosca parole palindrome (cioè parole che si leggono uguali anche al contrario). Il client chiede all'utente di inserire una stringa, il server risponde indicando i) la lunghezza della stringa e ii) se si tratta di una stringa palindroma o meno. 
+Q1) Completare gli script "UDP client" e "UDP server” date le seguenti specifiche:
+    • Utilizzare indirizzi IPv4 (0.5 punti)
+    • Time-out in ricezione (lato client): 5 secondi. (0.5 punti)
+    • Lunghezza buffer di ricezione (lato client): 2048 byte (0.5 punti)
+Q2) Completare la parte mancante nel ciclo while di "UDP server” affinché il servizio funzioni correttamente (1 punto)
+Q3) Con quale messaggio risponde il server se l’utente dell’applicazione client inserisce in input ‘12321’? (0.5 punti)
+
+UDP server
+
+from socket import *
+def riconosci_palindroma(stringa):
+    indice = (len(stringa) -1)
+    nuova_stringa = ""
+    while indice >= 0:
+        nuova_stringa += stringa[indice]
+        indice -= 1
+    return nuova_stringa
+serverPort = 12000
+serverSocket.bind(('', serverPort))
+print('Server pronto a ricevere!')
+while 1:
+    messaggio, clientAddress = serverSocket.recvfrom(2048)
+    messaggio = messaggio.decode(‘utf-8’)
+    print('La stringa passata ha ‘+str(len(messaggio))+’ caratteri…)
+    test = riconosci_palindroma(messaggio)
+    serverSocket.sendto(risposta.encode(‘utf-8’), clientAddress)
+
+UDP client
+
+from socket import *
+serverName = 'localhost'
+serverPort = 12000
+message = input('Inserisci una parola:')
+clientSocket.sendto(message.encode(‘utf-8’),
+try:
+    reply, serverAddress =
+    if reply.decode(‘utf-8’) == ‘OK’:
+       print(‘La stringa passata è palindroma!’)
+    else reply.decode(‘utf-8’) == ‘KO’:
+       print('Mi dispiace, la stringa inserita non è palindroma.’)
+except:
+    print("Il server non ha risposto entro il timeout...")
+finally:
+    clientSocket.close()

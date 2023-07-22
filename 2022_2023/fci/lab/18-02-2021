@@ -1,0 +1,43 @@
+Si vuole scrivere un'applicazione client/server UDP per conteggiare il numero di vocali presenti in una stringa.
+Il client chiede all'utente di inserire una stringa, il server risponde indicando il numero di vocali presenti nella stringa (sia maiuscole che minuscole). 
+Hint: y.count(x) conta quante volte appare l’elemento x nella lista y.
+
+Q1) (vedi codice) Completare gli script "UDP client" e "UDP server" date le seguenti specifiche:
+    • Utilizzare indirizzi IPv4 (0.5 punti)
+    • Time-out in ricezione (lato client): 3 secondi (0.5 punti)
+    • Lunghezza buffer di ricezione: 1024 byte (0.5 punti)
+
+Q2) Con quale messaggio risponde il server se il client invia la stringa "LabOratoRio" ? 
+Come fa il Server a riconoscere sia lettere maiuscole che minuscole?
+
+UDP server
+from socket import *
+serverPort = 16590
+serverSocket.bind(('', serverPort))
+print('Server pronto a ricevere!')
+vocali = ['A','E','I','O','U']
+while 1:
+    messaggio, clientAddress =
+    messaggio = messaggio.decode('utf-8').upper()
+    num = 0
+    for voc in vocali:
+        num = num + messaggio.count(voc)
+    risposta = "Il messaggio contiene "+str(num)+" vocali."
+    serverSocket.sendto(risposta.encode('utf-8'), clientAddress)
+
+UDP client
+
+from socket import *
+serverName = 'localhost'
+serverPort = 16590
+message = input('Inserisci una parola (senza caratteri speciali):')
+clientSocket.sendto(message.encode('utf-8'),                         )
+
+try:
+    reply, serverAddress =
+    print(reply.decode('utf-8'))
+except:
+    print("Il server non ha risposto entro il timeout...")
+finally:
+    clientSocket.close()
+

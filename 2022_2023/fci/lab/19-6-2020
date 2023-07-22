@@ -1,0 +1,63 @@
+Il codice sotto riportato è una versione semplificata di un’applicazione per effettuare la spesa online. L’utente inserisce l’indirizzo di consegna e i prodotti che vuole acquistare con la rispettiva quantità e il server risponde comunicando se la consegna è disponibile.
+Il diagramma in figura mostra il protocollo applicativo.
+--> Indirizzo
+<-- OK/KO
+--> Prodotto
+--> Quantita'
+<-- OK/KO
+(si ripete finche' l'utente non inserisce "quit")
+
+1) Completare il codice del client e del server assumendo che (1.5 punti): 
+    • La comunicazione avvenga su IPv4+TCP
+    • Il server sia in ascolto all’indirizzo 10.10.10.10 sulla porta 2020
+    • La dimensione del buffer del socket di ricezione sia 2048
+2) Scrivere nello spazio sottostante il codice mancante del server per inviare la risposta al client riguardo la disponibilità del prodotto
+
+Script Client:
+from socket import * 
+clSocket = socket(                    ) 
+indirizzo = input("Inserisci l'indirizzo di consegna: ")
+clSocket.send(indirizzo.encode('utf-8'))
+resp = clSocket.recv(2048) 
+if resp.decode('utf-8') != 'OK': 
+    print("Consegna non disponibile") 
+    clSocket.close() 
+    exit 
+while True: 
+    prodotto = input("Prodotto(quit per terminare): ") 
+    clSocket.send(prodotto.encode('utf-8')) 
+    if prodotto == "quit": 
+        break 
+    quantita = input("Quantita': ") 
+    clSocket.send(quantita.encode('utf-8')) 
+    resp = clSocket.
+    if resp.decode('utf-8') == 'KO': 
+        print("Prodotto o quantita' non disponibile")  
+clSocket.close()
+
+Script Server:
+
+from socket import * 
+magazzino = {"prodottoA":10, "prodottoB":5} 
+socket = socket(                    ) 
+socket.listen(1) 
+while True: 
+    clSocket, clAddr = socket.accept() 
+    indirizzo = clSocket.recv(1024) 
+    clSocket.send('OK'.encode('utf-8')) 
+    while True: 
+        prod = clSocket.recv(1024) 
+        decProd = prod.decode('utf-8')
+        if decProd == 'quit':
+            break 
+        qta = clSocket.recv(1024)
+        qta = int(qta.decode('utf8')) 
+        disponibile = False   
+        if decProd in magazzino and 
+                magazzino[decProd]>=qta:
+            disponibile = True
+            magazzino[decProd] -= qta   
+     # CODICE PER INVIARE LA RISPOSTA AL CLIENT
+        
+    clSocket.close()
+ 
