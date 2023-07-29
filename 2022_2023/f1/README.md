@@ -1,8 +1,8 @@
 # FONDAMENTI DI COMUNICAZIONI E INTERNET
 
 ### Professore:
-> Marangoni Marco Andrea Arrigo
+> Marangoni Marco Andrea Arrigo  
 > Crespi Andrea
 ### Esercitatore:
-> Genco Immacolata
+> Genco Immacolata  
 > Mocci Daniele
