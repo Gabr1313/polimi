@@ -12,4 +12,4 @@
 | :-:                                                    | :-:                             | :-: |
 | Elettrotecnica [_(ET)_](et/)                           | Linaro Daniele                  | 10  |
 | Fondamenti di comunicazioni e Internet [_(FCI)_](fci/) | Cesana Matteo                   | 10  |
-| Fisica 1 [_(F1)_](f1/)                                 | Crespi Andrea                   | 12  |
+| Fisica 1 [_(F1)_](f1/)                                 | Marangoni Marco Andrea Arrigo e Crespi Andrea                   | 12  |
