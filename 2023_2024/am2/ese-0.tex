@@ -1,0 +1,49 @@
+\documentclass[12pt, a4paper]{report}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{ragged2e}
+
+\title{Cses Summary}
+\author{Gabr1313}
+\date{\today}
+
+
+\begin{document}
+\justify
+
+\maketitle
+\tableofcontents
+
+\chapter{Esercitazione 1}
+
+\section{Limiti}
+
+\paragraph{Es}
+\[
+    \lim_{\rho \to 0} \frac{\rho (|\cos^2 \theta)| + |\cos^2 \theta \sin 
+    \theta|)}{1} \leq \rho(1+1) = 2\rho = 0
+\]
+\paragraph{Es}
+\[
+    \lim_{(x,y) \to (2, -1)} \frac{(y^2 - x^2 + 3)^2}{(x - 2)^2  + (y + 1)^2} =
+\]
+\subparagraph{Primo modo} 
+\begin{cases}
+    $X = x-2$ \\
+    $Y = y + 1$
+\end{cases}
+\subparagraph{Secondo modo} 
+\begin{cases}
+    $x = 2 + \roh \cos \theta$ \\
+    $y = -1 + \roh \cos \theta$
+\end{cases}
+\[
+    \lim_{\rho \to 0^+} \frac{((-1 + \roh \sin \theta)^2 - 
+    (2 + \roh \cos\theta) ^2 + 3)^2}{\rho \cos^2 \theta + \rho^2 \sin^2 \theta}
+    = \lim_{\rho \to 0^+} (\rho - 2 \sin \theta - \cos \theta)^2
+    \Rightarrow \nexists
+\]
+
+
+\end{document}

@@ -1,0 +1,6 @@
+\contentsline {chapter}{\numberline {1}Spass}{2}{chapter.1}%
+\contentsline {section}{\numberline {1.1}\href {https://tptp.org/cgi-bin/SeeTPTP?Category=Problems&Domain=PUZ&File=PUZ001+1.p}{Omicidio}}{2}{section.1.1}%
+\contentsline {subsubsection}{Symbols}{2}{section*.2}%
+\contentsline {subsubsection}{Axioms}{2}{section*.3}%
+\contentsline {subsubsection}{Conjecture}{3}{section*.4}%
+\contentsline {section}{\numberline {1.2}Esercizi per casa}{3}{section.1.2}%

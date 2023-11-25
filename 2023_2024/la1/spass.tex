@@ -1,0 +1,56 @@
+\documentclass[12pt, a4paper]{report}
+
+\usepackage{hyperref}
+\usepackage{ragged2e}
+
+\title{Cses Summary}
+\author{Gabr1313}
+\date{\today}
+
+
+\begin{document}
+\justify
+
+\maketitle
+\tableofcontents
+
+\chapter{Spass}
+Usefull link: \href{https://www.tptp.org}{Archive of theorme proved}.
+\section{\href{https://tptp.org/cgi-bin/SeeTPTP?Category=Problems&Domain=PUZ&File=PUZ001+1.p}{Omicidio}}
+\subsubsection{Symbols}
+\begin{itemize}
+    \item $L(x)$ $\rightarrow$ $x$ lives
+    \item $K(x,y)$ $\rightarrow$ $x$ kill $y$
+    \item $H(x,y)$ $\rightarrow$ $x$ odia $y$
+    \item $R(x,y)$ $\rightarrow$ $x$ è piu' ricco di $y$
+    \item $a$ $\rightarrow$ $a$ è Agata
+    \item $b$ $\rightarrow$ $b$ è il Maggiordomo
+    \item $c$ $\rightarrow$ $c$ è Charles
+\end{itemize}
+
+\subsubsection{Axioms}
+\begin{itemize}
+    \item $\exists x(L(x) \wedge K(x,a)) $
+    \item $L(a) \wedge L(b) \wedge L(c)$
+    \item $\forall x(L(x) \Rightarrow (x = a \wedge x = b \wedge x = c)) $
+    \item $\forall x \forall y (K(x,y) \Rightarrow H(x, y))$
+    \item $\forall x \forall y (K(x,y) \Rightarrow \neg R(x, y))$
+    \item $\forall (H(a,x) \Rightarrow \neg H(c,x))$
+    \item $\forall \neg(x=b) \Rightarrow H(a,x))$
+    \item $\neg H(a,b)$
+    \item $\forall x (\neg R(x,a) \Rightarrow H(b,x))$
+    \item $\forall x( H(a,x) \Rightarrow H(b,x))$
+    \item $\forall x \exists y( \neg H(x,y)) (\neg \exists x \forall y H(x,y))$
+    \item $\neg (a = b)$
+\end{itemize}
+
+\subsubsection{Conjecture}
+\begin{itemize}
+    \item $K(a,a) $
+\end{itemize}
+
+\section{Esercizi per casa}
+Se in un gruppo il quadrato di ogni elemento è l'identita' allora il gruppo 
+e' abeliano (commutativo).
+
+\end{document}

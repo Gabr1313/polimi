@@ -1,0 +1,361 @@
+\documentclass[12pt, a4paper]{report}
+
+\usepackage[margin=2cm]{geometry}
+\usepackage{ragged2e}
+
+\newtheorem{definition}{Definizione}
+
+\title{Linux}
+\author{Gabr1313}
+\date{\today}
+
+\begin{document}
+\justify
+
+\maketitle
+\tableofcontents
+
+\chapter{Introduzione}
+\begin{definition}[Posix]
+	Standard per i sistemi operativi Unix (usato di seguito sempre).
+\end{definition}
+\begin{definition}[Processo]
+	Macchina virtuale che segue un programma
+\end{definition}
+\begin{definition}[System service] Particolare funzioni di sistema a cui un
+	processo può accedere
+\end{definition}
+\begin{itemize}
+	\item fork, exec, wait, exit
+	\item comunicazione tra processi
+	\item accesso ai file (periferiche)
+\end{itemize}
+\section{Thread}
+I processi leggeri appartenenti allo stesso processo normale condividono la
+stessa memoria, a esclusione dello stack.
+
+Sono identificati dalla coppia \textbf{$<$PID, TGID$>$}, dove PID =
+\textit{process ID} e TGID = \textit{Thread group ID}. Le funzioni associate
+sono \texttt{getid()} e \texttt{getpid()}.
+
+\section{Sistema operativo}
+Il sistema operativo è lo strato che separa l'hardware dall'utente. La usa
+funzione principale è permettere l'esecuzione di diversi processi in parallelo
+(con 1 sola cpu i processi vengono alternati).
+\begin{definition}[Context switch]
+	Sostituzione processo in esecuzione
+\end{definition}
+L'esecuzione di un programma può essere sospesa per 2 motivi:
+\begin{itemize}
+	\item Sospensione autonoma
+	\item Sospensione forzata
+\end{itemize}
+\begin{definition}[Scheduler]
+	Componente del SO che decide quale processo mandare in esecuzione
+\end{definition}
+\section{Politica di scheduling}
+\begin{itemize}
+	\item Processi più importanti vengono eseguiti prima
+	\item A pari importanza i processi vengono eseguiti in maniera equa
+\end{itemize}
+Linux è un sistema time sharing
+\begin{definition}[Preemption]
+	Pausa forzata dal SO di un processo allo scadere di un quanto di tempo
+\end{definition}
+\begin{definition}[Kernel non-preemptable]
+	La preemption è proibita quando un processo esegue servizi del sistema
+	operativo
+\end{definition}
+\begin{definition}[Kernel moduler]
+	Moduli software inseriti nel sistema per permettere l'accesso alle
+	periferiche senza la necessità di ricompilare il sistema. Sono inoltre
+	caricati dinamicamente durante l'esecuzione quando necessario.
+\end{definition}
+\section{Architettura}
+I file che contengono codice dipendente dall'architettura in \texttt{linux/arch}
+D'ora in poi si farà riferimento all'architettura \textbf{x86-64}.
+\section{Strutture dati per la gestione dei processi}
+\subsection{Descrittore del processo}
+La funzione \texttt{get\_current()} restituisce un puntatore al task corrente
+\begin{verbatim}
+struct task_struct {
+    pid_t pid;
+    pid_t tgid;
+    volatile long state; // ‐1 unrunnable, 0 runnable, >0 stopped
+    void *stack; //puntatore all' sStack del task
+    ...
+}
+
+struct thread_struct {
+    unsigned long sp0;
+    unsigned long sp; // puntatore allo stack di modo S
+    unsigned long usersp; // puntatore allo stack di modo U (idem)
+    ...
+}
+\end{verbatim}
+\subsection{sStack (sPila)}
+L'sPila è diversa per ogni processo
+
+\chapter{Meccanismi Hardware di supporto}
+
+\section{Considerazioni generali}
+\begin{itemize}
+	\item PC = program counter
+	\item SP = stack pointer
+	\item push o pop dalla pila sono un'unica istruzione
+	\item chiamate a funzioni salvano in automatico sulla pila il return address
+	\item PSR = Process state register: semplificazione di una struttura dati HW
+	      che contiene le informazioni riguardanti un processo
+	\item SSP = Supervisor stack pointer
+	\item USP = User stack pointer
+\end{itemize}
+
+\section{Modi di funzionamento}
+\begin{itemize}
+	\item \textbf{Utente (U)}/Non privilegiato: non può eseguire istruzioni
+	      privilegiate e può accedere solo alle proprie zone di memoria
+	\item \textbf{Supervisore (S)}/Kernel/Privilegiato: può eseguire anche le
+	      istruzioni privilegiate, a accedere alle zone di memoria di qualsiasi
+	      processo
+\end{itemize}
+\section{Memoria virtuale}
+Lo spazio di indirizzamento è $2^{64}$ byte. Di questi sono utilizzabili solo i
+primi $2^{47}$ byte da U e gli ultimi $2^{47}$ byte da S. Gli altri indirizzi di
+memoria sono detti \textit{non-canonical area}.
+
+Una pagina di memoria è di $4Kb$. Ogni indirizzo virtuale prodotto dalla CPU
+viene mappato a un indirizzo fisico grazie alla \textbf{Tabella delle Pagine}.
+
+\section{Syscall}
+\begin{definition}[Syscall]
+	Particolare chiamata a funzione eseguita da un processo quando ha bisogno
+	di un servizio dell'OS.
+\end{definition}
+\begin{definition}[Vettore di Syscall]
+	Struttura dati HW costituita da 2 celle, inizializzata dal SO durante
+	l'avvio.
+	\begin{itemize}
+		\item PC: inidirizzo della funzione \texttt{system\_call()}
+		\item PSR
+	\end{itemize}
+\end{definition}
+Una sycall quindi, differentemente da una chiamata a funzione, non indica
+l'indirizzo a cui deve saltare, ma questo è contenuto nel vettore di syscall.
+
+Anche i valori di SSP e USP sono salvati in una struttura dati HW.
+
+Una Syscall permette di passare dallo stato U allo stato S svolgendo le seguenti
+operazioni:
+\begin{itemize}
+	\item USP = SP
+	\item SP = SSP
+	\item push del PC($\to$UPila) sulla SPila
+	\item push del PSR sulla SPila
+	\item caricamento di PC($\to$SPila) e PSR contenuti nel vettore di syscall
+\end{itemize}
+
+\begin{definition}[Sysret]
+	Inverso della syscall.
+\end{definition}
+Una Sysret, eseguita all fine di una \texttt{system\_call()} permette di passare
+dallo stato S allo stato U svolgendo le seguenti operazioni:
+\begin{itemize}
+	\item pop del PSR dalla SPila e ripristino registro
+	\item pop del PC($\to$UPila) dalla SPila e ripristino registro
+	\item SP = USP
+\end{itemize}
+
+\section{Interrupt}
+A un insieme di eventi HW è associata un funzione, detta \textbf{Routine di
+	Interrupt}. Il Meccanismo con cui funziona una Routine di Interrupt è lo
+stesso delle syscall, con però alcune differenze:
+\begin{itemize}
+	\item Sono asincrone: attivate da eventi e non esplicitamente da un
+	      programma
+	\item l'istruzione di ritorno è chiamata IRET
+	\item il vettore di syscall è sostituito con la \textbf{Tabella degli
+		      Interrupt}
+\end{itemize}
+Se il processo in esecuzione è in modalità S, PC e PSR vengono comunque
+salvati sulla sPila.
+\begin{definition}[Tabella degli Interrupt]
+	Struttura dati HW che contine i \textbf{vettori di interrupt}, inizializzata
+	dal SO durante l'avvio.
+\end{definition}
+\begin{definition}[Vettore di Interrupt]
+	Struttura dati HW costituita da 2 celle
+	\begin{itemize}
+		\item PC: inidirizzo della funzione \texttt{system\_call()}
+		\item PSR
+	\end{itemize}
+\end{definition}
+Un meccanismo HW converte l'ID dell'interrupt nell'indirizzo del corrispondente
+vettore di interrupt.
+
+La gestione degli errori durante i programmi spesso viene trattata come un
+interrupt che termina forzatamente il programma elimnando il processo (abort).
+
+\subsection{Priorità e iterrupt nidificati}
+Nel PSR, a ogni processo è associato un livello di priorità, e identicamente
+funziona per gli interrupt. Un interrupt viene accettato solo se il suo livello
+haì priorità superiore rispetto al processo in esecuzione, altrimenti è tenuto
+in sospeso. sospeso.
+
+\subsection{ABI}
+Gli eseguibili normalemente sono caricati dal SO, mentre gli eseguibili del
+sistema stessono devono essere in grado di partire autonomamente (bootstrap).
+\begin{definition}[Appllication Binary Interface]
+	Regole che il compilatore utilizza durante la traduzione (indipendentemente
+	dall'architettura HW), in modo che tutti i moduli siano coerenti.
+\end{definition}
+Funzioni della libreria glibc come \texttt{fork()} e \texttt{open()} sono dei
+wrapper attorno alla funzione
+\begin{verbatim}
+	long syscall(long syscall_number, ...);
+\end{verbatim}
+La chiamata assembly corrispondente è composta da varie istruzioni, l'ultima è
+la \texttt{SYSCALL}.
+
+\chapter{Getione dello stato dei processi}
+Ogni processo puo' trovarsi in uno dei 2 stati:
+\begin{itemize}
+	\item \textbf{Attesa}: attende un evento
+	\item \textbf{Pronto}: può essere eseguito se selezionato dallo scheduler.
+	      Il processo in esecuzione e' chiamatao \textbf{processo corrente}.
+\end{itemize}
+Un processo in esecuzione abbandona tale stato a causa di un evento:
+\begin{itemize}
+	\item un servizio di sistema richiesto dal processo deve attendere un
+	      evento. Il processo passa allo stato di attesa.
+	\item \textbf{Preemption}: il SO decide di sospendere l'esecuzione a favore
+	      di un altro processo. Il processo rimane nello stato di pronto.
+\end{itemize}
+\begin{definition}[Scheduler]
+	Componente del SO che esegue le seguenti funzioni:
+\end{definition}
+\begin{itemize}
+	\item Politica di scheduling: quale processo mettere in esecuzione e per
+	      quanto tempo
+	\item Context switch: \texttt{schedule()}
+\end{itemize}
+Inoltre gesticsce la struttura dati \texttt{runqueue}, la quale continene 2
+campi:
+\begin{itemize}
+	\item RB: lista dei puntatiori ai descrittori dei processi pronti (red-black
+	      tree)
+	\item CURR: puntatore al descrittore processo corrente
+\end{itemize}
+\subsection{SPila}
+Linux su x86-64 assegna a ogni processo una sPila di 2 pagine (8Kb). Questa e'
+utilizzata soltanto durante l'esecuzione di un servizio di sistema.
+
+Per il context switch SSP e USP devono contenere i valori corretti, i quali sono
+diversi per ogni processo. Percio' il descrittore di un processo deve contenere:
+\begin{itemize}
+	\item \textbf{sp0}: indirizzo di base della SPila
+	\item \textbf{sp}: valore di SP nel momento in cui il processo viene sospeso
+	      (puo' riferirse sia alla sPila che alla uPila)
+\end{itemize}
+\subsection{Cotext switch}
+Quando P e' in modalita' U SSP(processo) = sp0(descrittore).
+Quando P e' in modalita' S USP contiene il valore di ritorno sulla UPila.
+Quindi quando avviene il context switch
+\begin{itemize}
+	\item se P e' in modalita S: push di USP sulla sPila
+	\item sp(descrittore) = SP(processo)
+\end{itemize}
+Ovviamente quando P riprende l'esecuzione si eseguono le operazioni inverse:
+\begin{itemize}
+	\item se P era in modalita S: SP(processo) = sp(descrittore)
+	\item pop USP dalla sPila e ripristino
+	\item SSP(processo) = sp0(descrittore)
+\end{itemize}
+\section{Gestione degli interrupt}
+La routine di interrupt e' \textbf{trasparente} al processo: l'interrupt e'
+eseguito nel contesto del processo di esecuzione.
+
+La routine di interrupt puo' risvegliare dei processi in stato di attesa.
+
+Un interrupt puo' avvenire in 3 situazioni:
+\begin{itemize}
+	\item P e' in modalita' U
+	\item P e' in modalita' S
+	\item P sta gia' eseguendo una routine di interrupt
+\end{itemize}
+\section{Attesa/Pronto}
+Le attese possono essere di 3 tipi:
+\begin{itemize}
+	\item I/O
+	\item sblocco di un lock (mutex e semafori)
+	\item scadere di un timer
+\end{itemize}
+
+\begin{definition}[Wait\_queue]
+	Struttura dati che contiene i descrittore dei processi in attesa di un certo
+	evento.
+\end{definition}
+\begin{definition}[Identificatore dell'evento]
+	Indirizzo della wait\_queue.
+\end{definition}
+La macro \texttt{DECLARE\_WAIT\_QUEUE\_HEAD} dichiara una wait\_queue.
+
+Ad ogni wait\_queue e' associata una flag che indica la tipologia di attesa:
+\begin{definition}[Attesa esclusiva]
+	Un solo processo viene risvegliato all'avvenire dell'evento.
+\end{definition}
+\begin{definition}[Attesa non esclusiva]
+	Tutti i processi vengono risvegliati all'avvenire dell'evento.
+\end{definition}
+I processi in attesa esclusiva sono inserite alla fine della coda.
+
+Le funzioni associate sono: \texttt{wait\_event\_interruptible\_exclusive()} e
+\texttt{wait\_event\_interruptible()}
+
+La funzione \texttt{wake\_up()} risveglia i processi in attesa, mettendoli in
+stato di pronto.
+\begin{itemize}
+	\item Cambia lo stato da attesa a pronto
+	\item Elimina il/i processo/i dalla wait\_queue e li inserisce nella
+	      runqueue
+\end{itemize}
+\section{Segnali}
+\begin{definition}[Segnale]
+	Avviso asicrono inviato a un processo al SO o da un altro processo.
+\end{definition}
+I segnali sono numerati da 1 a 31.
+
+I segnali che non possono essere bloccati sono:
+\begin{itemize}
+	\item SIGKILL
+	\item SIGSTOP
+\end{itemize}
+Altri segnali sono:
+\begin{itemize}
+	\item SIGINT: terminazione del processo (CTRL+C)
+	\item SIGSTOP: sospensione del processo (CTRL+Z)
+\end{itemize}
+Quando il segnale viene inviato, il processo puo' essere in uno dei seguenti
+stati:
+\begin{itemize}
+	\item \textbf{Esecuzione U}: il segnale viene processat immediatamente
+	\item \textbf{Esecuzione S}: il segnale viene processato al ritorno in
+	      modalita' U
+	\item \textbf{Pronto}: il segnale viene processato quando il processo
+	      ritorna in esecuzione
+	\item \textbf{Attesa}:
+	      \begin{itemize}
+			  \item se l'attesa e' \textbf{interrompibile} il processo viene
+				  risvegliato (pronto). Al risveglio il processo deve
+				  controllare se la condizione di attesa e' diventata falsa, e
+				  in caso contrario tornare in attesa\\
+			  \texttt{wait\_interruptible()}\\
+			  \texttt{wait\_killable()}
+			  \item se l'attesa e' \textbf{non interrompibile} il segnale rimane
+				  pendente\\
+			  \texttt{wait\_event()}
+	      \end{itemize} 
+\end{itemize}
+
+% N3 5.
+
+\end{document}

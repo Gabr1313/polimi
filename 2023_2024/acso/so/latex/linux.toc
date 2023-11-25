@@ -1,0 +1,22 @@
+\contentsline {chapter}{\numberline {1}Introduzione}{2}{}%
+\contentsline {section}{\numberline {1.1}Thread}{2}{}%
+\contentsline {section}{\numberline {1.2}Sistema operativo}{2}{}%
+\contentsline {section}{\numberline {1.3}Politica di scheduling}{3}{}%
+\contentsline {section}{\numberline {1.4}Architettura}{3}{}%
+\contentsline {section}{\numberline {1.5}Strutture dati per la gestione dei processi}{3}{}%
+\contentsline {subsection}{\numberline {1.5.1}Descrittore del processo}{3}{}%
+\contentsline {subsection}{\numberline {1.5.2}sStack (sPila)}{3}{}%
+\contentsline {chapter}{\numberline {2}Meccanismi Hardware di supporto}{4}{}%
+\contentsline {section}{\numberline {2.1}Considerazioni generali}{4}{}%
+\contentsline {section}{\numberline {2.2}Modi di funzionamento}{4}{}%
+\contentsline {section}{\numberline {2.3}Memoria virtuale}{4}{}%
+\contentsline {section}{\numberline {2.4}Syscall}{4}{}%
+\contentsline {section}{\numberline {2.5}Interrupt}{5}{}%
+\contentsline {subsection}{\numberline {2.5.1}Priorità e iterrupt nidificati}{6}{}%
+\contentsline {subsection}{\numberline {2.5.2}ABI}{6}{}%
+\contentsline {chapter}{\numberline {3}Getione dello stato dei processi}{7}{}%
+\contentsline {subsection}{\numberline {3.0.1}SPila}{7}{}%
+\contentsline {subsection}{\numberline {3.0.2}Cotext switch}{8}{}%
+\contentsline {section}{\numberline {3.1}Gestione degli interrupt}{8}{}%
+\contentsline {section}{\numberline {3.2}Attesa/Pronto}{8}{}%
+\contentsline {section}{\numberline {3.3}Segnali}{9}{}%
