@@ -1,0 +1,64 @@
+\documentclass[12pt, a4paper]{report}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{ragged2e}
+\usepackage{amsthm}
+
+\newtheorem{definition}{Definizione}
+\newtheorem{theorem}{Teorema}
+\newtheorem{exercise}{Esercizio}
+
+\title{Appunti}
+\author{Gabr1313}
+\date{\today}
+
+
+\begin{document}
+\justify
+
+\maketitle
+\tableofcontents
+
+\chapter{Matrice Hessiana}
+\begin{proof}
+	Criterio matrice Hessiana
+\end{proof}
+
+\section{Strategie}
+Strategie da adottare in caso di forma quadratica indotta da 
+$H_f(\underline{x}_0)$ sia semidifenita:
+\begin{enumerate}
+	\item \textbf{Indagine diretta}
+	\item Convessità/concavità
+\end{enumerate}
+\subsection{Indagine diretta}
+La startegia consiste nel trovare due curve passanti per il punto critico in cui
+le restirzioni di $f$ hanno in un caso un massimo e nell'altro un minimo. Si
+conclude quindi che il punto critico è \textbf{punto di sella}.
+\subsection{Convessita'/ concavita'}
+\begin{definition}[Funzione concava]
+	Sia $f : \mathbb{R}^2 \to R \in \mathcal{C}^2(\mathbb{R}^2)$, 
+	diciamo che $f$ e' covessa (risp. concava) se $\forall (x,y) \in 
+	\mathbb{R}^2$ la matrice Hessiana $H_f(x,y)$ e' definita positiva o 
+	semi-definita positiva(risp. definita negativa o semi-definita negativa)
+\end{definition}
+\paragraph{Osservazioni}
+\begin{itemize}
+	\item Esiste la definizoione per funzioni non regolari come generalizzazione
+		del caso n = 1
+\end{itemize}
+\begin{theorem}[]
+	Sia $f \in \mathcal{C}^2(\mathbb{R}^2)$ e $(x_0, y_0) \in \mathbb{R}^2$
+	un punto critico di $f$, abbiamo che:
+	\begin{itemize}
+		\item se $f$ e' convessa su $\mathbb{R}^2$, allora $(x_0, y_0)$ e punto
+			di minimo assoluto
+		\item se $f$ e' concava su $\mathbb{R}^2$, allora $(x_0, y_0)$ e punto
+			di massimo assoluto
+	\end{itemize}
+\end{theorem}
+
+
+
+\end{document}

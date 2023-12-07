@@ -1,0 +1,483 @@
+\documentclass[12pt, a4paper]{report}
+
+\usepackage[margin=2cm]{geometry}
+\usepackage{ragged2e}
+
+\newtheorem{definition}{Definizione}
+
+\title{Memoria}
+\author{Gabr1313}
+\date{\today}
+
+\begin{document}
+\justify
+\sloppy
+\maketitle
+\tableofcontents
+
+\chapter{Organizzazione dello spazio virtuale dei processi}
+\section{VMA}
+La memoria virtuale di un processo LINUX è suddivisa in un certo numero di
+\textbf{aree di memoria virtuale} (\textbf{VMA}). Ogni VMA è costituita da un
+numero intero di pagine virtuali consecutive.
+
+Tipologie di VMA:
+\begin{itemize}
+	\item \textbf{Codice} (\textbf{C}): eseguibile e costanti.
+	\item \textbf{Costanti per rilocazione dinamica} (\textbf{K}): parametri per
+		il collegamento con librerie dinamiche.
+	\item \textbf{Dati statici} (\textbf{S}): dati inizializzati allocati per
+		tutta la durata del programma.
+	\item \textbf{Dati dinamici} (\textbf{D}): heap (contiene anche i BSS). Il
+		limite corrente è contenuto nella variabile del descrittore del
+		processo \texttt{brk} (Program break).
+	\item \textbf{Pile dei Thread} (\textbf{T}): contiene gli stack dei threads
+	\item \textbf{Memory-Mapped files} (\textbf{M}): mappa di un file in aree di
+		memoria virtuale. Ad esempio le \textbf{Librerie dinamiche} e la
+		\textbf{Memoria condivisa}.
+	\item \textbf{Memoria condivisa} (\textbf{P}): Upila che contiene le
+		varibaili locali e i parametri delle funzioni.
+\end{itemize}
+Per C, K, S, D e P esiste un'area virtuale, mentre per M e per T possono
+esistere zero o più aree virtuali. Le VMA C, K e S sono l'immagine dei
+corrispondenti segmenti del file eseguibile (ELF). I \textbf{Block Started by
+Symbol} (\textbf{BSS}) sono dati non inizializzati, che nell'eseguibile sono
+rappresentati sinteticamente da un nome simbolico e lo spazio di memoria
+occupato. Avendo un comportamento simile a quello di memoria allocata
+dinamicamente, durante l'esecuzione sono allocati nello heap.
+
+\subsection{Struttura dati per la VMA}
+Ogni VMA è definita in una variabile di tipo \texttt{vm\_area\_struct}.
+\begin{verbatim}
+struct vm_area_struct {
+    struct mm_struct *vm_mm; // puntatore al processo
+    unsigned long vm_start;
+    unsigned long vm_end;
+    struct vm_area_struct *vm_prev; // linked list
+    struct vm_area_struct *vm_next;
+    unsigned long vm_flags;
+    ...
+    unsigned long vm_pgoff;
+    struct file *vm_file;
+    ...
+    struct file * vm_file; // possibile puntatore al file
+    unsigned long vm_pgoff; // possibile offset nel file
+};
+\end{verbatim}
+Ogni bit di \texttt{vm\_flags} indica una caratteristica della VMA:
+\texttt{VM\_READ}, \texttt{VM\_WRITE}, \texttt{VM\_EXEC}, \texttt{VM\_SHARED},
+\texttt{VM\_GROWSDOWN}, \texttt{VM\_DENYWRITE}...
+
+Una VMA può essere \textbf{anonima} o \textbf{mappata su un file} detto
+\textbf{Backing Store}.
+
+Il comando \texttt{cat /proc/<pid>/maps} mostra le VMA di un processo. I
+permessi sono \texttt{r} (\texttt{VM\_READ}), \texttt{w} (\texttt{VM\_WRITE}),
+\texttt{x} (\texttt{VM\_EXEC}), \texttt{p} (private: \texttt{VM\_SHARED}).
+
+\subsection{Page fault}
+Ogni volta che la MMU genera un interrupt di Page Fault su un inidirizzo
+virtuale NPV, il kernel attiva la routine \textbf{Page Fault Handler}
+(\textbf{PFH}).
+\begin{verbatim}
+if (NPV notin VMA || NPV hasn't permission) Segmentation Fault;
+else if (NPV notin mem) load NPV in mem;
+\end{verbatim}
+
+\subsection{Regole generali e implementazione specifica}
+\begin{itemize}
+	\item \textbf{Regole generali}: garantite ufficialmente
+	\item \textbf{Implementazione specifica}: comportamento non specificato
+\end{itemize}
+
+\subsection{Address Space Layout Randomization}
+La \textbf{ASLR} è una tecnica di sicurezza che assegna casualmente l'indirizzo
+delle funzioni di libreria e delle più importanti aree di memoria. Per
+semplicità questa non viene considerata.
+
+\section{Tabella delle Pagine e Aree Virtuali}
+Il sistema operativo garantisce le seguenti regole:
+\begin{itemize}
+	\item In ogni siatnte esistono esclusivamente le pagine virtuali NPV
+		appartenenti alle VMA del processo.
+	\item La TP è sufficientemente grande
+	\item NPV può essere mappata su una NPF (indicato da una flag sulla TP)
+\end{itemize}
+La tecnica \textbf{demand paging} consiste nel caricare in memoria le pagine in
+base ai Page Fault generati.
+\subsection{Riassunto}
+\begin{itemize}
+	\item viene creata la VMA di pila con n NPV, di cui ne vengono fisicamente
+		allocate 1 o 2.
+	\item l'accesso a NPV non mappate ne cause l'allocazione (Page Fault)
+	\item tentativo di accesso a pagine subito sotto l'area esistente (area di
+		growsdown) produce un tentativo di crescita della VMA
+	\item tentativo di accesso a pagine non esistenti o diverse dall'area di
+		growsdown produce un Segmentation Fault
+\end{itemize}
+
+\begin{verbatim}
+if (NPV notin VMA || NPV hasn't permission) Segmentation Fault;
+else if (NPV notin mem) {
+    if (NPV is start_address of VMA with Growsdown == 1) add page NPV-1;
+    load NPV in mem;
+}
+\end{verbatim}
+\subsection{Servizio brk}
+Con \textbf{brk} si intende \textbf{break}, ovvero il limite superiore di una
+VMA.
+
+La \texttt{malloc()} svolge 2 operazioni distinte:
+\begin{itemize}
+	\item crescita della VMA D (\texttt{brk()} o \texttt{sbrk()})
+	\item allocazione fiscia delle pagine (se necessario riempirle coi dati)
+\end{itemize}
+\texttt{int brk(void * end\_data\_segment)} assegna il valore
+\texttt{end\_data\_segment} alla VMA D. Restituisce 0 in caso di successo, -1 in
+caso di errore.
+\texttt{void * sbrk(intptr\_t increment)} incrementa la VMA D di
+\texttt{increment} e restituisce un puntatore alla posizione iniziale della
+nuova area (program break position).
+
+\section{Gestione della memoria virtuale nella creazione di processi}
+\subsection{Fork}
+Dato che il processo è una copia del padre, non viene allocata nuova memoria,
+ma vengono solo aggiornate le infomazione della tabella dei processi. Una pagina
+viene duplicata solo nel momento di scrittura sulla pagina stessa: \textbf{Copy
+on Write} (\textbf{COW}).
+\begin{itemize}
+	\item durante la \texttt{fork()}, i permessi di tutte le pagine vengono
+		cambiati in sola lettura (R)
+	\item quando si verifica un page fault, il PFH verifica se la pgaina
+		prottetta R appartenga a una VMA scrivibile. In tal caso, se
+		\texttt{ref\_count() > 1}, duplica le pagine. Successivamnte cambia la
+		protezione in scrittura (W).
+\end{itemize}
+La varibile \texttt{ref\_count} nel \texttt{page\_descriptor} inidica il numero di
+utilizzatori della pagina fisica.
+\begin{verbatim}
+if (NPV notin VMA) Segmentation Fault;
+else if (NPV hasn't permission) {
+    if (NPV is in VMA with COW) {
+        if (ref_count() > 1) duplicate page;
+        else change protection in W;
+    }
+    else Segmentation Fault;
+}
+else if (NPV notin mem) {
+    if (NPV is start_address of VMA with Growsdown == 1) add page NPV-1;
+    load NPV in mem;
+}
+\end{verbatim}
+\subsection{Context Switch}
+Un context switch causa un svoutamento (\textbf{flush}) della TLB (Table
+Lookaside Buffer). Nel caso il descrittore della pagine fisica abbia
+\texttt{dirty\_bit = 1} le pagine vengono copiate su disco.
+\subsection{Exit}
+\begin{itemize}
+	\item eliminazione della struct della VMA
+	\item eliminazione della TP del processo
+	\item deallocazione delle NPV o decremento del \texttt{ref\_count}
+	\item context switch (con flush del TLB)
+\end{itemize}
+
+\section{Creazione dei Thread e aree di tipo T}
+I thread condividono la stessa struttura di aree virtuali e TP del processo
+padre. L'unica area di memoria non condivisa è lo stack, la cui dimensione
+massima è limitata a 8Mb (il flag \texttt{growsdown = 0}).
+
+\section{Creazione di VMA e mmap}
+La realizzazione di una VMA può essere invocata direttamente dal SO, o tramite
+la syscall \texttt{mmap()}. Le VMA possono essere \textbf{mapped} su un file
+(backing store) o \textbf{anonymous}, \textbf{shared} o \textbf{private} (la
+combinazione anonymous-shared non è trattata).
+\subsection{Mapped}
+Nella struct \texttt{vm\_area\_struct} sono contenuti i campi \texttt{vm\_file}
+e \texttt{vm\_pgoff}.
+
+La funzione \texttt{mmap()} ha la seguente sintassi:
+\begin{verbatim}
+void * mmap(void * addr, size_t len, int prot, int flags, int fd, off_t off);
+\end{verbatim}
+\begin{itemize}
+	\item \texttt{addr}: opzionale indirizzo di virtuale iniziale (Linux sceglie
+		l'indirizzo disponibile più vicino)
+	\item \texttt{len}: dimensione della VMA
+	\item \texttt{prot}: permessi di accesso
+	\item \texttt{flags}: \texttt{MAP\_SHARED}, \texttt{MAP\_PRIVATE} o
+		\texttt{MAP\_ANONYMOUS}
+	\item \texttt{fd}: file descriptor
+	\item \texttt{off}: offset nel file (multiplo della dimensione della pagina)
+\end{itemize}
+In caso di successo \texttt{mapp()} restituisce un puntatore all'area allocata.
+
+La funzione \texttt{munmap()} elimina la mappatura dell'intervallo virtuale
+specificato:
+\begin{verbatim}
+int munmap(void * addr, size_t len);
+\end{verbatim}
+
+\subsection{Page Cache}
+è un mecccanismo che serve ad evitare la rilettura da disco di pagine già
+caricate in memoria. è costituita da un insieme di pagine fisiche e strutture
+dati ausiliarie. Le strutture dati ausiliarie contengono l'insieme dei
+descrittori delle pagine fisiche presenti nella cache oltre che un meccanismo
+\texttt{Page\_Cache\_Index} per la ricesca di una pagina identificata da
+$<$indentificatore file, offset$>$. Le pagine caricate nella Paga Cache non
+vengono liberate nessun processo le sta utilizzando, ma solo quando la Page
+Cache è piena.
+
+Richiesta di accesso a una pagina virtuale mappata su file:
+\begin{itemize}
+	\item determinazione file e offset: il file è indicato nella VMA, e
+		l'offset è la somma tra l'offset della VMA rispetto all'inizio del file
+		e l'offset della pagina virtuale rispetto all'inizio della VMA
+		(evidentemente nella VMA può essere caricata solo una porzione di un
+		file).
+	\item Se la pagina è nella Paga Cache, la pagina virutal e viene
+		semplicemente mappata, altrimenti viene allocata una nuova pagina fisica
+		nella paga cache.
+\end{itemize}
+
+\subsection{Scrittura sulle pagine}
+\subsubsection{Scrittura su pagine condivise}
+La pagina fisica viena scritta e il bit di dirty viene settato. I cambiamenti
+sono immediatamente visibili da ogni processo.
+\subsubsection{Scrittura su pagine private}
+Il meccanismo di funzionamento è il COW. Le pagine modificate non mai ricopiate
+su disco, in quanto appartengono al singolo processo.
+\subsubsection{Scrittura su pagine anonime}
+Lo stack e l'heap sono pagine anonime. Tutte le pagine anonime sono mappate
+sulla \textbf{ZeroPage}, così che VMA trovi una pagina inizializzata a zero
+senza richiedere una nuova allocazione. Il meccanismo di funzionamento è il COW.
+
+\subsection{Mmap e fork}
+Le aree di memoria create tramine mmap si trasmettono ai figli durante una fork
+grazie al meccanismo di COW.
+
+\subsection{Condivisione degli eseguibili}
+Gli eseguibili sono VMA senza diritti di scrittura. Sono difinite come aree
+private (seppur ciò sia irrilevante). Anche il linker dinamico utilizza le VMA
+private per condividere le pagine fisiche delle librerie.
+
+\chapter{Gestione della memoria fisica}
+Le allocazioni sono di 2 tipi:
+\begin{itemize}
+	\item \textbf{a grana grossa}: intere porzioni di memoria (\texttt{brk()}:
+		unità di allocazione = pagina/gruppo di pagine)
+	\item \textbf{a grana fine}: piccole strutture dati in porzioni gestite a
+		grana grossa (\texttt{malloc()}
+\end{itemize}
+\section{Allocazione e deallocazione}
+La RAM ha principalmente 3 usi:
+\begin{itemize}
+	\item sistema operativo
+	\item processi
+	\item pagine lette da disco (buffer/disk cache)
+\end{itemize}
+\subsection{Page reclaming}
+Prima che avvenga una dellacazione, vengono salvate su disco le pagine con dirty
+bit settato.
+La deallocazione ha una gerarchia di priorità:
+\begin{itemize}
+	\item le pagine non più utilizzate dai processi vengono scaricate
+	\item alcune pagine utilizzate dai processi vengono scaricate
+	\item un processo viene ucciso: \textbf{OOMK} (Out Of Memory Killer)
+\end{itemize}
+Il comando \texttt{free} mostra lo stato della memoria.
+Ovviamente avengo la memoria swap a disposizione, l'OOMK avviene più
+tardivamente.
+\section{Allocazione della memoria a grana grossa}
+Linux cerca di allorace blocchi di pagine contigue e di frammetare la memoria il
+meno possibile: il DMA è così più efficiente e la memoria risulta più compatta.
+
+\begin{itemize}
+	\item La dimensione di un blocco di pagine contigue e' una potenza di 2,
+		detta \textbf{ordine} (esiste una costante \texttt{MAX\_ORDER}).
+	\item Per ogni ordine esiste una lista che collega tutti i blocchi.
+	\item Le richieste di allocazione indicano l'oridne del blocco desiderato.
+	\item se il blocco richiesto non e' disponibile, viene diviso in 2 blocchi
+		(\textbf{buddies}). Se necessario il processo viene reiterato.
+	\item quando un blocco viene liberato, se il suo buddy e' libero, i 2
+		blocchi vengono riuniti.
+\end{itemize}
+
+\section{Deallocazione della memoria a grana grossa}
+La memoria di un processo viene rilasciata appena il processo termina, mentre la
+disk cache crese indefinitivamente.
+
+Quando la memoria scende sotto un livello critico \textbf{minFree}, interviene
+la procedura \textbf{PFRA} (Page Frame Reclaiming Algorithm). PFRA necessita
+esso stesso di memoria, per questo l'esistenza del minFree. Per ridurre il
+numero di attivazioni di PFRA, si cercano di scaricare \textbf{maxFree} pagine.
+
+La scelta delle pagine da liberare si basa sui principi di LRU.
+
+\section{Determinazione delle pagine da liberare}
+\subsection{Quante}
+\begin{itemize}
+	\item \textbf{freePages}: numero di pagine libere.
+	\item \textbf{requiredPages}: numero di pagine richiesete da un processo o
+		dal SO.
+	\item \textbf{maxFree}: numero di pagine che il PFRA tenta di liberare.
+	\item \textbf{minFree}: livello critico di memoria libera.
+\end{itemize}
+Il PFRA viene invocato se:
+\begin{itemize}
+	\item \texttt{freePages - requiredPages < minFree}
+	\item \texttt{kswapd} (kernel swap daemon): funzione invocata periodicamente
+		se \texttt{freePages < maxFree}
+\end{itemize}
+Pfra cerca quindi di liberare \texttt{toFree = maxFree - freePages +
+requiredPages} pagine.
+
+In caso di carico leggero \texttt{kswapd} causa rare attivazione dirette di
+PFRA, viceversa con uso intensivo della memoria.
+
+Nel caso in cui il PFRA non riesce a liberare pagine e la memoria residua e'
+insufficiente, viene invocato l'OMMK. L'OMMK chiama la funzione
+\texttt{select\_bad\_process()} che considera i seguenti criteri: il processo
+abbia molte pagine occupate, abbia svolto poco lavoro, abbia bassa priorita',
+non abbia privilegi di root, non gestisca componenti HW (rimangono altrimenti in
+stato incosciente) e non sia un kernel thread. 
+
+Potrebbe verificarsi uno o stato di \textbf{Thrashing}: i processi
+continuano a richiedere pagine che vengono deallocate senza fare progredire con
+l'esecuzione.
+\subsection{Quali}
+Le pagine si dividono in 4 categorie:
+\begin{itemize}
+	\item \textbf{Non scaricabili}: pagine di sistema (statiche o dinamiche) e
+		pagine della sPila dei processi.
+	\item \textbf{Richiedono una Swap} per essere scaricate: pagine dati, uPila
+		e Heap.
+	\item \textbf{Buffer}: pagine mappate su file
+	\item \textbf{Mappate su file eseguibile}: non necessitano di riscrittura.
+\end{itemize}
+Esistono 2 liste globali, le \textbf{LRU list}, che contengono tutte le pagine
+appartenenti ai processi:
+\begin{itemize}
+	\item \textbf{Active list}: non possono essere scaricate
+	\item \textbf{Inactive list}
+\end{itemize}
+L'ordine delle liste e' un'approssimazione di LRU: l'x64 non tiene traccia del
+numero di accessi alla memoria, ma utilizza solamente un bit (\textbf{A}) di
+accesso presente nel TLB (translation lookaside buffer) gestitio dall'HW. Questo
+bit viene settato ogni volta che la memoria viene acceduta, e riportato a 0
+periodicamente dal kernel.
+
+Oltre a cio', ad ogni pagina viene associata una flag \textbf{ref} (referenced).
+Periodicamente \texttt{kswapd} esegue una funzione di controllo delle liste:
+\begin{itemize}
+	\item Scansione della coda della active list:
+		\begin{verbatim}
+		if (A) {
+		    A = 0;
+		    if (ref) move Page to the head of active list;
+		    else ref = 1;
+		} else {
+		    if (ref) ref = 0;
+		    else move Page to the head of inactive list;
+		}
+		\end{verbatim}
+	\item Scansione della testa della inactive list:
+		\begin{verbatim}
+		if (A) {
+		    A = 0;
+		    if (ref) {
+			    ref = 0;
+				move Page to the head of active list;
+			} else ref = 1;
+		} else {
+		    if (ref) ref = 0;
+		    else move Page to the tail of inactive list;
+		}
+		\end{verbatim}
+	\item Caricamento di nuove pagine
+		\begin{itemize}
+			\item se richieste da un processo vengono poste in testa alla active
+				con \texttt{ref = 1}
+			\item le paine di un nuovo processo possiedono lo stesso
+				\texttt{ref} del padre e poste in testa alla stessa lista del
+				padre.
+		\end{itemize}
+	\item Eliminazione di pagine: swapped out o exit dal processo.
+\end{itemize}
+
+\subsection{Scaricamento delle pagine}
+\begin{itemize}
+	\item Vengono prima scaricate le pagine della Page Cache non piu' utilzzate
+		in ordine di NPF.
+	\item Vengono poi scaricate le pagine fisiche della inactive list (che
+		contiene NPV). Ovviamente una NPF viene scaricata solo se si incontrano
+		tutte le NPV che a lei fanno riferimento.
+\end{itemize}
+
+\section{Swapping}
+Il meccanismo di swapping necessita almeno una \textbf{Swap Area} (risiedente su
+file o partizione). Questa contine dei \textbf{Page slot} che hanno dimensione
+di 1 pagina, identificati da $<$SwapArea, PageSlot$>$ (\textbf{SWPN}). A ogni
+Swap Area e' associato un \textbf{descrittore}, contente tra le altre cose un
+\texttt{swap\_map\_counter} per ogni slot, che tiene traccia del numero di PTE
+(page table enries) riferiti all'area swappata.
+\subsection{Swap Out}
+Quando una pagina viene liberata, se il bit di dirty e' settato, viene salvata
+sul disco, altrimenti viene eliminata. Se la pagina e' mappata su file, viene
+salvata in tale file; se invece e' anonima, viene salvata nella Swap Area.
+\begin{itemize}
+	\item Allocazione di un SWPN
+	\item Copia di NPF in SWPN
+	\item aggioranemto di \texttt{swap\_map\_counter}
+	\item ogni PTE che condivideva la pagina fisica viene aggiornata:
+		NPF viene sostituito da SWPN, e il bit di presenza viene
+		resettato.
+\end{itemize}
+Per determinare se una pagina fisica condivisa sia dirty, oltre a controllare il
+bit di dirty della pagina stessa, bisogna controllare nel TLB se le pagine
+virtuali a lei associata siano dirty. % TODO: WHY?
+\subsection{Accesso alla swap}
+\begin{itemize}
+	\item page fault
+	\item gestore del page fault chiama \texttt{swap\_in}
+	\item allocazione pagina fisica in memoria
+	\item Copia di SWPN (indicato in PTE) in NPF
+	\item ogni PTE che condivideva la pagina fisica viene aggiornata: SWPN viene
+		sostituito da NPF, e il bit di presenza viene settato.
+\end{itemize}
+\subsection{Swap In}
+Se avviene la Swap In di una pagina, e successivamente una Swap Out senza che ci
+siano state modifiche al contenuto della pagina stessa, Linux cerca di
+riutilizzare lo stesso SWPN. Utilizza quindi una \textbf{Swaph Cache}, una
+struttura dati simile alla Page Cache. Una pagina appartiene alla Swap Cache
+viene registarta nello \textbf{Swap Cache Index} se e' presente sia in Memoria,
+che nella Swap Area.
+Le pagine presenti in Swap sono solo anonime (e quindi private nella nostra
+semplificazione). Nel momento in cui avviene una Swap In:
+\begin{itemize}
+	\item La pagine viene copiata in memoria fisica, marcata in sola lettura
+		come pagina condivisa (dalla swap e dal processo).
+	\item Nella Swap Cache Index viene inserito un descrittore contenente i
+		riferimenti sia alla Pagina Fisica che al Page Slot.
+\end{itemize}
+Se poi la pagina viene scritta, si verifica un Page Fault
+\begin{itemize}
+	\item La pagina diventa privata (non appartiene piu' alla Swap Area)
+	\item La sua protezione viene posta a W
+	\item \texttt{swap\_map\_counter--}
+	\item Se \texttt{swap\_map\_counter == 0} il Page Slot viene liberato nella
+		Swap Area.
+\end{itemize}
+Successivamente a una Swap In
+\begin{itemize}
+	\item la NPV viene inserita in testa alla lista active con \texttt{ref = 1}
+	\item altre NPV condivise all'interno della stessa pagina vengono poste in
+		coda alla lista active con \texttt{ref = 0} \textit{(penso ci sia un
+		errore: le NPV in swap dovrebbero essere solo private nella nostra
+		semplificazione)}
+\end{itemize}
+
+
+
+
+
+\end{document}

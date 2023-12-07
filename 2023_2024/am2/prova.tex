@@ -1,0 +1,121 @@
+\documentclass[12pt, a4paper]{report}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{ragged2e}
+\usepackage{amsthm}
+
+\newtheorem{definition}{Definizione}
+\newtheorem{theorem}{Teorema}
+\newtheorem{exercise}{Esercizio}
+
+\title{Appunti}
+\author{Gabr1313}
+\date{\today}
+
+
+\begin{document}
+\justify
+
+\maketitle
+\tableofcontents
+
+\chapter{Matrice Hessiana}
+\begin{proof}
+	Criterio matrice Hessiana
+\end{proof}
+
+\section{Strategie}
+Strategie da adottare in caso di forma quadratica indotta da
+$H_f(\underline{x}_0)$ sia semidifenita:
+\begin{enumerate}
+	\item \textbf{Indagine diretta}
+	\item Convessità/concavità
+\end{enumerate}
+\subsection{Indagine diretta}
+La startegia consiste nel trovare due curve passanti per il punto critico in cui
+le restirzioni di $f$ hanno in un caso un massimo e nell'altro un minimo. Si
+conclude quindi che il punto critico è \textbf{punto di sella}.
+\subsection{Convessità/ concavità}
+\begin{definition}[Funzione concava]
+	Sia $f : \mathbb{R}^2 \to R \in \mathcal{C}^2(\mathbb{R}^2)$,
+	diciamo che $f$ è covessa (risp. concava) se $\forall (x,y) \in
+		\mathbb{R}^2$ la matrice Hessiana $H_f(x,y)$ è definita positiva o
+	semi-definita positiva (risp. definita negativa o semi-definita negativa)
+\end{definition}
+\paragraph{Osservazioni}
+\begin{itemize}
+	\item Esiste anche la definizione per funzioni non regolari come
+	      generalizzazione del caso $n = 1$.
+\end{itemize}
+\begin{theorem}[]
+	Sia $f \in \mathcal{C}^2(\mathbb{R}^2)$ e $(x_0, y_0) \in \mathbb{R}^2$
+	un punto critico di $f$, allora:
+	\begin{itemize}
+		\item se $f$ è convessa su $\mathbb{R}^2$, $(x_0, y_0)$ è punto
+		      di \textbf{minimo assoluto}
+		\item se $f$ è concava su $\mathbb{R}^2$, $(x_0, y_0)$ è punto
+		      di \textbf{massimo assoluto}
+	\end{itemize}
+\end{theorem}
+
+\section{Riassunto}
+\begin{itemize}
+	\item Se $A$ è chiuso e limitato in $\mathbb{R}^2$ e $f : \mathbb{R}^2
+		      \to \mathbb{R} \in \mathcal{C}^1(\mathbb{R}^2)$,
+	      allora i massimi e minimi sono raggiunti da $f$ in $A$ per il teo.
+	      di Weierstrass
+	\item se A è aperto, allora i punti estermali:
+	      \begin{itemize}
+		      \item potrebbero non essere raggiunti in $A$
+		      \item se f è deriviabile, condizione necessaria è che siano
+		            punti critici per il teormea di Fermat
+		      \item se $f \in \mathcal{C}^2(A)$, possiamo applicare i criteri
+		            della matrice Hessiana per classificare i punti critici, che
+		            però non sono conclusivi nel caso $|H_f(\underline{x}_0)| =
+			            0$ (dove $\underline{x}_0$ è punto critico)
+	      \end{itemize}
+	\item se $|H_f(\underline{x}_0)| = 0$ dove $\underline{x}_0$ e\ punto
+	      critico, allora possiamo:
+	      \begin{itemize}
+		      \item strategia diretta per verificare se $\underline{x}_0$ è un
+		            punto di sella
+		      \item verificare se $f$ è convessa o concava su $\mathbb{R}^2$ per
+		            concludere che $\underline{x}_0$ è punto di minimo o massimo
+		            assoluto.
+	      \end{itemize}
+\end{itemize}
+
+\chapter{OTTIMIZZAZIONE VINCOLATA}
+\begin{definition}[]
+	Sia $A \subseteq \mathbb{R}^2$ aperto e $f, F \in \mathcal{C}^1(A)$. Sia
+	$Z$ l'insieme di livello di $0$ di $F$, cioè $z=l_0^F$ o esplicitamente
+	$Z := \{ \underline{x} \in A: F(\underline{x}) = 0\}$ che viene chiamato
+	vincolo dell'ottimizzazione.
+
+	Dato $\underline{x}_0 = (x_0, y_0) \in Z$ abbiamo che:
+	\begin{enumerate}
+		\item $\underline{x}_0$ è punto di massimo (risp. minimo) locale o
+		      relativo di $f$ vincolato a $Z$ se $\exists \delta > 0$ :
+		      $f(x_0, y_0) \geq f(x,y)$ (risp. $f(x_0, y_0) \leq f(x,y)$)
+		      $\forall (x,y) \in B_{\delta}(\underline{x}_0 \cap Z$) e
+		      $f(\underline{x}_0)$ si dice massimo
+		      (risp. minimo) locale o relativo di $f$ vincolato a $Z$
+		\item $\underline{x}_0$ è punto di massimo (risp. minimo) assoluto o
+		      globale di $f$ vincolato a $Z$ se $\exists \delta > 0$ :
+		      $f(x_0, y_0) \geq f(x,y)$ (risp. $f(x_0, y_0) \leq f(x,y)$)
+		      $\forall (x,y) \in B_{\delta}(\underline{x}_0 \cap Z$) e
+		      $f(\underline{x}_0)$ si dice massimo (risp. minimo) assoluto o
+		      globale di $f$ vincolato a $Z$.
+		\item $\underline{x}_0$ è punto estremale o di estremo vincolato a $Z$
+		      se i punti di massimo o minimo locale vincolato a $Z$
+	\end{enumerate}
+\end{definition}
+
+Si parla di ottimizzazione vincolata di $f$ con vincolo $Z$ per indicare la ricerca dei punti estremali di $f$ vincolati a $Z$.
+
+
+
+
+
+\end{document}

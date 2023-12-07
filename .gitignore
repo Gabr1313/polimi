@@ -10,3 +10,13 @@
 *.ppm
 **/Cargo.lock
 **/target
+
+*.log  
+*.aux  
+*.fdb_latexmk  
+*.fls  
+*.gz
+linux.tex
+*.toc
+*_vimtex_selected.tex
+
