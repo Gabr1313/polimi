@@ -292,13 +292,13 @@ Linux cerca di allorace blocchi di pagine contigue e di frammetare la memoria il
 meno possibile: il DMA è così più efficiente e la memoria risulta più compatta.
 
 \begin{itemize}
-	\item La dimensione di un blocco di pagine contigue e' una potenza di 2,
+	\item La dimensione di un blocco di pagine contigue è una potenza di 2,
 		detta \textbf{ordine} (esiste una costante \texttt{MAX\_ORDER}).
 	\item Per ogni ordine esiste una lista che collega tutti i blocchi.
 	\item Le richieste di allocazione indicano l'oridne del blocco desiderato.
-	\item se il blocco richiesto non e' disponibile, viene diviso in 2 blocchi
+	\item se il blocco richiesto non è disponibile, viene diviso in 2 blocchi
 		(\textbf{buddies}). Se necessario il processo viene reiterato.
-	\item quando un blocco viene liberato, se il suo buddy e' libero, i 2
+	\item quando un blocco viene liberato, se il suo buddy è libero, i 2
 		blocchi vengono riuniti.
 \end{itemize}
 
@@ -334,12 +334,12 @@ requiredPages} pagine.
 In caso di carico leggero \texttt{kswapd} causa rare attivazione dirette di
 PFRA, viceversa con uso intensivo della memoria.
 
-Nel caso in cui il PFRA non riesce a liberare pagine e la memoria residua e'
+Nel caso in cui il PFRA non riesce a liberare pagine e la memoria residua è
 insufficiente, viene invocato l'OMMK. L'OMMK chiama la funzione
 \texttt{select\_bad\_process()} che considera i seguenti criteri: il processo
-abbia molte pagine occupate, abbia svolto poco lavoro, abbia bassa priorita',
+abbia molte pagine occupate, abbia svolto poco lavoro, abbia bassa priorità,
 non abbia privilegi di root, non gestisca componenti HW (rimangono altrimenti in
-stato incosciente) e non sia un kernel thread. 
+stato incosciente) e non sia un kernel thread.
 
 Potrebbe verificarsi uno o stato di \textbf{Thrashing}: i processi
 continuano a richiedere pagine che vengono deallocate senza fare progredire con
@@ -360,13 +360,13 @@ appartenenti ai processi:
 	\item \textbf{Active list}: non possono essere scaricate
 	\item \textbf{Inactive list}
 \end{itemize}
-L'ordine delle liste e' un'approssimazione di LRU: l'x64 non tiene traccia del
+L'ordine delle liste è un'approssimazione di LRU: l'x64 non tiene traccia del
 numero di accessi alla memoria, ma utilizza solamente un bit (\textbf{A}) di
 accesso presente nel TLB (translation lookaside buffer) gestitio dall'HW. Questo
 bit viene settato ogni volta che la memoria viene acceduta, e riportato a 0
 periodicamente dal kernel.
 
-Oltre a cio', ad ogni pagina viene associata una flag \textbf{ref} (referenced).
+Oltre a ciò, ad ogni pagina viene associata una flag \textbf{ref} (referenced).
 Periodicamente \texttt{kswapd} esegue una funzione di controllo delle liste:
 \begin{itemize}
 	\item Scansione della coda della active list:
@@ -406,7 +406,7 @@ Periodicamente \texttt{kswapd} esegue una funzione di controllo delle liste:
 
 \subsection{Scaricamento delle pagine}
 \begin{itemize}
-	\item Vengono prima scaricate le pagine della Page Cache non piu' utilzzate
+	\item Vengono prima scaricate le pagine della Page Cache non più utilzzate
 		in ordine di NPF.
 	\item Vengono poi scaricate le pagine fisiche della inactive list (che
 		contiene NPV). Ovviamente una NPF viene scaricata solo se si incontrano
@@ -417,13 +417,13 @@ Periodicamente \texttt{kswapd} esegue una funzione di controllo delle liste:
 Il meccanismo di swapping necessita almeno una \textbf{Swap Area} (risiedente su
 file o partizione). Questa contine dei \textbf{Page slot} che hanno dimensione
 di 1 pagina, identificati da $<$SwapArea, PageSlot$>$ (\textbf{SWPN}). A ogni
-Swap Area e' associato un \textbf{descrittore}, contente tra le altre cose un
+Swap Area è associato un \textbf{descrittore}, contente tra le altre cose un
 \texttt{swap\_map\_counter} per ogni slot, che tiene traccia del numero di PTE
 (page table enries) riferiti all'area swappata.
 \subsection{Swap Out}
-Quando una pagina viene liberata, se il bit di dirty e' settato, viene salvata
-sul disco, altrimenti viene eliminata. Se la pagina e' mappata su file, viene
-salvata in tale file; se invece e' anonima, viene salvata nella Swap Area.
+Quando una pagina viene liberata, se il bit di dirty è settato, viene salvata
+sul disco, altrimenti viene eliminata. Se la pagina è mappata su file, viene
+salvata in tale file; se invece è anonima, viene salvata nella Swap Area.
 \begin{itemize}
 	\item Allocazione di un SWPN
 	\item Copia di NPF in SWPN
@@ -449,7 +449,7 @@ Se avviene la Swap In di una pagina, e successivamente una Swap Out senza che ci
 siano state modifiche al contenuto della pagina stessa, Linux cerca di
 riutilizzare lo stesso SWPN. Utilizza quindi una \textbf{Swaph Cache}, una
 struttura dati simile alla Page Cache. Una pagina appartiene alla Swap Cache
-viene registarta nello \textbf{Swap Cache Index} se e' presente sia in Memoria,
+viene registarta nello \textbf{Swap Cache Index} se è presente sia in Memoria,
 che nella Swap Area.
 Le pagine presenti in Swap sono solo anonime (e quindi private nella nostra
 semplificazione). Nel momento in cui avviene una Swap In:
@@ -461,7 +461,7 @@ semplificazione). Nel momento in cui avviene una Swap In:
 \end{itemize}
 Se poi la pagina viene scritta, si verifica un Page Fault
 \begin{itemize}
-	\item La pagina diventa privata (non appartiene piu' alla Swap Area)
+	\item La pagina diventa privata (non appartiene più alla Swap Area)
 	\item La sua protezione viene posta a W
 	\item \texttt{swap\_map\_counter--}
 	\item Se \texttt{swap\_map\_counter == 0} il Page Slot viene liberato nella
@@ -475,6 +475,136 @@ Successivamente a una Swap In
 		errore: le NPV in swap dovrebbero essere solo private nella nostra
 		semplificazione)}
 \end{itemize}
+
+\chapter{Tabella della pagine}
+\section{Struttura della memoria virtuale del SO}
+Gli indirizzi virtuali si estondono da \texttt{FFFF 8000 0000 0000} a
+\texttt{FFFF FFFF FFFF FFFF} per un totale di $2^{47}$B = 128TB.
+\begin{itemize}
+	\item Codice e dati statici: 0.5GB
+	\item Moduli a caricamento dinamici: 1.5GB
+	\item Mappatura della memoria fisica: 64TB (50\%)
+	\item Strutture dinamiche
+	\item Mappture memoria virtuale
+	\item altro
+\end{itemize}
+\subsection{Page offset}
+Il sistema operativo opera su indirizzi virtuali (come gli altri processi), ma
+deve anche essere in grado di accedere agli indirizzi fisici, ad esempio per
+gestire la tabella della pagine (una struttura dati HW molto grande). Questo
+problema è in parte risolto mappando 1:1 la memoria fisica. L'indirizzo
+iniziale di questa area virtuale è chiamato \texttt{PAGE\_OFFSET}.
+Le aree di sPila dei processi sono allocate dal SO in un indirizzo fisico e
+mappate sul corrispondente indirizzo virtuale per essere utilizzate.
+\section{Paginazione in x64}
+\subsection{Tabella della pagine}
+La MMU (Memory Management Unit) è l'unità di gestione della memoria a livello
+HW: può essere un componente della CPU o esterno.
+
+L'indirizzo di una pagina virtuale (di 4KB) è suddiviso in 12 bit di offset e
+36 bit di NPV (per un totale di $2^{36}$ pagine virtuali). Ovviamente le pagine
+virtuali non sono tutte allcoate sulla TP: percio' la TP e' organizzata come un
+albero su 4 livelli:
+\begin{itemize}
+	\item i 36 bit di NPV sono suddivisi in 4 parti da 9 bit
+	\item ogni gruppo da 9 bit rappresenta l'offset nella \textbf{directory}:
+		una tabella le cui right sono chiamate \textbf{PTE} (Page Table Entry)
+	\item La dimensione di ogni directory è 4KB: ogni PTE occupa 64 bit.
+	\item L'indirizzo della directory principale è contenuto nel registro
+		\texttt{CR3} (Control Register 3) della CPU.
+\end{itemize}
+\subsection{Page Walk}
+Per tradurre un NPV in NPF:
+\begin{itemize}
+	\item accedi a \texttt{CR3}
+	\item leggi la PTE indicata dall'offset di primo livello di NPV
+	\item leggi l'indirizzo di base della directory di livello inferiore
+	\item ripeti la procudura per ogni livello
+\end{itemize}
+Ad ogni livello, la PTE non contiene solo l'indirizzo del livello inferiore, ma
+anche dei \textbf{flags}, memorizzati nei 12 bit bassi non utilizzati (essendo
+l'offset della TP 0).
+\subsection{Translation Lookaside Buffer}
+Essendo che la Page Walk richiede 5 accessi a memoria, l'architettura x64
+possiede un TLB in cui conservare le corrispondenze tra NPV e NPF piu'
+recenti. Il TLB e' gestito dall'MMU in maniera trasparente al software.
+Se il registro CR3 viene modificato la MMU invalida tutte le PTE del TLB,
+escluse quelle globali (flag G).
+\subsection{Struttura della TP}
+Le 4 directory sono:
+\begin{itemize}
+	\item \textbf{PGD}: Page Global Directory
+	\item \textbf{PUD}: Page Upper Directory
+	\item \textbf{PMD}: Page Middle Directory
+	\item \textbf{PT}: Page Table
+\end{itemize}
+\subsection{Avviamento del SO}
+Deve esistere un meccanismo che all'avvio del sistema permetta di caricare la
+TP. Durante l'avvio le funzioni di caricamento accedono direttamente alle
+memoria fisica (paginazione non attiva).
+
+La tabella delle pagine e' infatti memorizzata sulla memoria fisica anch'essa.
+La tabella della pagine, quindi, rimappa anche se stessa.
+\subsection{TP del Kernel}
+Non esistendo una TP del SO, il SO viene mappato nella meta' superiore dalla TP
+di ogni processo. Le meta' superiori di ogni processo puntano alla stessa
+sottodirectory, relativa al SO (memorizzata fisicamente una volta sola).
+
+\section{Dimensione della TP}
+\begin{itemize}
+	\item una PTE di PMD mappa 512 x 4KB = 2MB
+	\item una PTE di PUD mappa 512 x 2MB = 1GB
+	\item una PTE di PGD mappa 512 x 1GB = 512GB
+\end{itemize}
+L'occupazione percentuale di memoria nella TP rispetto alla memoria fisica
+diminuisce col numero della pagine fisiche utilizzate tendento a 1/512. Con
+programmi molto piccoli, tuttavia puo' essere maggiore di 1.
+
+\section{TP VMA e thread}
+Gli stack crescono verso indirizzi bassi, mentre le VMA verso indirizzi alti.
+La pagina finale di uno stack e' la prima pagina di una VMA, e viceversa.
+
+I thread condividono la stessa TP del padre, differendo solo per quanto riguardo
+lo stack. Ogni thread ha bisogno di 2048 + 1 pagina per lo stack, e quindi 4 PT
++ 1 pagina.
+
+\section{Gestione della TP da software}
+\begin{itemize}
+	\item \texttt{mk\_pte()} coverte in una PTE un numero di pagina fisica e
+		una serie di flag. 
+	\item \texttt{pdg\_alloc()}, \texttt{pud\_alloc()}, \texttt{pmd\_alloc()},
+		\texttt{pte\_alloc()} allocano e inizializzano intere pagine della TP.
+	\item \texttt{pgd\_free()}, \texttt{pud\_free()}, \texttt{pmd\_free()},
+		\texttt{pte\_free()} liberano intere pagine della TP.
+	\item \texttt{set\_pdg()}, \texttt{set\_pud()}, \texttt{set\_pmd()},
+		\texttt{set\_pte()} modificano una PTE.
+\end{itemize}
+Quando viene richiesto l'accesso a una NPV non ancora mappata sulla TP, il So
+deve inserire una nuova PTE nella directory PT (se questa gia' esiste), oppure
+allocare una nuova PT, e inserire la PTE nella directory PMD. Se questa non
+esiste la procedura viene ripetuta.
+
+\section{Approfondimenti}
+\subsection{TLB}
+La TLB e' gestita in modo trasparente dall'HW. La TLB flush viene eseguita ogni
+volta che viene modificato il varore di CR3 (ad esempio durante un contex
+switc). Le pagine di sistema piu' utilizzate sono marcate come globali, e non
+vengono percio' eliminate.
+
+\subsection{Cache}
+Anche la cache e' gestita in modo trasparente dall'HW.
+
+\subsection{Context switch}
+La funzione \texttt{schedule()}, prima di invocare la marcro
+\texttt{switch\_to(prev, next)}, invoca la funzione \texttt{switch\_mm(oldmm,
+mm, next)}. Questa funzione invoca la macro \texttt{load_cr3(next->pgd)} che
+carica in CR3 il nuovo valore.
+
+
+
+
+
+
 
 
 
