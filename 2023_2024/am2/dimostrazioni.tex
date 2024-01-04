@@ -7,9 +7,22 @@
 \usepackage{amsthm}
 \usepackage{hyperref}
 
-\newtheorem{theorem}{Theorem}[section]
+\newtheoremstyle{break}
+	{}%         Space above, empty = `usual value'
+	{}%         Space below
+	{}%         Body font
+	{}%         Indent amount (empty = no indent, \parindent = para indent)
+	{\bfseries}% Thm head font
+	{.}%        Punctuation after thm head
+	{\newline}% Space after thm head: \newline = linebreak
+	{}%         Thm head spec
+\renewcommand{\proofname}{Dimostrazione}
 
-\title{Memoria}
+\theoremstyle{break}
+\newtheorem{theorem}{Teorema}[section]
+
+
+\title{Dimostrazioni}
 \author{Gabr1313}
 \date{\today}
 
@@ -32,7 +45,7 @@
 	\]
 	dove $A = \int a(t) dt$, $t \in I$, $c \in \mathbb{R}$.
 \end{theorem}
-\begin{proof}
+\begin{proof} Calcoli
 	\begin{itemize}
 		\item
 			\begin{align*}
@@ -66,7 +79,7 @@
 	con $c_1, c_2 \in \mathbb{R}$, dove $y_{o,1}, y_{o,2}$ sono due soluzioni
 	linearmente indipendenti dell'EDO.
 \end{theorem}
-\begin{proof}
+\begin{proof} Principio di Sovrapposizione + $\exists !$ del PC
 	\begin{itemize}
 		\item per il pricipio di Sovrapposizione l'insieme di tutte le soluzioni
 			è uno spazio vettoriale, perchè chiuso rispetto alla somma e al
@@ -145,7 +158,7 @@
 	\end{align*}
 	con $R \in [0,+\infty]$, allora la serie converge e ha raggio $R$.
 \end{theorem}
-\begin{proof}
+\begin{proof} Applicazione dei criteri del rapporto e della radice
 	\begin{itemize}
 		\item Per il teorema del raggio di convergenza di una serie di potenze
 			e' sufficiente verificare che:
@@ -157,7 +170,7 @@
 				\item non converge per $|x - x_o| > R$
 			\end{itemize}
 		\item tutte le serie convergono per $x = x_o$; nel caso in cui $x \neq
-			x_o$ si puo' applicare il criterio del rapporto alla serie di
+				x_o$ si puo' applicare il criterio del rapporto alla serie di
 			partenza:
 			\[
 				\lim_{n \rightarrow \infty} \left| \frac{a_{n+1}(x-x_0)^{n+1}}
