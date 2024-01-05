@@ -74,6 +74,13 @@
 			\item \texttt{PSR U}
 			\item \texttt{rientro a CU da R\_Int(evento)} (codice utente)
 		\end{itemize}
+		Mentre in un interrupt annidato 
+		\begin{itemize}
+			\item \dots
+			\item \texttt{PSR S}
+			\item \texttt{rientro a R\_Int\_1(evento) da R\_Int\_2(evento)}
+			\item \dots
+		\end{itemize}
 	\item \texttt{syscall}: dipende da syscall a syscall.\\
 		La chimata a è del tipo:
 		\begin{itemize}
