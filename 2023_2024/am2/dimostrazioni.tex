@@ -7,7 +7,8 @@
 \usepackage{amsthm}
 \usepackage{hyperref}
 \usepackage{thmtools}
-
+\usepackage[utf8]{inputenc}
+ 
 \newtheoremstyle{break}
 	{}           %Space above, empty = `usual valuè
 	{}           %Space below
@@ -30,12 +31,15 @@
 \date{\today}
 
 \begin{document}
+\pagenumbering{roman}
 \justify
 \sloppy
 \maketitle
 \listoftheorems
 
 \newpage
+\pagenumbering{arabic}
+
 \begin{theorem} [Formula risolutiva per le EDO del primo ordine lineari]
 	Date $a, b: I \subseteq \mathbb{R} \to \mathbb{R}$ continue,
 	l'integrale generale delle EDO
