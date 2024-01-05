@@ -3,7 +3,6 @@
 *.gch
 *.bin
 *.csv
-*.pdf
 *.o
 *.json
 *.vscode
@@ -13,6 +12,7 @@
 
 *.log  
 *.aux  
+*.loe  
 *.fdb_latexmk  
 *.fls  
 *.gz

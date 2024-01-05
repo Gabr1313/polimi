@@ -399,7 +399,7 @@ stati:
 \section{Esempio: Mutex}
 Quando un mutex è libero, per evitare di fare una system call (e cioè passare
 alla modalità S e mettersi in attesa), Linux utilizza i \textbf{Futex}
-(Fast Userspace Mutex). Un futex possiede una \textbf{varibile intera} nello
+(Fast Userspace Mutex). Un futex possiede una \textbf{variabile intera} nello
 spazio U e una \textbf{waitqueue} nello spazio S.
 \begin{enumerate}
 	\item Test e incremento della variabile intera in maniera atomica (in x86-64
@@ -453,15 +453,15 @@ I 2 casi sono:
 \section{Curiosità}
 \begin{itemize}
 	\item In sistemi multiprocessore il problema di esecuzioni concorrenti è
-		risolto usando meccansimi di sincronizzazione (lock). Il kernel,
-		per sempilicità, rimane non preemptive.
-	\item In sistemi multiprocessore per attese brevi invece che utilizzaire i
-		Mutex (i quali richiedo un context switch) utilia gli
-		\textbf{Spinlock}: il task entra in un loop finchè non ottine il lock
+		risolto usando meccanismi di sincronizzazione (lock). Il kernel,
+		per semplicità, rimane non preemptive.
+	\item In sistemi multiprocessore per attese brevi invece che utilizzare i
+		Mutex (i quali richiedo un context switch) utilizza gli
+		\textbf{Spinlock}: il task entra in un loop finché non ottiene il lock
 		(ha senso solo in sistemi multiprocessore).
 	\item Esistono altri stati di un processo: \texttt{TASK\_STOPPED},
 		\texttt{EXIT\_ZOMBIE} e \texttt{EXIT\_DEAD}. Questi processi non
-		appartenengono a nessuna \texttt{runqueue} o \texttt{waitqueue} e sono
+		appartengono a nessuna \texttt{runqueue} o \texttt{waitqueue} e sono
 		acceduti tramite \texttt{PID}.
 \end{itemize}
 
@@ -489,11 +489,11 @@ l'indirizzo della routine da eseguire (come una \texttt{switch}).
 
 \section{Creazione dei processi (normali e leggeri)}
 La libreria più utilizzata è la \textbf{Native Posix Thread Library}.
-I processi noramli sono creati da una \texttt{fork()}, quelli leggeri da una
+I processi normali sono creati da una \texttt{fork()}, quelli leggeri da una
 \texttt{thread\_create()}.
 
 La funzione  \texttt{clone()} permette d creare un processo con caratteristiche
-di condivione.
+di condivisione.
 
 \subsection{sys\_clone}
 \texttt{sys\_clone} non è una funzione, ma un numero sulla tabella delle
@@ -504,7 +504,7 @@ Il servizio di sistema chiamata da \texttt{clone()} è \texttt{sys\_clone()}
 long sys_clone(unsigned long flags, void *child_stack, ...);
 \end{verbatim}
 La uPila del figlio è un clone di quella del padre. In particolare se
-\texttt{child\_stack = NULL} l'inidirizzo virtuale di USP è lo stesso di quello
+\texttt{child\_stack = NULL} l'indirizzo virtuale di USP è lo stesso di quello
 del padre, altrimenti è quello specificato.
 
 \subsection{Implementazione di fork()}
@@ -533,7 +533,7 @@ clone(void (*fn)(void *), void *child_stack, int flags, void *arg, ... ) {
 \section{Eliminazione dei processi}
 \begin{itemize}
 	\item \texttt{sys\_exit}
-	\item \texttt{sys\_exit\_group}: inivia il \texttt{signal} di terminazione
+	\item \texttt{sys\_exit\_group}: invia il \texttt{signal} di terminazione
 		ai processi del gruppo ed esegue poi la \texttt{sys\_exit}
 \end{itemize}
 \texttt{sys\_exit} e \texttt{sys\_exit\_group} non sono una funzione, ma un
@@ -609,7 +609,7 @@ static const struct sched_class fair_sched_class = {
     .task_new           = task_new_fair,
 };
 \end{verbatim}
-Quando ad esepmio un processo in mod S chiama \texttt{enqueue\_task()}, questa a
+Quando ad esempio un processo in mod S chiama \texttt{enqueue\_task()}, questa a
 sua volta chiama \texttt{p->sched\_class->enqueue\_task()}.
 
 Le 3 classi più importanti sono, in ordine di diritto di esecuzione:
@@ -645,7 +645,7 @@ pick_next_task(rq, prev) {
 \section{Scheduling dei processi soft real-time}
 Per supportare i processi RT, Linux utilizza \texttt{SCHED\_FIFO} e
 \texttt{SCHED\_RR}. A ogni processo è attribuita una \textbf{priorità statica}
-(da 1 a 99), la quale è memorizzata in \texttt{tast\_struct.static\_prio}.
+(da 1 a 99), la quale è memorizzata in \texttt{task\_struct.static\_prio}.
 In entrambi i casi processi con maggiore priorità hanno diritto di esecuzione.
 Solo nel caso di processi con uguale priorità le politiche differiscono.
 
@@ -665,8 +665,8 @@ I task sono ordinati in un \textbf{red-black tree}.
 dove \textbf{LT} è la latenza (default 6ms) e \textbf{GR} è il granularità
 (default 0.75ms).
 
-Per calcolare Q, invece, si utilizza una media pesata, dove \texttt{RQL} e' run
-queue load e \texttt{LC} e' load coefficient:
+Per calcolare Q, invece, si utilizza una media pesata, dove \texttt{RQL} è run
+queue load e \texttt{LC} è load coefficient:
 \[
 	\texttt{RQL = } \sum \texttt{LOAD}
 \]
@@ -697,7 +697,7 @@ Si ottiene così l'effetto che VRT aumenti più velocemente nei processi più
 leggeri (i processi più pesanti utilizzano la CPU per più tempo a ogni ciclo).
 
 Inoltre, la runqueue aggiorna continuamente la variabile \texttt{VMIN} (LFT =
-left of RB) (il perche' del \texttt{max(...)} e' spiegato in seguito):
+left of RB) (il perchè del \texttt{max(...)} è spiegato in seguito):
 \[
 	\texttt{VMIN = max(VMIN, min(CURR.VRT, LFT.VRT))}
 \]
@@ -728,24 +728,24 @@ pick_next_task_fair(rq, previous_task) {
 \end{verbatim}
 
 \section{Gestione di wait e wakeup}
-Un processo risvegliato dall'attesa e' plausibile abbia un \texttt{VRT} molto
-basso: potrebbe percio' essere modificato. Inoltre modifica i valori di
+Un processo risvegliato dall'attesa è plausibile abbia un \texttt{VRT} molto
+basso: potrebbe perciò essere modificato. Inoltre modifica i valori di
 \texttt{NRT} e \texttt{RQL}, e quindi \texttt{LC} e \texttt{Q} di ogni processo.
 \[
 	\texttt{tw.VRT = max(tw.VRT, (VMIN - LT/2))}
 \]
-Dato che e' opportuno che la crescita di \texttt{VMIN} sia monotona:
+Dato che è opportuno che la crescita di \texttt{VMIN} sia monotona:
 \[
 	\texttt{VMIN = max(VMIN, min(CURR.VRT, LFT.VRT))}
 \]
 
-\subsection{Necessita' di rescheduling}
+\subsection{Necessità di rescheduling}
 Gli eventi WAIT implicano sempre un rescheduling, mentre gli eventi WAKEUP
 eseguono un rescheduling se:
 \begin{itemize}
-	\item la classe del processo risvegliato ha priorita' maggiore, oppure
+	\item la classe del processo risvegliato ha priorità maggiore, oppure
 	\item \texttt{tw‐>vrt + WGR * tw‐>load\_coeff < CURR‐>vrt} dove
-		\texttt{WRG} (wakeup granularity) e' solitamente impostato a 1ms.
+		\texttt{WRG} (wakeup granularity) è solitamente impostato a 1ms.
 \end{itemize}
 
 \subsection{Creazione e cancellazione di task}
@@ -763,7 +763,7 @@ Il rescheduling viene valutato come se avvenisse una WAKEUP.
 
 \section{Assegnazione dei pesi ai processi}
 \begin{definition}[Nice Value]
-	Valore assegnabile dall'utente: -20 e' massima priorita', 19 e' minima.
+	Valore assegnabile dall'utente: -20 è massima priorità, 19 è minima.
 \end{definition}
 \[
 	\texttt{t.LOAD = 1024 / (1.25 $^{\texttt{t.NICE}}$)}

@@ -1,0 +1,328 @@
+\documentclass[12pt, a4paper]{report}
+
+\usepackage[margin=2cm]{geometry}
+\usepackage{ragged2e}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\newtheorem{definition}{Definizione}
+
+\title{Cheat Sheet}
+\author{Gabr1313}
+\date{\today}
+
+\begin{document}
+\justify
+\sloppy
+\maketitle
+
+\section*{Programmazione concorrente}
+\begin{itemize}
+	\item Conviene guardare un contesto alla volta e spesso nel metre si trovano
+		anche i deadlock.
+	\item nel caso di una deadlock, nello schema si mettono tutti i valori che
+		global puo' assumere da quando sono state eseguite le istruzioni che
+		implicheranno tale deadlock.
+\end{itemize}
+
+\newpage
+\section*{Gestione dei processi}
+\begin{itemize}
+	\item Il padre prosegue l'esecuzione dopo la creazione del figlio
+	\item Il task che da attesa passa a pronto viene messo in esecuzione
+	\item Alla exit di un processo, anche i thread figli vengono terminati
+	\item Quando un processo termina, anche se non scritta esplicitamente,
+		bisogna riportare la \texttt{exit}
+\end{itemize}
+
+
+\newpage
+\section*{Moduli del kernel}
+\begin{itemize}
+	\item Segui lo schema della del cheat sheet
+	\item prima di ogni ritorno in modalità U, vai a \texttt{schedule} e
+		\texttt{pick\_next\_task}. Al ritorno da \texttt{pick\_next\_task} salvi
+		sulla pila l'\texttt{USP} e poi avviene il context switch.
+	\item Scrivi sulla pila tutte le chiamate, e tira una riga sopra a quella da
+		cui ritorni
+	\item segui le frecce finchè bisogna (in base al contesto, non sempre fino
+		alla fine)
+		\begin{itemize}
+			\item \texttt{resched(set TIF\_NEED\_RESCHED)} avviene solo se
+				effittivamente è necessario un rescheduling: se vieni da
+				\texttt{chechk\_preemtp\_curr} ci devono essere processi in
+				stato di pronto, mentre se viene da \texttt{task\_tick}, devi
+				assicurarti che il timer sia scaduto per il quanto di tempo.
+			\item \texttt{TIF\_NEED\_RESCHED} è la condizione che determina la
+				chiamate a \texttt{schedule} nel momento del ritorno in
+				modalità U.
+			\item \texttt{schedule} setta sempre \texttt{TIF\_NEED\_RESCHED} a
+				0.
+		\end{itemize}
+	\item si usa la notazione \texttt{a *1* da *2*} per indicare che la funzione
+		1 ha chiamato la funzione 2, e quindi sullo stack ci si salva
+		l'indirizzo a cui ritornare nella funzione 1.
+	\item \texttt{R\_int(evento)}: chiamata prima \texttt{task\_tick()} $\to
+			\dots$ e poi \texttt{controlla\_timer()} $\to \dots$.\\
+		L' \texttt{s\_stack} è del tipo:
+		\begin{itemize}
+			\item \texttt{USP}
+			\item \dots
+			\item \texttt{rientro a R\_int(CK) da schedule}
+			\item \dots
+			\item \texttt{PSR U}
+			\item \texttt{rientro a CU da R\_Int(evento)} (codice utente)
+		\end{itemize}
+	\item \texttt{syscall}: dipende da syscall a syscall.\\
+		La chimata a è del tipo:
+		\begin{itemize}
+			\item \texttt{> *funzione\_libreria*}
+			\item \texttt{> ***}
+			\item \texttt{> syscall}
+			\item \texttt{> System\_Call: SYSCALL}
+			\item \texttt{> sys\_***}
+			\item \dots
+			\item \texttt{> schedule}
+			\item \texttt{> pick\_next\_task <}
+			\item \dots
+		\end{itemize}
+		Il ritorno è del tipo:
+		\begin{itemize}
+			\item \dots
+			\item \texttt{schedule <}
+			\item \dots
+			\item \texttt{sys\_*** <}
+			\item \texttt{System\_Call: SYSRET <}
+			\item \texttt{syscall <}
+			\item \texttt{*** <}
+			\item \texttt{*funzione\_libreria* <}
+		\end{itemize}
+		L' \texttt{u\_stack} è del tipo:
+		\begin{itemize}
+			\item \texttt{rientro a *** da syscall}
+			\item \texttt{rientro a CU da ***}
+			\item \dots
+		\end{itemize}
+		L' \texttt{s\_stack} è del tipo:
+		\begin{itemize}
+			\item \texttt{USP}
+			\item \dots
+			\item \texttt{rientro a System\_Call da sys\_***}
+			\item \texttt{PSR U}
+			\item \texttt{rientro a syscall da System\_Call}
+		\end{itemize}
+	\item quando un thread termina l'esecuzione::
+		\begin{itemize}
+			\item \texttt{fn <}
+			\item \texttt{clone} (?) % TODO
+			\item \texttt{> syscall}
+			\item \dots
+		\end{itemize}
+\end{itemize}
+
+
+\newpage
+\section*{Memoria virtuale e file system}
+
+\begin{itemize}
+	\item \textbf{VMA}: \texttt{area NPV\_iniziale | dim | R/W | P/S | M/A |
+		<nome\_file, offset>}
+		(il nome del file è \texttt{-1} se la pagina è anonima)
+	\item \textbf{PT}: \texttt{process dim : n\_phys\_page -/D R/W}
+	\item \textbf{MEMORIA FISICA}: \texttt{n : processo\_area\_n -/D}
+	\item \textbf{SWAP FILE}: \texttt{s\_n : processo\_area\_n}
+	\item \textbf{TLB}: \texttt{processo\_area\_n : n - D A}
+\end{itemize}
+
+\begin{itemize}
+	\item \texttt{Dirty bit}
+		\begin{itemize}
+			\item Finchè non avviene un \texttt{context\_switch} questo viene
+				salvato nel TLB.
+			\item Appena avviene il context switch il bit viene riportato sulla
+				memoria fisica.
+			\item Essendo che i file non sono contenuti nel TLB, il bit di dirty
+				viene sempre salvato sulla memoria fisica.
+			\item nella page table il bit di dirty si mette se e solo se è
+				presente anche nella memoria fisica
+		\end{itemize}
+	\item \texttt{pagine di pila (P)}
+		\begin{itemize}
+			\item crescono verso il basso, quindi la pagina successiva ha un NPV
+				minore di 1.
+			\item Nella pila serve sempre avere la prima pagina libera (pagina di
+				growsdown).
+		\end{itemize}
+	\item \texttt{pagine condivise (S)}
+		\begin{itemize}
+			\item le pagine \texttt{shared} possono essere abilitate alla
+				scrittura anche se più processi le condividono.
+			\item le pagine non codivise (\texttt{P}), anche se mappate su file,
+				quando vengono scritte fanno scattare \texttt{COW}.
+		\end{itemize}
+	\item \texttt{kswapd}
+		\begin{itemize}
+			\item gestisce tutte le pagine nelle LRU: la \texttt{active list}
+				dalla coda, la \texttt{inactive list} dalla testa
+			\item se viene chiamato più volte, i bit di accesso delle pagine
+				precedenti rimangono a 1 (come se venissero acceduti anche loro
+				ripetutamente)
+			\item Il bit di \texttt{A} è salvato nel TLB, quindi pagine non
+				presenti nel TLB è come se avessero bit di \texttt{A} a 0.
+			\item bisogna quindi porre attenzione allo stato del TLB prima di
+				eseguire kswapd: le pagine con bit di A settato saranno in testa
+				alla coda, mentre le altre in coda.
+			\item Scansione dalla coda della active list:
+				\begin{verbatim}
+    if (A) {
+        A = 0;
+        if (ref) move Page to the head of active list;
+        else ref = 1;
+    } else {
+        if (ref) ref = 0;
+        else move Page to the head of inactive list;
+    }
+				\end{verbatim}
+			\item Scansione dalla testa della inactive list:
+				\begin{verbatim}
+    if (A) {
+        A = 0;
+        if (ref) {
+            ref = 0;
+            move Page to the head of active list;
+        } else ref = 1;
+    } else {
+        if (ref) ref = 0;
+        else move Page to the tail of inactive list;
+    }
+				\end{verbatim}
+		\end{itemize}
+	\item \texttt{swap file}
+		\begin{itemize}
+			\item ci vanno solo le pagine anonime e dirty
+		\end{itemize}
+	\item \texttt{read/write}
+		\begin{itemize}
+			\item le pagine vengono accedute una alla volta (il \texttt{pfra}
+				non sa a prescindere quante pagine saranno accedute).
+			\item nella PT \texttt{read} indica che la pagina è stata letta.
+			\item nella VMA \texttt{read} indica che la pagina ha permessi di
+				sola lettura.
+			\item nella PT \texttt{write} indica che la pagina è stata scritta.
+			\item nella VMA \texttt{write} indica che la pagina ha permessi di
+				lettura e scrittura.
+			\item  Le pagine \texttt{W}, dopo una \texttt{fork}, vengono marcate
+				come \texttt{R}.
+		\end{itemize}
+	\item \texttt{swap\_in}
+		\begin{itemize}
+			\item finchè una pagina non viene scritta rimane duplicata sulla
+				swap
+			\item se una pagina viene scritta, la pagina del processo che scrive
+				subisce la COW, mentre l'altra rimane sia in memoria fisica che
+				in swap
+			\item se una pagina in swap era "condivisa" tra 2 processi, e uno di
+				questi va un \texttt{write}, allora la pagina che viene scritta
+				è messa in cima alla \texttt{LRU active} mentre quella non
+				scritta in coda alla \texttt{LRU inactive}.
+		\end{itemize}
+	\item \texttt{sbrk}
+		\begin{itemize}
+			\item alloca pagine \texttt{D} appena dopo le precedenti, o se non
+				erano già presenti appena dopo \texttt{S}.
+			\item Essendo le nuove pagina anonime, inizialmente non hanno
+				indirizzo, ma si comportano come \texttt{COW} sulla
+				\texttt{<ZP>} (una volta lette, sono mappate nella memoria
+				fisica sulla \texttt{<ZP>}).
+		\end{itemize}
+	\item \texttt{mmap(add, n\_pag, W/R, P/S, M/A, file, file\_page\_offset)}
+		\begin{itemize}
+			\item alloca la pagina specificata, facendo attenzione che i primi
+				12 bit di \texttt{address} sono di offset nella pagina (non fanno
+				quindi parte della NPV).
+		\end{itemize}
+	\item \texttt{context switch}
+		\begin{itemize}
+			\item svouta il TLB: se le pagine sono dirty marca le stesse pagine
+				in memoria fisiaca come dirty.
+			\item carica la pagina del codice e della pila del nuovo processo in
+				memoria fisica e quindi anche sul TLB.
+		\end{itemize}
+	\item \texttt{fork}
+		\begin{itemize}
+			\item le pagine vengono tutte "condivise" tra i processi
+				(\texttt{COW}, \texttt{R}).
+			\item tutte le pagine vengono aggiunte in testa alla stessa
+				\texttt{LRU} di quelle del padre, con lo stesso bit di ref.
+			\item la pagina della pila viene "regalata" al figlio, e clonata
+				(\texttt{COW}) dal padre.
+			\item la pagina del figlio viene marcata \texttt{D} nella memoria
+				fisica (scrive il PID).
+			\item il puntatore al descrittore dei file punta alla stessa area di
+				memoria.
+		\end{itemize}
+	\item \texttt{clone}
+		\begin{itemize}
+			\item crea un nuovo thread: tutte le pagine vengono condivise con
+				quella del padre (NON \texttt{COW}).
+			\item viene creata una nuova NPV (pila) di tipo \texttt{T}, di
+				dimensione 2, W P A. Questa viene marcata \texttt{D} nella
+				memoria fisica (come la pila di un nuovo processo in una
+				\texttt{fork}).
+			\item dopo un \texttt{context\_switch} il TLB viene aggiornato
+				(malgrado contenga pagine condivise).
+		\end{itemize}
+	\item \texttt{pfra}
+		\begin{itemize}
+			\item prima libera le pagine dei file, e poi quelle dei processi.
+			\item quando interviene libera \texttt{MAX\_FREE} pagine.
+			\item non sa a prescindere quali pagine verranno usate: potrebbere
+				mettere in swap la stessa pagina condivisa per poi ricaricarla
+				in memoria fisica.
+		\end{itemize}
+	\item \texttt{FILE}
+		\begin{itemize}
+			\item \texttt{READ} indica che la pagina è stata caricata in
+				memoria
+			\item \texttt{WRITE} indica che la pagina è stata salvata sul disco
+				(avviene solo se la pagina è dirty)
+			\item se \texttt{f\_count == 0} allora le pagine dirty vengono
+				scritte in memoria e la \texttt{f\_pos} si "resetta"
+		\end{itemize}
+	\item \texttt{fopen}
+		\begin{itemize}
+			\item se un file viene aperto, allora viene creato un nuovo
+				descrittore, e quindi \texttt{f\_pos = 0}.
+		\end{itemize}
+\end{itemize}
+
+\newpage
+\section*{Struttura del filesystem}
+\begin{itemize}
+	\item prima di aprire un nuovo file, libera una posizione nel
+		\texttt{P->files.fd\_array}
+\end{itemize}
+
+\newpage
+\section*{Tabella della pagine}
+\begin{itemize}
+	\item l'indirizzo di una pagina è di 48 bit: 9 di offset e 36 di VMA. La
+		VMA è divisa in:
+		\begin{itemize}
+			\item \texttt{PGD}: 9 bit
+			\item \texttt{PUD}: 9 bit
+			\item \texttt{PMD}: 9 bit
+			\item \texttt{PT}: 9 bit
+		\end{itemize}
+	\item \texttt{\#PGD = 1}
+	\item \texttt{\#PUD = \#of\_different\_PGD}
+	\item \texttt{\#PMD = \#of\_different\_PUD}
+	\item \texttt{\#PT = \#of\_different\_PMD}
+	\item \texttt{rapporto\_di\_occupazione = pagine\_totali / numero\_di\_NPV}
+	\item \texttt{dimensione\_massima\_del\_processo\_in\_pagine\_virtuali =
+		512 * \#PT}
+\end{itemize}
+
+
+\end{document}

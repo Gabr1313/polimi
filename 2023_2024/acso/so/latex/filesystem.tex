@@ -1,0 +1,519 @@
+\documentclass[12pt, a4paper]{report}
+
+\usepackage[margin=2cm]{geometry}
+\usepackage{ragged2e}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+
+\newtheorem{definition}{Definizione}
+
+\title{Memoria}
+\author{Gabr1313}
+\date{\today}
+
+\begin{document}
+\justify
+\sloppy
+\maketitle
+\tableofcontents
+
+\chapter{Il File System}
+Fornisce un livello di astrazione (\textbf{Modello d'utente}) per consentire
+l'accesso alle periferiche (file speciali).
+\section{Drivers}
+Le tipologie di periferiche sono molteplici, e queste evolvono nel tempo. Linux
+permette quindi di aggiungere dei moduli software al SO: i \textbf{device
+drivers}.
+
+Questi vengono caricati solo quando necessari. Il meccanismo di inserimento nel
+sistema di nuovo software è chiamato \texttt{kernel\_modules}. A un livello
+astratto i driver devono avere un comportamento omogeneo.
+
+I driver si dividono in due categorie:
+\begin{itemize}
+	\item \textbf{Driver a carattere}: le operazioni sono eseguite,
+		ordinatamente, direttamente dai programmi che le richiedono.
+	\item \textbf{Driver a blocchi}: il sistema pone le sue richieste in una
+		coda, gestita da un FS. Il driver la può modificare così da ottimizzare
+		le prestazioni. \end{itemize}
+
+\section{Virtual File System e VFS}
+Linux è in grado di gestire una moltitudine di file system (compatibilità,
+ottimizzazioni \dots). Il \textbf{Virtual File System Switch} è lo strato che
+premette ai programmi applicativi di essere indipendenti dall'implementazione
+del file system: ridirigono le richieste di servizi alle corrette routine.
+L'interfaccia unica è chiamata \textbf{modello del VFS}.
+
+Più FS possono coesistere nello stesso sistema, con il vincolo che ogni
+partizione (\textbf{Device}) sia essere gestita da un solo FS. Ogni Device è
+costituito da un insieme di blocchi identificati da un \textbf{LBA} (Logical
+Block Address).
+
+\section{Ottimizzazioni con la memoria}
+L'accesso a periferiche come un disco può richiedere diversi millisecondi:
+perciò Linux tenta di mantenere in memoria i dati letti da disco il più lungo
+possibile. Il VFS deve quindi collaborare strettamente col gestore della
+memoria. Quando il VFS o un FS ha bisogno di accedere a un Device, la richiesta
+passa per la \textbf{Page Cache} che si occupa dell'eventuale trasferimento in
+memoria del blocco.
+
+\chapter{Modello d'utente}
+\section{Modello per l'accesso al singolo file}
+L'accesso a un file può avvenire secondo 2 modalità:
+\begin{itemize}
+	\item mappatura di una VMA sul file (\texttt{mmap()})
+	\item system calls, le cui API permettono di creare, cancellare, leggere o
+		scrivere su file, oppure di creare o cancellare i direttori.
+\end{itemize}
+\subsection{Modello di un file}
+Un file è costituito da una sequenza di byte memorizzati su disco. Un programma
+non lavora mai direttamente su tale contenuto, ma su una sua copia in memoria.
+
+Esiste un'\textbf{indicatore della posizione corrente} che punta al byte in cui
+avviene l'operazione di lettura o scrittura.
+
+Al momento dell'apertura un file (identificato dal nome) restituirci un intero
+non negativo: il \textbf{descrittore del file} (un puntatore).
+
+\subsubsection{Funzioni della libreria di Linux}
+\begin{itemize}
+	\item \texttt{int open(char *file\_name, int type, int permission)}:
+		\texttt{pathname} è il nome completo; \texttt{type} indica scrittura,
+		lettura o entrambi.
+	\item \texttt{int creat(char *file\_name, int permission)}
+	\item \texttt{int close(int fd)}: elimina il legame tra descrittore e file.
+		Non è garantita la scrittura su disco.
+	\item \texttt{int fsync(int fd)}: forza la scrittura su disco.
+	\item \texttt{int read(int fd, void *buffer, int size)}: lettura
+	\item \texttt{int write(int fd, void *buffer, int size)}: scrittura
+	\item \texttt{long lseek(int fd, long offset, int whence)}: modifica la
+		posizione corrente (permette di non operare in maniera sequenziale su un
+		file) e restituisce il valore della nuova posizione. \texttt{whence} può
+		essere 0, 1 o 2: inizio del file, posizione corrente, fine del file.
+\end{itemize}
+
+\section{Organizzazione complessiva dei file}
+
+\subsection{Directory e filename}
+I file e le partizioni sono organizzati in una struttura ad albero i cui nodi
+sono detti \textbf{directory} (folder\dots). Le directory sono dei file (di
+\textbf{tipo directory}) che contengono i nomi e le informazioni di accesso ad
+altri file (sia di \textbf{tipo normale} che di tipo directory). Per scrivere o
+leggere su questi file si utilizzano servizi speciali.
+
+Il \textbf{Pathname} o nome completo è costituito dal nome delle directory
+separate da uno "/". La \textbf{root} è indicata da "/".
+
+\begin{itemize}
+	\item \texttt{link()}: permette di creare un nuovo nome per un file già
+		esistente
+	\item \texttt{unlink(char *file\_name)}: rimuove il riferimento a un file.
+		In Linux non esiste un servizio per la cancellazione di un file, ma
+		semplicemente se un file rimane senza riferimenti, quello spazio diventa
+		libero.
+	\item \texttt{mkdir()}: è l'equivalente di \texttt{creat()} per le
+		directory.
+\end{itemize}
+
+\subsection{Periferiche e file speciali}
+Tutte le periferiche sono considerate come \textbf{tipo speciale}. I file
+speciali sono trattati come normali file, con la differenza che alcune delle
+operazioni perdono di significato. Spesso i file speciali risiedono nella
+cartella \texttt{/dev}.
+
+In questa cartella sono presenti anche i terminali virtuali (creati dalla gui),
+di solito indicati con \texttt{/dev/pts/`n`}. A differenza dei dispositivi fisici,
+la creazione di terminali virtuali avviene su comando. Per conoscere il nome del
+file speciale associato ad un terminale si usa il comando \texttt{tty}.
+
+L'interprete dei comandi (shell) fa in modo che un programma in esecuzione abbia
+i descrittori 0, 1 e 2: \textbf{stdin}, \textbf{stdout} e \textbf{stderr} (file
+speciali). Questi descrittori possono essere rediretti su file normali: quando
+ad esempio si usa la funzione \texttt{close(0)}, la stdin viene rediretta sul
+file successivamente aperto.
+
+La funzione \texttt{dup()} duplica un descrittore, seppur l'indicatore della
+posizione rimane univoco.
+
+\subsubsection{Creazione di file speciali}
+Ogni periferica è identificata da una coppia di numeri: \textbf{major} e
+\textbf{minor}. Il primo identifica il driver, il secondo il dispositivo.
+L'equivalente di \texttt{creat()} per i file speciali è \texttt{mknod(pathname,
+type, major, minor)}, la quale può essere utilizzata solo dall'amministratore
+del sistema (type = character / block).
+
+\section{I Device}
+A differenza di Windows, in cui i device sono identificati da una lettera (C:,
+D:) che india la radice dell'albero, in Linux i device sono rappresentati da
+nodi detti \textbf{mount point}. Il sottoalbero ne descrive la struttura
+interna.
+
+Per inserire un nuovo device nel sistema si deve:
+\begin{itemize}
+	\item associare un FS al device (con \texttt{mkfs -t type device})
+	\item montare il volume in un mount point (con \texttt{mount device
+		mount\_point})
+\end{itemize}
+A questo punto i file possono essere acceduti sia dal mount point che dal
+device.
+
+\chapter{Il Modello del VFS}
+Le informazioni contenute nel VFS sono di 2 tipi: quelle statiche relative al
+contenuto dei file e quelle dinamiche associate ai file aperti.
+
+Le strutture dati su cui si base il VFS sono:
+\begin{itemize}
+	\item \texttt{struct dentry} (directory entry): ogni istanza rappresenta una
+		directory nel VFS.
+	\item \texttt{struct inode}: ogni istanza rappresenta un file fisicamente
+		presente nei device.
+	\item \texttt{struct file}: ogni istanza rappresenta un file aperto.
+\end{itemize}
+Queste strutture dati sono accedute tramite puntatori contenuti in:
+\begin{itemize}
+	\item \textbf{struttura delle directory}
+	\item \textbf{struttura di accesso dai processi ai file aperti}
+\end{itemize}
+
+\section{Struttura delle directory}
+Questa struttura dati ad albero è costituita da \texttt{struct dentry}.
+\begin{verbatim}
+struct dentry {
+    struct inode *d_inode;
+    struct dentry *d_parent;
+    struct qstr d_name;
+    struct list_head d_subdirs;
+    struct list_head d_child;
+    ...
+}
+\end{verbatim}
+\begin{itemize}
+	\item \texttt{d\_inode} è un puntatore alla struttura che rappresenta il
+		file fisico.
+	\item \texttt{d\_name} è il nome del file o della directory.
+	\item \texttt{d\_subdirs} è un puntatore al primo dei figli.
+	\item \texttt{d\_child} è un puntatore al prossimo fratello.
+\end{itemize}
+
+\section{Struttura di accesso dai processi ai file aperti}
+Nel descrittore dei processi sono presenti 2 puntatori rilevanti ai fini
+dell'accesso ai file:
+\begin{verbatim}
+struct task_struct {
+    struct fs_struct *fs;
+    struct files_struct *files;
+    ...
+}
+\end{verbatim}
+\begin{itemize}
+	\item \texttt{fs} è un puntatore alla lista dei file system utilizzati dal
+		processo.
+\end{itemize}
+\begin{verbatim}
+struct files_struct {
+    int next_fd;
+    struct file **fd_array[NR_OPEN_DEFAULT];
+    ...
+}
+\end{verbatim}
+\begin{itemize}
+	\item Ogni elemento di \texttt{fd\_array} è un puntatore a \texttt{struct
+		file}, una struttura dati utilizzata per rappresentare i file aperti.
+	\item \texttt{fd}, descrittore del file F, è l'indice di \texttt{fd\_array}.
+\end{itemize}
+
+\begin{verbatim}
+struct file {
+    struct list_head f_list;
+    struct dentry *f_dentry;
+    loff_t f_pos;
+    int f_count;
+    ...
+}
+\end{verbatim}
+\begin{itemize}
+	\item \texttt{f\_list} serve a collegar tutti i file aperti in una lista.
+	\item \texttt{f\_dentry} è un puntatore alla directory entry utilizzata per
+		aprire il file.
+	\item \texttt{f\_pos} è l'indicatore della posizione corrente.
+	\item \texttt{f\_count} è il numero di processi che hanno aperto il file.
+\end{itemize}
+Il percorso di un file aperto è quindi:
+\texttt{file\_descriptor->files.fd\_array[fd]->f\_dentry->d\_inode}.
+
+Quando un nuovo file viene aperto, viene creata una nuova istanda di
+\texttt{struct file} e viene inserita nella prima posizione libera della tabella
+dei file aperti. Se non sono già presenti in memoria vengono create anche le
+struct \texttt{dentry} e \texttt{inode} (eliminate quando \texttt{f\_count}
+diventa 0).
+
+L'operazione di \texttt{fork()} duplica la tabella dei file aperti usando la
+funzione \texttt{dup()}, quindi il riferimento a \texttt{struct
+file} di tutti i file aperti è lo stesso.
+
+Se lo stesso file fisico viene aperto da un'altra posizione (link), invece,
+viene creata una nuova istanza di \texttt{struct file}, il quale avrà una
+\texttt{f\_pos} differente, che punta a una \texttt{f\_dentry}, la quale però
+punta  allo stesso \texttt{inode}.
+
+\section{Struct inode}
+La corrispondenza tra \texttt{struct inode} e file fisico è 1 a 1.
+\begin{verbatim}
+struct inode {
+	loff_t i_size;
+    struct list_head i_dentry;
+    struct super_block *i_sb;
+    struct inode_operations *i_op;
+    struct file_operations *i_fop;
+    struct address_space *i_mapping;
+    ...
+}
+\end{verbatim}
+\begin{itemize}
+	\item \texttt{i\_size} è la dimensione del file.
+	\item \texttt{i\_dentry} è l'inizio della lista dei dentry del file (un file
+		può avere più nomi: link).
+	\item \texttt{i\_sb} è un puntatore al superblocco che lo gestisce: una
+		struttura dati che contiene le caratteristiche del FS.
+	\item \texttt{i\_op} e \texttt{i\_fop} contengono i puntatori alle funzioni
+		dello specifico FS (non risiedono nel blocco per rendere le operazioni
+		più immediate).
+		\begin{itemize}
+			\item \texttt{i\_op} contiene le operazioni per la gestione
+				complessiva dei file e delle directory:\\
+				\texttt{create}, \texttt{mknod}, \texttt{link}, \texttt{unlink},
+				\texttt{mkdir}, \texttt{rmdir} \dots
+			\item \texttt{i\_fop} contiene le operazioni di accesso ai file:\\
+				\texttt{read}, \texttt{write}, \texttt{open}, \texttt{close},
+				\texttt{llseek} \dots
+		\end{itemize}
+	\item \texttt{i\_mapping} contiene informazioni per il trasferimento dei
+		dati da device a memoria.
+\end{itemize}
+
+\section{Accesso ai dati}
+\texttt{read()} e \texttt{write()} chiamano delle system calls. Il disco è
+suddiviso in LBA da 1024 byte e la page cache in pagine da 4096 byte. La lettura
+di un file è basata sulla pagina: è l'unità minima trasferita dal SO. Una
+pagina è quindi costituita da 4 blocchi, ognuno identificato dal \textbf{File
+Block Address} (\textbf{FBA}).
+\begin{itemize}
+	\item determina la pagina del file alla quale i byte appartengono:
+		\texttt{OFFSET = POS \% 4096}.
+	\item verifica se la pagina è contenuta nella page cache.
+	\item altrimenti alloca una nuova pagina nella page cache e carica 4 LBA:
+		\texttt{FP = POS / 4096}.
+	\item copia i dati richiesti all'indirizzo richiesto dalla system call.
+\end{itemize}
+Blocchi di FBA consecutivi possono essere allocati in LBA non consecutivi
+(dipende dalla disponibilità di risorse e dal FS utilizzato).
+\subsection{Page cache}
+La page cache contiene pagine fisiche, strutture dati e funzioni. Le strutture
+dati contengono i descrittori delle pagine fisiche, i quali a loro volta
+contengono l'identificatore del file, l'offset, il ref\_count \dots. Una pagina
+è identificata dalla coppia \texttt{<file, offset>}.
+
+Il campo \texttt{i\_mapping} di \texttt{struct inode} punta a
+\begin{verbatim}
+	struct address_space {
+	struct inode host;
+	struct radix_tree_root page_tree;
+	struct ... a_ops;
+	...
+	}
+\end{verbatim}
+Questa struttura serve a determinare se una pagina di un file è presente nella
+page cache.
+\begin{itemize}
+	\item \texttt{page\_tree} è una struttura dati che punta a tutte le pagine
+		nella Page Cache relative al file. Se la pagina non viene trovata, si
+		procede a caricarla.
+	\item \texttt{a\_ops} contiene operazioni specifiche del FS per accedere
+		alle pagine:\\
+		\texttt{readpage}, \texttt{writepage}, \dots \\
+		Queste solitamente chiamano funzioni del device driver.
+\end{itemize}
+Questo processo supporta anche la mappatura di una VMA su un file.
+\subsubsection{Altro}
+\begin{itemize}
+	\item Esistono anche la \texttt{inode\_cache} e la \texttt{dentry\_cache},
+		separate dalla page cache.
+	\item esiste la possibilità di caricare sulla page cache un numero di
+		blocchi che non è multiplo della dimensione della pagina.
+\end{itemize}
+
+\chapter{Gli extended FS ext2, ext3 e ext4}
+\section{Introduzione}
+I FS default di windows sono \textbf{ext2} e \textbf{ext3} e \textbf{ext4} (le
+ultime sono delle versioni aggiornate e compatibili con la prima).
+
+Il journaling è una tecnica che evita la creazione di file corrotti in caso di
+chiusura anomala.
+\section{Il FS ext2}
+Ogni device è suddiviso in \textbf{Block Groups}
+
+\subsection{ext2 senza Block Groups}
+Le principali strutture dati utilizzate sono:
+\begin{itemize}
+	\item \textbf{superblock}: contiene le informazioni globali e viene
+		eventualmente utilizzato durante il boot.
+	\item \textbf{tabella degli inode}: array di inode
+	\item \textbf{inode}: informazioni relative al singolo file
+	\item \textbf{directories}
+	\item \textbf{blocchi dati}: il contenuto effettivo dei file
+\end{itemize}
+Il superblock ha un indirizzo prefissato: da esso sono raggiungibili la tabella
+degli inode e la root directory. La root directory può coincidere con la root
+del sistema o con un mount point.
+
+A ogni istante un blocco dati appartiene a un file oppure alla \textbf{lista
+libera}.
+
+\subsubsection{Contenuto di un inode}
+Contiene le informazioni generali relative a un file. Nei cataloghi i file sono
+individuati dalla coppia \texttt{<nome, numero di inode>}. Le informazioni più
+importanti sono:
+\begin{itemize}
+	\item \textbf{tipo}: normale, directory o speciale
+	\item \textbf{numero di riferimenti} (link) al file
+	\item \textbf{dimensione}
+	\item \textbf{puntatori ai blocchi dati} a eccetto dei file speciali.
+\end{itemize}
+
+\subsubsection{Accesso ai Blocchi dati}
+La dimensione degli FBA (1KB - 64KB) deve essere minore o uguale a quelli di una
+pagina (4KB su x64).
+
+In ext2 l'accesso ai blocchi è basato su 15 puntatori. I primi 12 puntano
+direttamente ai blocchi dati, gli ultimi 3 sono puntatori indiretti (uno
+singolo, uno doppio e uno triplo). Questa struttura serve a rendere più
+efficiente l'accesso ai file di piccole dimensioni.
+
+Se $b$ è la dimensione di un blocco, allora la massima dimensione del file è
+\[
+	b((b/4)^3 + (b/4)^2 + b/4 + 12)
+\]
+$b/4$ è la dimensione di un blocco diviso per la dimensione di un puntatore.
+
+\subsection{ext2 con Block Groups}
+Un Block Group è un insieme di LBA contigui. L'accesso consecutivo a LBA
+consecutivi è più veloce di un accesso casuale: è compito del driver disporre
+vicini blocchi con informazioni correlate.
+
+La dimensione di un Block Group è \texttt{8 * block\_size}: in un blocco è
+memorizzata una bitmap che indica l'utilizzo o meno degli altri blocchi.
+
+Il superblocco del volume è unico, ma può essere replicato in più block
+group.
+
+La tabella degli inode è logicamente unica, suddivisa in parti uguali nei
+diversi block group. Nel superblocco è memorizzato il parametro
+\texttt{inodes\_per\_group}.
+\begin{verbatim}
+    bg = (inode_num - 1) / inodes_per_group	
+offset = ((inode_num - 1) % inodes_per_group) * inode_size
+\end{verbatim}
+
+In generale, le strutture dati contenute in un Block Group sono:
+\begin{itemize}
+	\item \textbf{Superblock}: contiene le informazioni globali (opzionale)
+	\item \textbf{Block group descriptor table}
+	\item \textbf{Block usage bitmap}
+	\item \textbf{Inode usage bitmap}
+	\item \textbf{Porzione della tabella degli inode}: contenente  soli
+		\texttt{inodes\_per\_group} inode
+	\item \textbf{blocchi dati}: il contenuto effettivo dei file
+\end{itemize}
+
+\section{Extent in ext4}
+Un \textbf{extent} è un insieme di blocchi contigui sia all'interno del file
+che sul dispositivo fisico. Un extent è rappresentato da \texttt{<FBA iniziale,
+LBA iniziale, dimensione>}: non sono più necessari i puntatori ai singoli
+blocchi.
+
+\chapter{Driver a carattere}
+\section{Introduzione}
+I \textbf{device driver} (gestori delle periferiche) sono dei moduli software
+che adattano una l'hardware di una specifica periferica a funzionare nel
+contesto del sistema operativo. I gestori sono suddivisi in \textbf{character
+devie driver} e \textbf{block device driver}.
+
+\section{File speciali e identificazione dei gestori}
+Per ogni periferica installata nel sistema deve esistere un corrispondente file
+speciale (di solito nella cartella \texttt{/dev}).
+
+Ogni periferica è identificata da una coppia di numeri: \textbf{major} e
+\textbf{minor}. Il primo identifica il driver, il secondo il dispositivo.
+Questi valori sono posti nell'inode del file speciale.
+
+\section{Routine di un gestore di periferica}
+Le funzioni che un gestore di periferica svolge sono:
+\begin{itemize}
+	\item inizializzazione all'avvio del SO
+	\item porre la periferica in servizio o fuori servizio
+	\item ricevere e inviare dati
+	\item scoprire e gestire gli errori
+	\item gestire gli interrupt
+\end{itemize}
+Il gestore è quindi costituito da routine attivate al momento opportuno e dalla
+routine di interrupt. In ogni gestore esiste una \textbf{tabella delle
+operazioni} così composta:
+\begin{verbatim}
+struct file_operations{
+    int (*lseek) ();
+    int (*read) ();
+    int (*write) ();
+    int (*ioctl) ();
+    int (*open) ();
+    int (*release) ();
+    ...
+}
+\end{verbatim}
+\begin{itemize}
+	\item \texttt{open()} verifica che la periferica sia attiva, e nel caso
+		questa si utilizzabile da un solo processo alla volta viene controllata
+		un'apposita variabile (e nel caso viene restituito un errore).
+	\item \texttt{release()} viene chiamata dalla \texttt{close()} di un file
+		speciale: controlla che il buffer sia svuotato e modifica la variabile
+		di utilizzo.
+	\item \texttt{write()}: vedi \ref{write}
+	\item \texttt{read()} simmetrica a \texttt{write()}.
+	\item \texttt{ioctl(int fd, int command, int parameter)} permette di
+		svolgere le operazioni specifiche della periferica.
+\end{itemize}
+All'avvio del SO viene attivata una funzione di inizializzazione per ogni
+gestore di periferica installato che restituisce un puntatore alla propria
+tabella delle operazioni. Il kernel si salva il puntatore nella \textbf{tabella
+dei gestori a carattere} o nella \textbf{tabella dei gestori a blocchi}.
+
+Ad esempio, nel caso di una periferica a carattere (che non utilizza la page
+cache), il kernel accede al file \texttt{/dev/tty1}, dove legge il numero di
+major \texttt{4} , per accedere alla tabella delle operazioni e chiamare la
+funzione \texttt{open()}.
+
+\section{Principi di funzionamene di un gestore di periferica}
+Essendo che un processo in attesa di un servizio della periferica non è in
+esecuzione, questo non è in grado di rispondere prontamente alla richiesta di
+interrupt e di trasferire i dati. Perciò i dati da scrivere o leggere vengono
+conservati dal gestore stesso in un buffer.
+\begin{itemize}\label{write}
+	\item il processo chiama X.write()
+	\item la routine di X.write() copia dallo spazio del processo nel buffer
+		del gestore $C = min(buffer.size(), char_to_write)$ caratteri. 
+	\item X.write() manda il primo carattere alla periferica.
+	\item X.write() deve attendere che la stampante abbia stampato il carattere
+		e sia pronta a ricevere il successivo.
+		\texttt{wait\_event\_iterruptible(WQ, empty\_buffer)}.
+	\item interrupt della periferica
+	\item la routine di interrupt viene subito eseguita e se disponibile il
+		carattere successivo viene inviato, altrimenti...
+	\item \texttt{wake\_up(WQ)} risveglia il processo e lo mette in stato di
+		pronto.
+	\item quando il processo riprende l'esecuzione X.write() copia i successivi
+		caratteri nel buffer del gestore, altrimenti...
+	\item il processo ritorna al modo U.
+\end{itemize}
+
+\end{document}
