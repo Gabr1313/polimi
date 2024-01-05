@@ -8,7 +8,9 @@
 \usepackage{hyperref}
 \usepackage{thmtools}
 \usepackage[utf8]{inputenc}
- 
+\usepackage{tocloft}
+
+\renewcommand{\listtheoremname}{Indice}
 \newtheoremstyle{break}
 	{}           %Space above, empty = `usual valuè
 	{}           %Space below
@@ -19,12 +21,8 @@
 	{\newline}   %Space after thm head: \newline = linebreak
 	{}           %Thm head spec
 \renewcommand{\proofname}{Dimostrazione}
-
 \theoremstyle{break}
 \newtheorem{theorem}{Teorema} %[section]
-
-\usepackage{tocloft}
-
 
 \title{Dimostrazioni}
 \author{Gabr1313}
@@ -39,7 +37,6 @@
 
 \newpage
 \pagenumbering{arabic}
-
 \begin{theorem} [Formula risolutiva per le EDO del primo ordine lineari]
 	Date $a, b: I \subseteq \mathbb{R} \to \mathbb{R}$ continue,
 	l'integrale generale delle EDO
