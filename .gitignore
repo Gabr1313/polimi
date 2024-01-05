@@ -10,13 +10,12 @@
 **/Cargo.lock
 **/target
 
-*.log  
-*.aux  
-*.loe  
-*.fdb_latexmk  
-*.fls  
+*.log
+*.aux
+*.loe
+*.fdb_latexmk
+*.fls
 *.gz
-linux.tex
 *.toc
 *_vimtex_selected.tex
-
+*.thm
