@@ -126,6 +126,16 @@
 			\item \texttt{> syscall}
 			\item \dots
 		\end{itemize}
+	\item le strutture dati HW di un processo contengono:
+		\begin{itemize}
+			\item \texttt{registro PC}
+			\item \texttt{registro SP}: cima dell'ultima pila (sia U o S) 
+				utilizzata
+			\item \texttt{SSP}: base della pila S
+			\item \texttt{USP}: cima della pila U
+			\item \texttt{descrittore di stato}: esexuzione, pronto, attesa(di
+				cosa?)
+		\end{itemize}
 \end{itemize}
 
 
@@ -253,9 +263,10 @@
 		\begin{itemize}
 			\item svouta il TLB: se le pagine sono dirty marca le stesse pagine
 				in memoria fisiaca come dirty.
-			\item carica la pagina del codice e della pila del nuovo processo in
-				memoria fisica e quindi anche sul TLB.
-		\end{itemize}
+			\item carica prima la pagina del codice e poi quella della pila del
+				nuovo processo in memoria fisica (attenzione, sulla pila ci
+				scrive anche, quindi nel caso va tolta dalla swap) e quindi
+		anche sul TLB. \end{itemize}
 	\item \texttt{fork}
 		\begin{itemize}
 			\item le pagine vengono tutte "condivise" tra i processi
