@@ -377,7 +377,9 @@ Periodicamente \texttt{kswapd} esegue una funzione di controllo delle liste:
         else ref = 1;
     } else {
         if (ref) ref = 0;
-        else move Page to the head of inactive list;
+        else {
+	    ref = 1;
+	    move Page to the head of inactive list;
     }
         \end{verbatim}
 	\item Scansione della testa della inactive list:
@@ -386,7 +388,7 @@ Periodicamente \texttt{kswapd} esegue una funzione di controllo delle liste:
         A = 0;
         if (ref) {
             ref = 0;
-            move Page to the head of active list;
+            move Page to the tail of active list;
         } else ref = 1;
     } else {
         if (ref) ref = 0;
