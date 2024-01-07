@@ -53,7 +53,7 @@
 	\begin{itemize}
 		\item Derivando la seguente funzione, si ottine
 			\begin{align*}
-				(y e^{-A})' & = y' e^{-A} + [ye^{-A}(-a')] \\
+				(y e^{-A})' & = y' e^{-A} + [ye^{-A}(-a)] \\
 				            & = y' e^{-A} - aye^{-A}       \\
 				            & = (y' - ay)e^{-A}            \\
 				            & = (b)e^{-A}
@@ -61,8 +61,8 @@
 		\item Utilizzando il teorema fondamentale del calcolo integrale
 			\begin{align*}
 				y e^{-A} & = \int (y e^{-A})' dt       \\
-				         & = \int (b)e^{-A} dt + c     \\
-				y        & = e^A \int (b)e^{-A} dt + c \\
+				         & = \int be^{-A} dt + c     \\
+				y        & = e^A \int be^{-A} dt + c \\
 			\end{align*}
 			dove $c \in \mathbb{R}$.
 	\end{itemize}
@@ -520,7 +520,7 @@
 
 \newpage
 \begin{theorem} [Cambiamenti di variabili in coordinate polari, cilindriche, e
-	sferiche e loro Jacobiano]
+	sferiche e il loro Jacobiano]
 	Sia $\omega \subseteq \mathbb{R}^n$ un dominio regolare, $f: \omega
 		\to \mathbb{R}$ una funzione continua, se $\underline{T} : U \to
 		V$ è un cambio di varibili tra $U$ e $V$ con $\omega \subseteq V$
