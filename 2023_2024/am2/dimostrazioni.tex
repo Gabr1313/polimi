@@ -49,18 +49,19 @@
 	\]
 	dove $A = \int a(t) dt$, $t \in I$, $c \in \mathbb{R}$.
 \end{theorem}
-\begin{proof} Calcoli e teorema fondamentale del calcolo integrale
+\begin{proof} Deriva $y e^{-A}$ e applica il teorema fondamentale del calcolo
+	integrale
 	\begin{itemize}
 		\item Derivando la seguente funzione, si ottine
 			\begin{align*}
 				(y e^{-A})' & = y' e^{-A} + [ye^{-A}(-a)] \\
-				            & = y' e^{-A} - aye^{-A}       \\
-				            & = (y' - ay)e^{-A}            \\
+				            & = y' e^{-A} - aye^{-A}      \\
+				            & = (y' - ay)e^{-A}           \\
 				            & = (b)e^{-A}
 			\end{align*}
 		\item Utilizzando il teorema fondamentale del calcolo integrale
 			\begin{align*}
-				y e^{-A} & = \int (y e^{-A})' dt       \\
+				y e^{-A} & = \int (y e^{-A})' dt     \\
 				         & = \int be^{-A} dt + c     \\
 				y        & = e^A \int be^{-A} dt + c \\
 			\end{align*}
@@ -83,7 +84,8 @@
 	con $c_1, c_2 \in \mathbb{R}$, dove $y_{o,1}, y_{o,2}$ sono due soluzioni
 	linearmente indipendenti dell'EDO.
 \end{theorem}
-\begin{proof} Principio di Sovrapposizione + $\exists !$ del PC
+\begin{proof} Principio di Sovrapposizione, trovare una soluzione e dimostrare
+	$\exists !$ col teorema di Cauchy
 	\begin{itemize}
 		\item per il pricipio di Sovrapposizione l'insieme di tutte le soluzioni
 			è uno spazio vettoriale, perchè chiuso rispetto alla somma e al
@@ -255,7 +257,8 @@
 		\text{len}(r([a,b])) = \int_{c}^{d} || v'(s) || ds =
 		\text{len}(v([c,d])) \]
 \end{theorem}
-\begin{proof} calcoli e discussione della monotonia di $\varphi$
+\begin{proof} derivata di $v$, integrale per sostituzione e discussione della
+	monotonia
 	\begin{itemize}
 		\item Siccome r è regolare
 			\[
@@ -351,7 +354,7 @@
 		\item passando ora al limite
 			\begin{align*}
 				0 & \leq \lim_{\underline{x} \to \underline{x}_0}
-				f(\underline{x}) - f(\underline{x}_0)                           \\
+				|f(\underline{x}) - f(\underline{x}_0)|                         \\
 				  & \leq \lim_{\underline{x} \to \underline{x}_0} \left(
 				||\nabla f (\underline{x}_0)|| \cdot ||(\underline{x} -
 				\underline{x}_0)|| \right) + \lim_{\underline{x} \to
@@ -389,7 +392,7 @@
 		\item Siccome $f$ è differenziabile in $\underline{x}_0$, allora per $h
 				\to 0$
 			\[
-				f(\underline{x}_0 + h) = f(\underline{x}_0) + \nabla f
+				f(\underline{x}_0 + \underline{h}) = f(\underline{x}_0) + \nabla f
 				(\underline{x}_0) \cdot \underline{h}
 				+ o(||\underline{h}||)
 			\]
@@ -404,14 +407,16 @@
 			\[
 				\frac{f(\underline{x}_0 + t \underline{v}) -
 				f(\underline{x}_0)}{t} = \frac{\nabla f (\underline{x}_0) \cdot
-				t \underline{v}}{t} + \frac{o(t)}{t}
+				t \underline{v}}{t} + \frac{o(t)||\underline{v}||}{t}
 			\]
 		\item dunque per la definizione di derivata direzionale
 			\[
 				f_{\underline{v}}(\underline{x}_0)
 				= \lim_{t \to 0} \frac{f(\underline{x}_0 + t \underline{v}) -
 				f(\underline{x}_0)}{t}
-				= \nabla f(\underline{x}_0) \cdot \underline{v}
+				= \lim_{t \to 0} \frac{\nabla f (\underline{x}_0) \cdot t
+				\underline{v}}{t} + \lim_{t \to 0}\frac{o(t) ||\underline{v}||}
+				{t} = \nabla f(\underline{x}_0) \cdot \underline{v}
 			\]
 	\end{itemize}
 \end{proof}
@@ -424,24 +429,27 @@
 		\}$) sia il sostegno di una curva regolare $\underline{r}: I \subseteq
 		\mathbb{R} \to A$, allora
 	\[
-		\nabla f(\underline{x}) \cdot r'(t) = 0 \quad \forall t \in I
+		\nabla f(\underline{x}) \cdot \underline{r}'(t) = 0 \quad \forall t \in
+		I , \forall \underline{x} \in I_k
 	\]
 \end{theorem}
-\begin{proof} definizione e teorema di derivazione delle funzioni composte
+\begin{proof} $F = f \circ \underline{r}$ e teorema di derivazione
+	delle funzioni composte
 	\begin{itemize}
-		\item Considerando $F:I \to \mathbb{R}$, $F(t) = f(r(t))$
+		\item Considerando $F:I \to \mathbb{R}$, $F(t) = f(\underline{r}(t))$
 			si osserva che
 			\[
 				\{\underline{r}(t): t \in I\} = I_k = \{\underline{x} \in A:
 				f(\underline{x}) = k \}
 			\]
-			dunque $F(t) = f(r(t)) = k$, da cui si deduce che $F'(t) = 0 \quad
-				\forall t \in I$.
+			dunque $F(t) = f(\underline{r}(t)) = k$, da cui si deduce che
+			$F'(t) = 0 \quad \forall t \in I$.
 		\item per il teorema di derivazione delle funzioni composte 1-n-1 si
 			ottiene che
 			\[
-				0 = F'(t) = \nabla f(\underline{r}(t)) \cdot \underline{r}'(t)
-				\quad \forall t \in I
+				0 = F'(t) = \nabla f(\underline{r}(t)) \cdot \underline{r}'(t) =
+				\nabla f(\underline{x}) \cdot \underline{r}'(t) \quad \forall t
+				\in I , \forall \underline{x} \in I_k
 			\]
 	\end{itemize}
 \end{proof}
@@ -480,7 +488,7 @@
 				\nabla f(\underline{x}_0) \cdot \underline{h} + \frac{1}{2}
 				q(\underline{h}) + o(||\underline{h}||^2)
 				\\ & = \frac{1}{2} q(\underline{h})+ o(||\underline{h}||^2)
-				\\ & \geq \lambda_{min} ||\underline{h}||^2 +
+				\\ & \geq \frac{1}{2}  ||\underline{h}||^2 +
 				o(||\underline{h}||^2)
 			\end{align*}
 		\item per la definizione di $o$ si ha che
@@ -493,13 +501,13 @@
 				\exists \delta > 0 : \text{ se } ||\underline{h}|| < \delta
 				\text{ e } \underline{h} \neq \underline{0} \Rightarrow
 				\frac{o(||\underline{h}||^2)} {||\underline{h}||^2} <
-				\frac{\lambda_{min}}{4}
+				\frac{1}{4}\lambda_{min}
 			\]
 			con $\lambda_{min} > 0$ perchè $q$ è definita positiva.\\
 		\item In paricolare
 			\[
 				\exists \delta > 0 : \forall \underline{h} \in B_{\delta}(0)
-				\Rightarrow o(||\underline{h}||^2) > -\frac{\lambda_{min}}{4}
+				\Rightarrow o(||\underline{h}||^2) > -\frac{1}{4}\lambda_{min}
 				||\underline{h}||^2
 			\]
 		\item utilizzando la formula precedentemente trovata si deduce che
@@ -507,9 +515,9 @@
 				\underline{h} \in A$
 			\begin{align*}
 				f(\underline{x}_0 + \underline{h}) - f(\underline{x}_0) & \geq
-				\lambda_{min} ||\underline{h}||^2 + o(||\underline{h}||^2)
-				\\ & \geq \lambda_{min} ||\underline{h}||^2 -
-				\frac{\lambda_{min}}{4}
+				\frac{1}{2} \lambda_{min} ||\underline{h}||^2 + o(||\underline{h}||^2)
+				\\ & \geq \frac{1}{2}  \lambda_{min} ||\underline{h}||^2 -
+				\frac{1}{4} \lambda_{min} ||\underline{h}||^2
 				\\ & \geq 0
 			\end{align*}
 			e quindi $\underline{x}_0 $ un punto di minimo locale
@@ -521,17 +529,17 @@
 \newpage
 \begin{theorem} [Cambiamenti di variabili in coordinate polari, cilindriche, e
 	sferiche e il loro Jacobiano]
-	Sia $\omega \subseteq \mathbb{R}^n$ un dominio regolare, $f: \omega
+	Sia $\Omega \subseteq \mathbb{R}^n$ un dominio regolare, $f: \Omega
 		\to \mathbb{R}$ una funzione continua, se $\underline{T} : U \to
-		V$ è un cambio di varibili tra $U$ e $V$ con $\omega \subseteq V$
+		V$ è un cambio di varibili tra $U$ e $V$ con $\Omega \subseteq V$
 	\[
-		\underline{T}(u_1, \dots, u_n) = (x_1 \dots, x_n),
+		\underline{T}(\underline{u}) = (\underline{x}),
 	\]
 	allora
 	\[
-		\int \dots \int_{\omega} f(x_1, \dots, x_n) dx_1 \dots dx_n
-		= \int \dots \int_{\underline{T}^{-1}} f(\underline{T}(u_1, \dots, u_n))
-		| \det(J_{\underline{T}}(u_1, \dots, u_n)) | du_1 \dots du_n
+		\int_{\Omega} f(\underline{x}) d \underline{x}
+		= \int_{\underline{T}^{-1}(\Omega)} f(\underline{T}(\underline{u}))
+		| \det(J_{\underline{T}}(\underline{u})) | d \underline{u}
 	\]
 	\begin{itemize}
 		\item Sia $\underline{T}_p : \mathbb{R}^+ \times [0,2\pi) \to
@@ -595,10 +603,9 @@
 			\]
 	\end{itemize}
 \end{theorem}
-\begin{proof} Dimostrazione riportata solo per il cambio di coordinate in
-	coordinate sferiche: calcoli
+\begin{proof} Solo cambio di coordinate in coordinate sferiche: calcoli
 	\begin{itemize}
-		\item
+		\item La matrice Jacobiana è:
 			\[
 				J_{\underline{T}_s} (\rho, \varphi, \theta) =
 				\begin{bmatrix}
@@ -610,31 +617,15 @@
 					\\ \cos(\varphi) & -\rho \sin(\varphi)              & 0
 				\end{bmatrix}
 			\]
-		\item
+		\item Usando il metodo di Sarrus:
 			\begin{align*}
 				\det(J_{\underline{T}_s} (\rho, \varphi, \theta)) & =
-				\cos(\varphi) \det \left(
-				\begin{bmatrix}
-						\rho \cos(\varphi) \cos(\theta) & -\rho \sin(\varphi)
-						\sin(\theta)
-						\\ \rho \cos(\varphi) \sin(\theta) & \rho \sin(\varphi)
-						\cos(\theta)
-					\end{bmatrix}
-				\right)
-				\\&\quad +
-				\rho \sin(\varphi) \det \left(
-				\begin{bmatrix}
-						\sin(\varphi) \cos(\theta) & -\rho \sin(\varphi)
-						\sin(\theta)
-						\\ \sin(\varphi) \sin(\theta) & \rho \sin(\varphi)
-						\cos(\theta)
-					\end{bmatrix}
-				\right)
-				\\ &= \rho^2 \sin(\varphi) \cos^2(\varphi)
-				(\cos^2(\theta) + \sin^2(\theta))
-				\\ &\quad + \rho^2 \sin^3(\varphi) (\cos^2(\theta) +
-				\sin^2(\theta))
-				\\ &= \rho^2 \sin(\varphi) (\cos^2(\varphi) + \sin^2(\varphi))
+				\rho^2 \cos^2(\varphi) \sin(\varphi) \cos^2(\theta) +
+				\rho^2 \sin^3(\varphi) \sin^2(\theta)
+				\\ & \quad + \rho^2 \cos^2(\varphi) \sin(\varphi) \sin^2(\theta)
+				+ \rho^2 \sin^3(\varphi) \cos^2(\theta)
+				\\ &= \rho^2 \cos^2(\varphi) \sin(\varphi) +
+				\rho^2 \sin^3(\varphi)
 				\\ &= \rho^2 \sin(\varphi)
 			\end{align*}
 	\end{itemize}
