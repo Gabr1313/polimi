@@ -53,25 +53,25 @@
 	integrale
 	\begin{itemize}
 		\item Derivando la seguente funzione, si ottine
-			\begin{align*}
-				(y e^{-A})' & = y' e^{-A} + [ye^{-A}(-a)] \\
-				            & = y' e^{-A} - aye^{-A}      \\
-				            & = (y' - ay)e^{-A}           \\
-				            & = (b)e^{-A}
-			\end{align*}
+		      \begin{align*}
+			      (y e^{-A})' & = y' e^{-A} + [ye^{-A}(-a)] \\
+			                  & = y' e^{-A} - aye^{-A}      \\
+			                  & = (y' - ay)e^{-A}           \\
+			                  & = (b)e^{-A}
+		      \end{align*}
 		\item Utilizzando il teorema fondamentale del calcolo integrale
-			\begin{align*}
-				y e^{-A} & = \int (y e^{-A})' dt     \\
-				         & = \int be^{-A} dt + c     \\
-				y        & = e^A \int be^{-A} dt + c \\
-			\end{align*}
-			dove $c \in \mathbb{R}$.
+		      \begin{align*}
+			      y e^{-A} & = \int (y e^{-A})' dt     \\
+			               & = \int be^{-A} dt + c     \\
+			      y        & = e^A \int be^{-A} dt + c \\
+		      \end{align*}
+		      dove $c \in \mathbb{R}$.
 	\end{itemize}
 \end{proof}
 
 \newpage
 \begin{theorem} [Teorema di struttura dell’integrale generale di equazioni del
-	secondo ordine lineari omogenee]
+		secondo ordine lineari omogenee]
 	Siano $a, b, c: I \subseteq \mathbb{R} \to \mathbb{R}$ continue, $a
 		\neq 0$, allora la EDO
 	\[
@@ -88,68 +88,68 @@
 	$\exists !$ col teorema di Cauchy
 	\begin{itemize}
 		\item per il pricipio di Sovrapposizione l'insieme di tutte le soluzioni
-			è uno spazio vettoriale, perchè chiuso rispetto alla somma e al
-			prodotto per uno scalare. Rimane quindi da dimostrare che la
-			dimesione di tale spazio vettoriale è 2:
-			\begin{itemize}
-				\item si trovano $y_{o,1}$ e $y_{o,2}$ LI
-				\item si dimostra che ogni soluzione si possa scrivere come
-					combinazione lineare di queste due
-			\end{itemize}
+		      è uno spazio vettoriale, perchè chiuso rispetto alla somma e al
+		      prodotto per uno scalare. Rimane quindi da dimostrare che la
+		      dimesione di tale spazio vettoriale è 2:
+		      \begin{itemize}
+			      \item si trovano $y_{o,1}$ e $y_{o,2}$ LI
+			      \item si dimostra che ogni soluzione si possa scrivere come
+			            combinazione lineare di queste due
+		      \end{itemize}
 		\item Si scelgono $y_{o,1}, y_{o,2}$ come soluzioni di problemi di
-			Cauchy seguenti con $t_o \in I$ fissato
-			\begin{align*}
-				\begin{cases}
-					a(t) y''(t) + b(t) y'(t) + c(t) y(t) = 0 \\
-					y(t_o) = 1                               \\
-					y'(t_o) = 0                              \\
-				\end{cases}
-			\end{align*}
-			\begin{align*}
-				\begin{cases}
-					a(t) y''(t) + b(t) y'(t) + c(t) y(t) = 0 \\
-					y(t_o) = 0                               \\
-					y'(t_o) = 1                              \\
-				\end{cases}
-			\end{align*}
-			Queste soluzioni esistono e sono uniche per il teorema di $\exists
-				!$ del PC. $y_{o,1}$ e $y_{o,2}$ sono inoltre LI perchè se per
-			assurdo si ipotizzasse che $\exists c \neq 0 : y_{o,1} = c y_{o,2}
-				\quad \forall t \in I$, allora $1 = y_{o,1}(t_o) = c y_{o,2}
-				(t_o) = 0$.
+		      Cauchy seguenti con $t_o \in I$ fissato
+		      \begin{align*}
+			      \begin{cases}
+				      a(t) y''(t) + b(t) y'(t) + c(t) y(t) = 0 \\
+				      y(t_o) = 1                               \\
+				      y'(t_o) = 0                              \\
+			      \end{cases}
+		      \end{align*}
+		      \begin{align*}
+			      \begin{cases}
+				      a(t) y''(t) + b(t) y'(t) + c(t) y(t) = 0 \\
+				      y(t_o) = 0                               \\
+				      y'(t_o) = 1                              \\
+			      \end{cases}
+		      \end{align*}
+		      Queste soluzioni esistono e sono uniche per il teorema di $\exists
+			      !$ del PC. $y_{o,1}$ e $y_{o,2}$ sono inoltre LI perchè se per
+		      assurdo si ipotizzasse che $\exists c \neq 0 : y_{o,1} = c y_{o,2}
+			      \quad \forall t \in I$, allora $1 = y_{o,1}(t_o) = c y_{o,2}
+			      (t_o) = 0$.
 		\item Sia $\bar{y}_o$ una qualunque soluzione particolare della EDO, si
-			cercano $c_1, c_2 \in \mathbb{R}$ in modo tale che
-			$\bar{y}_o(t)$ coincida con
-			\[
-				z(t) = c_1 y_{o,1}(t) + c_2 y_{o,2}(t)
-			\]
-			la quale è una soluzione per il Principio di Sovrapposizione.\\
-			Si scelgono quindi $c_1, c_2$ in modo che:
-			\begin{align*}
-				\bar{y}_o(t_o) = z(t_o) = c_1 y_{o,1}(t_o) + c_2 y_{o,2}(t_o) =
-				c_1         \\
-				\bar{y}'_o(t_o) = z'(t_o) = c_1 y'_{o,1}(t_o) + c_2 y'_{o,2}
-				(t_o) = c_2 \\
-			\end{align*}
-			quindi
-			\begin{align*}
-				z(t) = \bar{y}_o(t_o) y_{o,1}(t) + \bar{y}'_o(t_o) y_{o,2}(t)
-			\end{align*}
-			Sia $\bar{y}_o$ che $z$ soddisfano lo stesso PC
-			\begin{align*}
-				\begin{cases}
-					a(t) y''(t) + b(t) y'(t) + c(t) y(t) = 0 \\
-					y(t_o) = y_o(t_o)                        \\
-					y'(t_o) = y_o'(t_o)                      \\
-				\end{cases}
-			\end{align*}
-			e quindi per il teorema di $\exists !$ del PC $\bar{y}_o(t) = z(t)$.
+		      cercano $c_1, c_2 \in \mathbb{R}$ in modo tale che
+		      $\bar{y}_o(t)$ coincida con
+		      \[
+			      z(t) = c_1 y_{o,1}(t) + c_2 y_{o,2}(t)
+		      \]
+		      la quale è una soluzione per il Principio di Sovrapposizione.\\
+		      Si scelgono quindi $c_1, c_2$ in modo che:
+		      \begin{align*}
+			      \bar{y}_o(t_o) = z(t_o) = c_1 y_{o,1}(t_o) + c_2 y_{o,2}(t_o) =
+			      c_1         \\
+			      \bar{y}'_o(t_o) = z'(t_o) = c_1 y'_{o,1}(t_o) + c_2 y'_{o,2}
+			      (t_o) = c_2 \\
+		      \end{align*}
+		      quindi
+		      \begin{align*}
+			      z(t) = \bar{y}_o(t_o) y_{o,1}(t) + \bar{y}'_o(t_o) y_{o,2}(t)
+		      \end{align*}
+		      Sia $\bar{y}_o$ che $z$ soddisfano lo stesso PC
+		      \begin{align*}
+			      \begin{cases}
+				      a(t) y''(t) + b(t) y'(t) + c(t) y(t) = 0 \\
+				      y(t_o) = y_o(t_o)                        \\
+				      y'(t_o) = y_o'(t_o)                      \\
+			      \end{cases}
+		      \end{align*}
+		      e quindi per il teorema di $\exists !$ del PC $\bar{y}_o(t) = z(t)$.
 	\end{itemize}
 \end{proof}
 
 \newpage
 \begin{theorem} [Criterio della radice e criterio del rapporto per la
-	determinazione del raggio di convergenza]
+		determinazione del raggio di convergenza]
 	Data la serie
 	\[
 		\sum_{n=0}^{\infty} a_n (x - x_o)^n
@@ -166,33 +166,33 @@
 \begin{proof} Applicazione dei criteri del rapporto e della radice
 	\begin{itemize}
 		\item Per il teorema del raggio di convergenza di una serie di potenze
-			è sufficiente verificare che:
-			\[
-				\sum_{n=0}^{\infty} \left| a_n (x - x_o)^n \right|
-			\]
-			\begin{itemize}
-				\item converge per $|x - x_o| < R$
-				\item non converge per $|x - x_o| > R$
-			\end{itemize}
+		      è sufficiente verificare che:
+		      \[
+			      \sum_{n=0}^{\infty} \left| a_n (x - x_o)^n \right|
+		      \]
+		      \begin{itemize}
+			      \item converge per $|x - x_o| < R$
+			      \item non converge per $|x - x_o| > R$
+		      \end{itemize}
 		\item tutte le serie convergono per $x = x_o$; nel caso in cui $x \neq
-				x_o$ si può applicare il criterio del rapporto alla serie di
-			partenza:
-			\[
-				\lim_{n \to \infty} \left| \frac{a_{n+1}(x-x_0)^{n+1}}
-				{a_n (x-x_0)^n} \right| = \left| x - x_0 \right| \lim_{n
-				\to \infty} \left| \frac{a_{n+1}}{a_n} \right| =
-				\frac{\left| x -
-				x_0 \right|}{R}
-			\]
-			E quindi i 2 punti precedenti sono verificati.
+			      x_o$ si può applicare il criterio del rapporto alla serie di
+		      partenza:
+		      \[
+			      \lim_{n \to \infty} \left| \frac{a_{n+1}(x-x_0)^{n+1}}
+			      {a_n (x-x_0)^n} \right| = \left| x - x_0 \right| \lim_{n
+				      \to \infty} \left| \frac{a_{n+1}}{a_n} \right| =
+			      \frac{\left| x -
+				      x_0 \right|}{R}
+		      \]
+		      E quindi i 2 punti precedenti sono verificati.
 		\item $\quad \forall x \in \mathbb{R} $ si può applicare il criterio
-			della radice alla serie di partenza:
-			\[
-				\lim_{n \to \infty} \sqrt[n]{\left| a_n (x-x_0)^n
-				\right|} = \lim_{n \to \infty} \left| x - x_0 \right|
-				\sqrt[n]{\left| a_n \right|} = \frac{\left| x - x_0 \right|}{R}
-			\]
-			E quindi i 2 punti precedenti sono verificati.
+		      della radice alla serie di partenza:
+		      \[
+			      \lim_{n \to \infty} \sqrt[n]{\left| a_n (x-x_0)^n
+				      \right|} = \lim_{n \to \infty} \left| x - x_0 \right|
+			      \sqrt[n]{\left| a_n \right|} = \frac{\left| x - x_0 \right|}{R}
+		      \]
+		      E quindi i 2 punti precedenti sono verificati.
 	\end{itemize}
 \end{proof}
 
@@ -214,34 +214,34 @@
 \begin{proof} calcoli utilizzando le formule di ortogonalità
 	\begin{itemize}
 		\item $a_0$
-			\begin{align*}
-				        & \frac{1}{2\pi} \int_{-\pi}^{\pi} f(x) dx =           \\
-				= \quad & \frac{1}{2\pi} \int_{-\pi}^{\pi} \left[a_0 +
-				\sum_{n=1}^{\infty} (a_n \cos(nx) + b_n \sin(nx))\right] dx  = \\
-				\intertext{per convergenza totale}
-				= \quad & \frac{1}{2\pi} \left( a_0 \int_{-\pi}^{\pi} dx +
-				\sum_{n=1}^{\infty} a_n \int_{-\pi}^{\pi} \cos(nx) dx +
-				\sum_{n=1}^{\infty} b_n \int_{-\pi}^{\pi} \sin(nx) dx \right)
-				=                                                              \\
-				= \quad & \frac{1}{2\pi} \left( 2\pi a_0 + 0 + 0 \right)   =   \\
-				= \quad & a_0
-			\end{align*}
+		      \begin{align*}
+			              & \frac{1}{2\pi} \int_{-\pi}^{\pi} f(x) dx =           \\
+			      = \quad & \frac{1}{2\pi} \int_{-\pi}^{\pi} \left[a_0 +
+			      \sum_{n=1}^{\infty} (a_n \cos(nx) + b_n \sin(nx))\right] dx  = \\
+			      \intertext{per convergenza totale}
+			      = \quad & \frac{1}{2\pi} \left( a_0 \int_{-\pi}^{\pi} dx +
+			      \sum_{n=1}^{\infty} a_n \int_{-\pi}^{\pi} \cos(nx) dx +
+			      \sum_{n=1}^{\infty} b_n \int_{-\pi}^{\pi} \sin(nx) dx \right)
+			      =                                                              \\
+			      = \quad & \frac{1}{2\pi} \left( 2\pi a_0 + 0 + 0 \right)   =   \\
+			      = \quad & a_0
+		      \end{align*}
 		\item $a_n$
-			\begin{align*}
-				        & \frac{1}{\pi} \int_{-\pi}^{\pi} f(x) \cos(nx) dx =       \\
-				= \quad & \frac{1}{\pi} \int_{-\pi}^{\pi} \left[a_0 +
-				\sum_{n=1}^{\infty} (a_n \cos(nx) + b_n \sin(nx))\right]
-				\cos(nx) dx =                                                      \\
-				\intertext{per convergenza totale: $| \cos(nx) | \leq 1$ }
-				= \quad & \frac{1}{\pi} \left( a_0 \int_{-\pi}^{\pi} \cos(nx) dx +
-				\sum_{n=1}^{\infty} a_n \int_{-\pi}^{\pi} \cos^2(nx) dx +
-				\sum_{n=1}^{\infty} b_n \int_{-\pi}^{\pi} \cos(nx) \sin(nx)
-				\right)                                                 =          \\
-				\intertext{per le formule di ortogonalità delle serie armoniche
-				n-esime}
-				= \quad & \frac{1}{\pi} \left( 0 + a_n \pi + 0 \right)  =          \\
-				= \quad & a_n
-			\end{align*}
+		      \begin{align*}
+			              & \frac{1}{\pi} \int_{-\pi}^{\pi} f(x) \cos(nx) dx =       \\
+			      = \quad & \frac{1}{\pi} \int_{-\pi}^{\pi} \left[a_0 +
+			      \sum_{n=1}^{\infty} (a_n \cos(nx) + b_n \sin(nx))\right]
+			      \cos(nx) dx =                                                      \\
+			      \intertext{per convergenza totale: $| \cos(nx) | \leq 1$ }
+			      = \quad & \frac{1}{\pi} \left( a_0 \int_{-\pi}^{\pi} \cos(nx) dx +
+			      \sum_{n=1}^{\infty} a_n \int_{-\pi}^{\pi} \cos^2(nx) dx +
+			      \sum_{n=1}^{\infty} b_n \int_{-\pi}^{\pi} \cos(nx) \sin(nx)
+			      \right)                                                 =          \\
+			      \intertext{per le formule di ortogonalità delle serie armoniche
+				      n-esime}
+			      = \quad & \frac{1}{\pi} \left( 0 + a_n \pi + 0 \right)  =          \\
+			      = \quad & a_n
+		      \end{align*}
 		\item $b_n$ si dimostra in modo analogo a $a_n$.
 	\end{itemize}
 \end{proof}
@@ -261,63 +261,63 @@
 	monotonia
 	\begin{itemize}
 		\item Siccome r è regolare
-			\[
-				\text{len}(r([a,b])) = \int_{a}^{b} || r'(t) || dt
-			\]
+		      \[
+			      \text{len}(r([a,b])) = \int_{a}^{b} || r'(t) || dt
+		      \]
 		\item allora $\forall s \in [c,d]$
-			\[
-				v'(s) =
-				\begin{bmatrix}
-					v_1'(s) \\
-					\vdots  \\
-					v_n'(s) \\
-				\end{bmatrix}
-				=
-				\begin{bmatrix}
-					[r_1(\varphi(s))]' \\
-					\vdots             \\
-					[r_n(\varphi(s))]' \\
-				\end{bmatrix}
-				=
-				\begin{bmatrix}
-					r_1'(\varphi(s))\varphi(s)' \\
-					\vdots                      \\
-					r_n'(\varphi(s))\varphi(s)' \\
-				\end{bmatrix}
-				= \varphi'(s) r'(\varphi(s))\\
-			\]
-			quindi
-			\[
-				||v'(s)|| = ||\varphi'(s) r'(\varphi(s))|| = |\varphi'(s)| ||
-				r'(\varphi(s))||
-			\]
+		      \[
+			      v'(s) =
+			      \begin{bmatrix}
+				      v_1'(s) \\
+				      \vdots  \\
+				      v_n'(s) \\
+			      \end{bmatrix}
+			      =
+			      \begin{bmatrix}
+				      [r_1(\varphi(s))]' \\
+				      \vdots             \\
+				      [r_n(\varphi(s))]' \\
+			      \end{bmatrix}
+			      =
+			      \begin{bmatrix}
+				      r_1'(\varphi(s))\varphi(s)' \\
+				      \vdots                      \\
+				      r_n'(\varphi(s))\varphi(s)' \\
+			      \end{bmatrix}
+			      = \varphi'(s) r'(\varphi(s))\\
+		      \]
+		      quindi
+		      \[
+			      ||v'(s)|| = ||\varphi'(s) r'(\varphi(s))|| = |\varphi'(s)| ||
+			      r'(\varphi(s))||
+		      \]
 		\item sia $t = \varphi(s)$, allora $ dt = \varphi'(s) ds$
 		\item se $\varphi$ è crescente, allora $\varphi(c) = a < b =
-				\varphi(d)$ e $\varphi'(s) \geq 0 \quad \forall s \in [c,d]$,
-			quindi
-			\[
-				||v'(s)|| = \varphi'(s) || r'(\varphi(s))||
-			\]
-			\[
-				\text{len}(r([a,b])) =
-				\int_{a}^{b} || r'(t) || dt =
-				\int_{c}^{d} || r'(\varphi(s))|| \varphi'(s) ds =
-				\int_{c}^{d} || v'(s) || ds =
-				\text{len}(v([c,d]))
-			\]
+			      \varphi(d)$ e $\varphi'(s) \geq 0 \quad \forall s \in [c,d]$,
+		      quindi
+		      \[
+			      ||v'(s)|| = \varphi'(s) || r'(\varphi(s))||
+		      \]
+		      \[
+			      \text{len}(r([a,b])) =
+			      \int_{a}^{b} || r'(t) || dt =
+			      \int_{c}^{d} || r'(\varphi(s))|| \varphi'(s) ds =
+			      \int_{c}^{d} || v'(s) || ds =
+			      \text{len}(v([c,d]))
+		      \]
 		\item se $\varphi$ è decrescente, allora $\varphi(c) = b > a =
-				\varphi(d)$ e $\varphi'(s) \leq 0 \quad \forall s \in [c,d]$,
-			quindi
-			\[
-				||v'(s)|| = -\varphi'(s) || r'(\varphi(s))||
-			\]
-			\[
-				\text{len}(r([a,b])) =
-				\int_{a}^{b} || r'(t) || dt =
-				\int_{d}^{c} || r'(\varphi(s))|| (-\varphi'(s)) ds =
-				\int_{c}^{d} || v'(s) || ds =
-				\text{len}(v([c,d]))
-			\]
+			      \varphi(d)$ e $\varphi'(s) \leq 0 \quad \forall s \in [c,d]$,
+		      quindi
+		      \[
+			      ||v'(s)|| = -\varphi'(s) || r'(\varphi(s))||
+		      \]
+		      \[
+			      \text{len}(r([a,b])) =
+			      \int_{a}^{b} || r'(t) || dt =
+			      \int_{d}^{c} || r'(\varphi(s))|| (-\varphi'(s)) ds =
+			      \int_{c}^{d} || v'(s) || ds =
+			      \text{len}(v([c,d]))
+		      \]
 	\end{itemize}
 \end{proof}
 
@@ -331,48 +331,46 @@
 	Cauchy-Schwarz, limite e teorema dei carabinieri
 	\begin{itemize}
 		\item Siccome $f$ è differenziabile in $\underline{x}_0$, allora
-			\[
-				f(\underline{x}) = f(\underline{x}_0) + \nabla f
-				(\underline{x}_0) \cdot (\underline{x} - \underline{x}_0)
-				+ o(||\underline{x} - \underline{x}_0||)
-			\]
-			ovvero
-			\begin{align*}
-				0 & \leq |f(\underline{x}) - f(\underline{x}_0)|               \\
-				  & = |\nabla f
-				(\underline{x}_0) \cdot (\underline{x} - \underline{x}_0) +
-				o(||\underline{x} - \underline{x}_0||)|                        \\
-				\intertext{per la disuguaglianza triangolare}
-				  & \leq |\nabla f (\underline{x}_0) \cdot (\underline{x} -
-				\underline{x}_0)| + |o(||\underline{x} - \underline{x}_0||)|   \\
-				  & = |\nabla f (\underline{x}_0) \cdot (\underline{x} -
-				\underline{x}_0)| + o(||\underline{x} - \underline{x}_0||)
-				\intertext{per la disuguaglianza di Cauchy-Schwarz}
-				  & \leq ||\nabla f (\underline{x}_0)|| \cdot ||(\underline{x}
-				- \underline{x}_0)|| + o(||\underline{x} - \underline{x}_0||)
-			\end{align*}
+		      \[
+			      f(\underline{x}) = f(\underline{x}_0) + \nabla f
+			      (\underline{x}_0) \cdot (\underline{x} - \underline{x}_0)
+			      + o(||\underline{x} - \underline{x}_0||)
+		      \]
+		      ovvero
+		      \begin{align*}
+			      0 & \leq |f(\underline{x}) - f(\underline{x}_0)|               \\
+			        & = |\nabla f
+			      (\underline{x}_0) \cdot (\underline{x} - \underline{x}_0) +
+			      o(||\underline{x} - \underline{x}_0||)|                        \\
+			      \intertext{per la disuguaglianza triangolare}
+			        & \leq |\nabla f (\underline{x}_0) \cdot (\underline{x} -
+			      \underline{x}_0)| + |o(||\underline{x} - \underline{x}_0||)|   \\
+			      \intertext{per la disuguaglianza di Cauchy-Schwarz}
+			        & \leq ||\nabla f (\underline{x}_0)|| \cdot ||(\underline{x}
+			      - \underline{x}_0)|| + |o(||\underline{x} - \underline{x}_0||)|
+		      \end{align*}
 		\item passando ora al limite
-			\begin{align*}
-				0 & \leq \lim_{\underline{x} \to \underline{x}_0}
-				|f(\underline{x}) - f(\underline{x}_0)|                         \\
-				  & \leq \lim_{\underline{x} \to \underline{x}_0} \left(
-				||\nabla f (\underline{x}_0)|| \cdot ||(\underline{x} -
-				\underline{x}_0)|| \right) + \lim_{\underline{x} \to
-				\underline{x}_0} o(||\underline{x} - \underline{x}_0||)         \\
-				  & = ||\nabla f (\underline{x}_0)|| \cdot  \lim_{\underline{x}
-				\to \underline{x}_0} ||(\underline{x} - \underline{x}_0)|| +
-				\lim_{\underline{x} \to \underline{x}_0} \left(
-				\frac{o(||\underline{x} - \underline{x}_0||)}
-					{||\underline{x} - \underline{x}_o||}||\underline{x} -
-				\underline{x}_o|| \right)                                       \\
-				  & = 0
-			\end{align*}
+		      \begin{align*}
+			      0 & \leq \lim_{\underline{x} \to \underline{x}_0}
+			      |f(\underline{x}) - f(\underline{x}_0)|                         \\
+			        & \leq \lim_{\underline{x} \to \underline{x}_0} \left(
+			      ||\nabla f (\underline{x}_0)|| \cdot ||(\underline{x} -
+			      \underline{x}_0)|| \right) + \lim_{\underline{x} \to
+			      \underline{x}_0} |o(||\underline{x} - \underline{x}_0||)|       \\
+			        & = ||\nabla f (\underline{x}_0)|| \cdot  \lim_{\underline{x}
+				      \to \underline{x}_0} ||(\underline{x} - \underline{x}_0)|| +
+			      \lim_{\underline{x} \to \underline{x}_0} \left(
+			      \frac{|o(||\underline{x} - \underline{x}_0||)|}
+				      {||\underline{x} - \underline{x}_o||}||\underline{x} -
+			      \underline{x}_o|| \right)                                       \\
+			        & = 0
+		      \end{align*}
 		\item quindi per il teormema dei carabinieri
-			\[
-				\lim_{\underline{x} \to \underline{x}_0} | f(\underline{x}) -
-				f(\underline{x}_0) | = 0
-			\]
-			ovvero $f$ è continua in $\underline{x}_0$.
+		      \[
+			      \lim_{\underline{x} \to \underline{x}_0} | f(\underline{x}) -
+			      f(\underline{x}_0) | = 0
+		      \]
+		      ovvero $f$ è continua in $\underline{x}_0$.
 	\end{itemize}
 \end{proof}
 
@@ -390,34 +388,34 @@
 \begin{proof} definizione di differenziabilità e di derivata direzionale
 	\begin{itemize}
 		\item Siccome $f$ è differenziabile in $\underline{x}_0$, allora per $h
-				\to 0$
-			\[
-				f(\underline{x}_0 + \underline{h}) = f(\underline{x}_0) + \nabla f
-				(\underline{x}_0) \cdot \underline{h}
-				+ o(||\underline{h}||)
-			\]
+			      \to 0$
+		      \[
+			      f(\underline{x}_0 + \underline{h}) = f(\underline{x}_0) + \nabla f
+			      (\underline{x}_0) \cdot \underline{h}
+			      + o(||\underline{h}||)
+		      \]
 		\item sia $\underline{h} = t \underline{v}$, allora per $t \to 0^+$
-			\[
-				f(\underline{x}_0 + t \underline{v}) = f(\underline{x}_0) +
-				\nabla f (\underline{x}_0) \cdot t \underline{v}
-				+ o(||t \underline{v}||)
-			\]
+		      \[
+			      f(\underline{x}_0 + t \underline{v}) = f(\underline{x}_0) +
+			      \nabla f (\underline{x}_0) \cdot t \underline{v}
+			      + o(||t \underline{v}||)
+		      \]
 		\item essendo $o(||t \underline{v}||) = o(|t| || \underline{v}||) =
-				o(t)$, allora
-			\[
-				\frac{f(\underline{x}_0 + t \underline{v}) -
-				f(\underline{x}_0)}{t} = \frac{\nabla f (\underline{x}_0) \cdot
-				t \underline{v}}{t} + \frac{o(t)||\underline{v}||}{t}
-			\]
+			      o(t)$, allora
+		      \[
+			      \frac{f(\underline{x}_0 + t \underline{v}) -
+				      f(\underline{x}_0)}{t} = \frac{\nabla f (\underline{x}_0) \cdot
+				      t \underline{v}}{t} + \frac{o(t)||\underline{v}||}{t}
+		      \]
 		\item dunque per la definizione di derivata direzionale
-			\[
-				f_{\underline{v}}(\underline{x}_0)
-				= \lim_{t \to 0} \frac{f(\underline{x}_0 + t \underline{v}) -
-				f(\underline{x}_0)}{t}
-				= \lim_{t \to 0} \frac{\nabla f (\underline{x}_0) \cdot t
-				\underline{v}}{t} + \lim_{t \to 0}\frac{o(t) ||\underline{v}||}
-				{t} = \nabla f(\underline{x}_0) \cdot \underline{v}
-			\]
+		      \[
+			      f_{\underline{v}}(\underline{x}_0)
+			      = \lim_{t \to 0} \frac{f(\underline{x}_0 + t \underline{v}) -
+				      f(\underline{x}_0)}{t}
+			      = \lim_{t \to 0} \frac{\nabla f (\underline{x}_0) \cdot t
+				      \underline{v}}{t} + \lim_{t \to 0}\frac{o(t) ||\underline{v}||}
+			      {t} = \nabla f(\underline{x}_0) \cdot \underline{v}
+		      \]
 	\end{itemize}
 \end{proof}
 
@@ -437,20 +435,20 @@
 	delle funzioni composte
 	\begin{itemize}
 		\item Considerando $F:I \to \mathbb{R}$, $F(t) = f(\underline{r}(t))$
-			si osserva che
-			\[
-				\{\underline{r}(t): t \in I\} = I_k = \{\underline{x} \in A:
-				f(\underline{x}) = k \}
-			\]
-			dunque $F(t) = f(\underline{r}(t)) = k$, da cui si deduce che
-			$F'(t) = 0 \quad \forall t \in I$.
+		      si osserva che
+		      \[
+			      \{\underline{r}(t): t \in I\} = I_k = \{\underline{x} \in A:
+			      f(\underline{x}) = k \}
+		      \]
+		      dunque $F(t) = f(\underline{r}(t)) = k$, da cui si deduce che
+		      $F'(t) = 0 \quad \forall t \in I$.
 		\item per il teorema di derivazione delle funzioni composte 1-n-1 si
-			ottiene che
-			\[
-				0 = F'(t) = \nabla f(\underline{r}(t)) \cdot \underline{r}'(t) =
-				\nabla f(\underline{x}) \cdot \underline{r}'(t) \quad \forall t
-				\in I , \forall \underline{x} \in I_k
-			\]
+		      ottiene che
+		      \[
+			      0 = F'(t) = \nabla f(\underline{r}(t)) \cdot \underline{r}'(t) =
+			      \nabla f(\underline{x}) \cdot \underline{r}'(t) \quad \forall t
+			      \in I , \forall \underline{x} \in I_k
+		      \]
 	\end{itemize}
 \end{proof}
 
@@ -462,11 +460,11 @@
 	$H_f(\underline{x}_0)$, allora:
 	\begin{itemize}
 		\item se $q$ è definita positiva $\Rightarrow$ $\underline{x}_0$ è un
-			punto di minimo locale
+		      punto di minimo locale
 		\item se $q$ è definita negativa $\Rightarrow$ $\underline{x}_0$ è un
-			punto di massimo locale
+		      punto di massimo locale
 		\item se $q$ è indefinita $\Rightarrow$ $\underline{x}_0$ è un punto di
-			sella
+		      sella
 	\end{itemize}
 \end{theorem}
 \begin{proof} definizione di forma quadratcia, formula di Taylor e definizione
@@ -474,61 +472,61 @@
 	\begin{itemize}
 		\item $H_f(\underline{x}_0)$ è simmetrica per il teorema di Schwarz
 		\item se $q$ è definita positiva $\Rightarrow$ $H_f(\underline{x}_0)$ ha
-			autovalori $\lambda > 0 \in \mathbb{R}$
+		      autovalori $\lambda > 0 \in \mathbb{R}$
 		\item quindi per la definizione di forma quadratica definita positiva
-			\[
-				H_f(\underline{x}_0) \underline{h} \cdot \underline{h} = q
-				(\underline{h}) \geq \lambda_{min} ||\underline{h}||^2
-				\quad \forall \underline{h} \in \mathbb{R}^n
-			\]
+		      \[
+			      H_f(\underline{x}_0) \underline{h} \cdot \underline{h} = q
+			      (\underline{h}) \geq \lambda_{min} ||\underline{h}||^2
+			      \quad \forall \underline{h} \in \mathbb{R}^n
+		      \]
 		\item utilizzando la formula di Taylor al secondo ordine per
-			$||\underline{h}|| \to 0$, dato che $x_0$ è un punto critico
-			\begin{align*}
-				f(\underline{x}_0 + \underline{h}) - f(\underline{x}_0) & =
-				\nabla f(\underline{x}_0) \cdot \underline{h} + \frac{1}{2}
-				q(\underline{h}) + o(||\underline{h}||^2)
-				\\ & = \frac{1}{2} q(\underline{h})+ o(||\underline{h}||^2)
-				\\ & \geq \frac{1}{2}  ||\underline{h}||^2 +
-				o(||\underline{h}||^2)
-			\end{align*}
+		      $||\underline{h}|| \to 0$, dato che $x_0$ è un punto critico
+		      \begin{align*}
+			      f(\underline{x}_0 + \underline{h}) - f(\underline{x}_0) & =
+			      \nabla f(\underline{x}_0) \cdot \underline{h} + \frac{1}{2}
+			      q(\underline{h}) + o(||\underline{h}||^2)
+			      \\ & = \frac{1}{2} q(\underline{h})+ o(||\underline{h}||^2)
+			      \\ & \geq \frac{1}{2} \lambda_{min} ||\underline{h}||^2 +
+			      o(||\underline{h}||^2)
+		      \end{align*}
 		\item per la definizione di $o$ si ha che
-			\[
-				\lim_{||\underline{h}|| \to 0} \frac{o(||\underline{h}||^2)}
-				{||\underline{h}||^2} = 0
-			\]
+		      \[
+			      \lim_{||\underline{h}|| \to 0} \frac{o(||\underline{h}||^2)}
+			      {||\underline{h}||^2} = 0
+		      \]
 		\item per la definizione di limite
-			\[
-				\exists \delta > 0 : \text{ se } ||\underline{h}|| < \delta
-				\text{ e } \underline{h} \neq \underline{0} \Rightarrow
-				\frac{o(||\underline{h}||^2)} {||\underline{h}||^2} <
-				\frac{1}{4}\lambda_{min}
-			\]
-			con $\lambda_{min} > 0$ perchè $q$ è definita positiva.\\
+		      \[
+			      \exists \delta > 0 : \text{ se } ||\underline{h}|| < \delta
+			      \text{ e } \underline{h} \neq \underline{0} \Rightarrow
+			      \frac{o(||\underline{h}||^2)} {||\underline{h}||^2} <
+			      \frac{1}{4}\lambda_{min}
+		      \]
+		      con $\lambda_{min} > 0$ perchè $q$ è definita positiva.\\
 		\item In paricolare
-			\[
-				\exists \delta > 0 : \forall \underline{h} \in B_{\delta}(0)
-				\Rightarrow o(||\underline{h}||^2) > -\frac{1}{4}\lambda_{min}
-				||\underline{h}||^2
-			\]
+		      \[
+			      \exists \delta > 0 : \forall \underline{h} \in B_{\delta}(0)
+			      \Rightarrow o(||\underline{h}||^2) > -\frac{1}{4}\lambda_{min}
+			      ||\underline{h}||^2
+		      \]
 		\item utilizzando la formula precedentemente trovata si deduce che
-			$\forall h \in B_{\delta}(\underline{x}_0): \underline{x}_0 +
-				\underline{h} \in A$
-			\begin{align*}
-				f(\underline{x}_0 + \underline{h}) - f(\underline{x}_0) & \geq
-				\frac{1}{2} \lambda_{min} ||\underline{h}||^2 + o(||\underline{h}||^2)
-				\\ & \geq \frac{1}{2}  \lambda_{min} ||\underline{h}||^2 -
-				\frac{1}{4} \lambda_{min} ||\underline{h}||^2
-				\\ & \geq 0
-			\end{align*}
-			e quindi $\underline{x}_0 $ un punto di minimo locale
+		      $\forall h \in B_{\delta}(\underline{x}_0): \underline{x}_0 +
+			      \underline{h} \in A$
+		      \begin{align*}
+			      f(\underline{x}_0 + \underline{h}) - f(\underline{x}_0) & \geq
+			      \frac{1}{2} \lambda_{min} ||\underline{h}||^2 + o(||\underline{h}||^2)
+			      \\ & \geq \frac{1}{2}  \lambda_{min} ||\underline{h}||^2 -
+			      \frac{1}{4} \lambda_{min} ||\underline{h}||^2
+			      \\ & \geq 0
+		      \end{align*}
+		      e quindi $\underline{x}_0 $ un punto di minimo locale
 		\item analogamente si dimostra che se $q$ è definita negativa
-			$\underline{x}_0$ è un punto di massimo locale
+		      $\underline{x}_0$ è un punto di massimo locale
 	\end{itemize}
 \end{proof}
 
 \newpage
 \begin{theorem} [Cambiamenti di variabili in coordinate polari, cilindriche, e
-	sferiche e il loro Jacobiano]
+		sferiche e il loro Jacobiano]
 	Sia $\Omega \subseteq \mathbb{R}^n$ un dominio regolare, $f: \Omega
 		\to \mathbb{R}$ una funzione continua, se $\underline{T} : U \to
 		V$ è un cambio di varibili tra $U$ e $V$ con $\Omega \subseteq V$
@@ -543,91 +541,91 @@
 	\]
 	\begin{itemize}
 		\item Sia $\underline{T}_p : \mathbb{R}^+ \times [0,2\pi) \to
-				\mathbb{R}^2$
-			\[
-				\underline{T}_p(\rho, \theta) =
-				\begin{bmatrix}
-					\rho \cos(\theta) \\
-					\rho \sin(\theta) \\
-				\end{bmatrix}
-				=
-				\begin{bmatrix}
-					x \\
-					y \\
-				\end{bmatrix}
-			\]
-			il suo Jacobiano è
-			\[
-				det(J_{\underline{T}_p} (\rho, \theta)) = \rho
-			\]
+			      \mathbb{R}^2$
+		      \[
+			      \underline{T}_p(\rho, \theta) =
+			      \begin{bmatrix}
+				      \rho \cos(\theta) \\
+				      \rho \sin(\theta) \\
+			      \end{bmatrix}
+			      =
+			      \begin{bmatrix}
+				      x \\
+				      y \\
+			      \end{bmatrix}
+		      \]
+		      il suo Jacobiano è
+		      \[
+			      det(J_{\underline{T}_p} (\rho, \theta)) = \rho
+		      \]
 		\item Sia $\underline{T}_c : \mathbb{R}^+ \times
-				[0,2\pi) \times \mathbb{R} \to \mathbb{R}^3$
-			\[
-				\underline{T}_c (\rho, \theta, z) =
-				\begin{bmatrix}
-					\rho \cos(\theta) \\
-					\rho \sin(\theta) \\
-					z                 \\
-				\end{bmatrix}
-				=
-				\begin{bmatrix}
-					x \\
-					y \\
-					z \\
-				\end{bmatrix}
-			\]
-			il suo Jacobiano è
-			\[
-				det(J_{\underline{T}_c} (\rho, \theta, z)) = \rho
-			\]
+			      [0,2\pi) \times \mathbb{R} \to \mathbb{R}^3$
+		      \[
+			      \underline{T}_c (\rho, \theta, z) =
+			      \begin{bmatrix}
+				      \rho \cos(\theta) \\
+				      \rho \sin(\theta) \\
+				      z                 \\
+			      \end{bmatrix}
+			      =
+			      \begin{bmatrix}
+				      x \\
+				      y \\
+				      z \\
+			      \end{bmatrix}
+		      \]
+		      il suo Jacobiano è
+		      \[
+			      det(J_{\underline{T}_c} (\rho, \theta, z)) = \rho
+		      \]
 		\item Sia $\underline{T}_s : \mathbb{R}^+ \times
-				[0,2\pi) \times [0,\pi] \to \mathbb{R}^3$
-			\[
-				\underline{T}_s(\rho, \varphi, \theta) =
-				\begin{bmatrix}
-					\rho \sin(\varphi) \cos(\theta) \\
-					\rho \sin(\varphi) \sin(\theta) \\
-					\rho \cos(\varphi)              \\
-				\end{bmatrix}
-				=
-				\begin{bmatrix}
-					x \\
-					y \\
-					z \\
-				\end{bmatrix}
-			\]
-			il suo Jacobiano è
-			\[
-				det(J_{\underline{T}_s} (\rho, \theta, \varphi)) = \rho^2
-				\sin(\varphi)
-			\]
+			      [0,2\pi) \times [0,\pi] \to \mathbb{R}^3$
+		      \[
+			      \underline{T}_s(\rho, \varphi, \theta) =
+			      \begin{bmatrix}
+				      \rho \sin(\varphi) \cos(\theta) \\
+				      \rho \sin(\varphi) \sin(\theta) \\
+				      \rho \cos(\varphi)              \\
+			      \end{bmatrix}
+			      =
+			      \begin{bmatrix}
+				      x \\
+				      y \\
+				      z \\
+			      \end{bmatrix}
+		      \]
+		      il suo Jacobiano è
+		      \[
+			      det(J_{\underline{T}_s} (\rho, \theta, \varphi)) = \rho^2
+			      \sin(\varphi)
+		      \]
 	\end{itemize}
 \end{theorem}
 \begin{proof} Solo cambio di coordinate in coordinate sferiche: calcoli
 	\begin{itemize}
 		\item La matrice Jacobiana è:
-			\[
-				J_{\underline{T}_s} (\rho, \varphi, \theta) =
-				\begin{bmatrix}
-					\sin(\varphi) \cos(\theta) & \rho \cos(\varphi) \cos(\theta)
-					                           & -\rho \sin(\varphi)
-					\sin(\theta)
-					\\ \sin(\varphi) \sin(\theta)& \rho \cos(\varphi)
-					\sin(\theta)               & \rho \sin(\varphi) \cos(\theta)
-					\\ \cos(\varphi) & -\rho \sin(\varphi)              & 0
-				\end{bmatrix}
-			\]
+		      \[
+			      J_{\underline{T}_s} (\rho, \varphi, \theta) =
+			      \begin{bmatrix}
+				      \sin(\varphi) \cos(\theta) & \rho \cos(\varphi) \cos(\theta)
+				                                 & -\rho \sin(\varphi)
+				      \sin(\theta)
+				      \\ \sin(\varphi) \sin(\theta)& \rho \cos(\varphi)
+				      \sin(\theta)               & \rho \sin(\varphi) \cos(\theta)
+				      \\ \cos(\varphi) & -\rho \sin(\varphi)              & 0
+			      \end{bmatrix}
+		      \]
 		\item Usando il metodo di Sarrus:
-			\begin{align*}
-				\det(J_{\underline{T}_s} (\rho, \varphi, \theta)) & =
-				\rho^2 \cos^2(\varphi) \sin(\varphi) \cos^2(\theta) +
-				\rho^2 \sin^3(\varphi) \sin^2(\theta)
-				\\ & \quad + \rho^2 \cos^2(\varphi) \sin(\varphi) \sin^2(\theta)
-				+ \rho^2 \sin^3(\varphi) \cos^2(\theta)
-				\\ &= \rho^2 \cos^2(\varphi) \sin(\varphi) +
-				\rho^2 \sin^3(\varphi)
-				\\ &= \rho^2 \sin(\varphi)
-			\end{align*}
+		      \begin{align*}
+			      \det(J_{\underline{T}_s} (\rho, \varphi, \theta)) & =
+			      \rho^2 \cos^2(\varphi) \sin(\varphi) \cos^2(\theta) +
+			      \rho^2 \sin^3(\varphi) \sin^2(\theta)
+			      \\ & \quad + \rho^2 \cos^2(\varphi) \sin(\varphi) \sin^2(\theta)
+			      + \rho^2 \sin^3(\varphi) \cos^2(\theta)
+			      \\ &= \rho^2 \cos^2(\varphi) \sin(\varphi) +
+			      \rho^2 \sin^3(\varphi)
+			      \\ &= \rho^2 \sin(\varphi)
+		      \end{align*}
 	\end{itemize}
 \end{proof}
 

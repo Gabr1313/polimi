@@ -21,9 +21,11 @@
 \begin{itemize}
 	\item Conviene guardare un contesto alla volta e spesso nel metre si trovano
 		anche i deadlock.
-	\item nel caso di una deadlock, nello schema si mettono tutti i valori che
-		global puo' assumere da quando sono state eseguite le istruzioni che
-		implicheranno tale deadlock.
+	\item nel caso di una deadlock, se entrambi i thread sono bloccati si
+		registrano i valori di global nel caso dei thread fermi a tali
+		istruzioni. Se uno invece potrebbe essere terminato, si considerano i
+		valori che global puo' assumere da quando esegue l'istruzione che blocca
+		l'altro in poi.
 \end{itemize}
 
 \newpage
