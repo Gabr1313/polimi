@@ -24,7 +24,7 @@
 	\item nel caso di una deadlock, se entrambi i thread sono bloccati si
 	      registrano i valori di global nel caso dei thread fermi a tali
 	      istruzioni. Se uno invece potrebbe essere terminato, si considerano i
-	      valori che global puo' assumere da quando esegue l'istruzione che blocca
+	      valori che global può assumere da quando esegue l'istruzione che blocca
 	      l'altro in poi.
 \end{itemize}
 
@@ -136,9 +136,10 @@
 		            utilizzata
 		      \item \texttt{SSP}: base della pila S
 		      \item \texttt{USP}: cima della pila U
+		      \item \texttt{PSR}: process status register
 		      \item \texttt{descrittore.stato}: pronto, attesa(di cosa?)
 		      \item \texttt{descrittore.sp}: sp corrente (o nel momento della
-				  sospensione)
+		            sospensione)
 		      \item \texttt{descrittore.sp0}: SSP
 	      \end{itemize}
 \end{itemize}
@@ -193,8 +194,8 @@
 		      \item Il bit di \texttt{A} è salvato nel TLB, quindi pagine non
 		            presenti nel TLB è come se avessero bit di \texttt{A} a 0.
 		      \item bisogna quindi porre attenzione allo stato del TLB prima di
-		            eseguire kswapd: le pagine con bit di A settato saranno in testa
-		            alla coda, mentre le altre in coda.
+		            eseguire kswapd: le pagine con bit di A settato saranno in
+		            testa alla LRU corrispondente, mentre le altre in coda.
 		      \item Scansione dalla coda della active list:
 		            \begin{verbatim}
     if (A) {
@@ -269,9 +270,10 @@
 		      \item svouta il TLB: se le pagine sono dirty marca le stesse pagine
 		            in memoria fisica come dirty.
 		      \item carica prima la pagina del codice e poi quella della pila del
-		            nuovo processo in memoria fisica (attenzione, sulla pila ci
-		            scrive anche, quindi nel caso va tolta dalla swap) e quindi
-		            anche sul TLB. \end{itemize}
+					nuovo processo in memoria fisica e quindi anche sul TLB.
+					(attenzione, sulla pila ci scrive anche, quindi nel caso va
+					tolta dalla swap)
+			\end{itemize}
 	\item \texttt{fork}
 	      \begin{itemize}
 		      \item le pagine vengono tutte "condivise" tra i processi
@@ -311,20 +313,17 @@
 		            memoria
 		      \item \texttt{WRITE} indica che la pagina è stata salvata sul disco
 		            (avviene solo se la pagina è dirty)
-		      \item se \texttt{f\_count == 0} allora le pagine dirty vengono
-		            scritte in memoria (e quindi sparisce il bit \texttt{D}) e la
-		            \texttt{f\_pos} si "resetta" \end{itemize}
 	\item \texttt{fopen}
 	      \begin{itemize}
 		      \item se un file viene aperto, allora viene creato un nuovo
 		            descrittore, e quindi \texttt{f\_pos = 0}.
 	      \end{itemize}
-	\item \texttt{fopen}
+	\item \texttt{fclose}
 	      \begin{itemize}
-			  \item se un descrittore ha \texttt{f\_count == 0} allora TUTTE le
-				  pagine del file associato vengono scritte su disco (anche se
-				  altri descrittori hanno alcune pagine dello stesso file
-				  aperte)
+		      \item se un descrittore ha \texttt{f\_count == 0} allora TUTTE le
+				  pagine \texttt{D} del file associato vengono scritte su disco
+				  (anche se altri descrittori hanno alcune pagine dello stesso
+				  file aperte)
 	      \end{itemize}
 \end{itemize}
 
@@ -351,8 +350,8 @@
 	\item \texttt{\#PMD = \#of\_different\_PUD}
 	\item \texttt{\#PT = \#of\_different\_PMD}
 	\item \texttt{rapporto\_di\_occupazione = (\#PGD + \#PUD + \#PMD + \#PT) /
-		numero\_di\_NPV} \item
-		\texttt{dimensione\_massima\_del\_processo\_in\_pagine\_virtuali =
+		      numero\_di\_NPV} \item
+	      \texttt{dimensione\_massima\_del\_processo\_in\_pagine\_virtuali =
 		      512 * \#PT}
 \end{itemize}
 
