@@ -61,9 +61,9 @@
 		      \end{align*}
 		\item Utilizzando il teorema fondamentale del calcolo integrale
 		      \begin{align*}
-			      y e^{-A} & = \int (y e^{-A})' dt     \\
-			               & = \int be^{-A} dt + c     \\
-			      y        & = e^A \int be^{-A} dt + c \\
+			      y e^{-A} & = \int (y e^{-A})' dt                   \\
+			               & = \int be^{-A} dt + c                   \\
+			      y        & = e^A \left(\int be^{-A} dt + c \right) \\
 		      \end{align*}
 		      dove $c \in \mathbb{R}$.
 	\end{itemize}
@@ -182,7 +182,7 @@
 			      {a_n (x-x_0)^n} \right| = \left| x - x_0 \right| \lim_{n
 				      \to \infty} \left| \frac{a_{n+1}}{a_n} \right| =
 			      \frac{\left| x -
-				      x_0 \right|}{R}
+				      x_0 \right|}{R} < 1
 		      \]
 		      E quindi i 2 punti precedenti sono verificati.
 		\item $\quad \forall x \in \mathbb{R} $ si può applicare il criterio
@@ -190,7 +190,8 @@
 		      \[
 			      \lim_{n \to \infty} \sqrt[n]{\left| a_n (x-x_0)^n
 				      \right|} = \lim_{n \to \infty} \left| x - x_0 \right|
-			      \sqrt[n]{\left| a_n \right|} = \frac{\left| x - x_0 \right|}{R}
+			      \sqrt[n]{\left| a_n \right|} = \frac{\left| x - x_0 \right|}
+			      {R} < 1
 		      \]
 		      E quindi i 2 punti precedenti sono verificati.
 	\end{itemize}
@@ -248,25 +249,27 @@
 
 \newpage
 \begin{theorem} [Invarianza della lunghezza per riparametrizzazioni]
-	Sia $r: [a,b] \subseteq \mathbb{R} \to \mathbb{R}^n$ una curva
-	regolare con sostegno $\gamma$ e sia $v: [c,d] \subseteq \mathbb{R}
-		\to \mathbb{R}^n$ una riparametrizzazione di $\gamma$ relativa
+	Sia $\underline{r}: [a,b] \subseteq \mathbb{R} \to \mathbb{R}^n$ una curva
+	regolare con sostegno $\gamma$ e sia $\underline{v}: [c,d] \subseteq
+		\mathbb{R} \to \mathbb{R}^n$ una riparametrizzazione di $\gamma$ relativa
 	alla variabile $ \varphi : [c,d] \to [a,b]$ (monotona), cioè
-	$v(s) = r(\varphi (s)) \quad \forall s \in [c,d]$, allora
+	$\underline{v}(s) = \underline{r}(\varphi (s)) \quad \forall s \in [c,d]$,
+	allora
 	\[
-		\text{len}(r([a,b])) = \int_{c}^{d} || v'(s) || ds =
-		\text{len}(v([c,d])) \]
+		\text{len}(\underline{r}([a,b])) = \int_{c}^{d} || \underline{v}'(s) ||
+		ds = \text{len}(\underline{v}([c,d]))
+	\]
 \end{theorem}
 \begin{proof} derivata di $v$, integrale per sostituzione e discussione della
 	monotonia
 	\begin{itemize}
-		\item Siccome r è regolare
+		\item Siccome $\underline{r}$ è regolare
 		      \[
-			      \text{len}(r([a,b])) = \int_{a}^{b} || r'(t) || dt
-		      \]
+			      \text{len}(\underline{r}([a,b])) = \int_{a}^{b} ||
+			      \underline{r}'(t) || dt \]
 		\item allora $\forall s \in [c,d]$
 		      \[
-			      v'(s) =
+			      \underline{v}'(s) =
 			      \begin{bmatrix}
 				      v_1'(s) \\
 				      \vdots  \\
@@ -284,39 +287,40 @@
 				      \vdots                      \\
 				      r_n'(\varphi(s))\varphi(s)' \\
 			      \end{bmatrix}
-			      = \varphi'(s) r'(\varphi(s))\\
+			      = \varphi'(s) \underline{r}'(\varphi(s))\\
 		      \]
 		      quindi
 		      \[
-			      ||v'(s)|| = ||\varphi'(s) r'(\varphi(s))|| = |\varphi'(s)| ||
-			      r'(\varphi(s))||
+			      ||\underline{v}'(s)|| = ||\varphi'(s)
+			      \underline{r}'(\varphi(s))|| = |\varphi'(s)| ||
+			      \underline{r}'(\varphi(s))||
 		      \]
 		\item sia $t = \varphi(s)$, allora $ dt = \varphi'(s) ds$
 		\item se $\varphi$ è crescente, allora $\varphi(c) = a < b =
 			      \varphi(d)$ e $\varphi'(s) \geq 0 \quad \forall s \in [c,d]$,
 		      quindi
 		      \[
-			      ||v'(s)|| = \varphi'(s) || r'(\varphi(s))||
-		      \]
+			      ||\underline{v}'(s)|| = \varphi'(s) ||
+			      \underline{r}'(\varphi(s))|| \]
 		      \[
-			      \text{len}(r([a,b])) =
-			      \int_{a}^{b} || r'(t) || dt =
-			      \int_{c}^{d} || r'(\varphi(s))|| \varphi'(s) ds =
-			      \int_{c}^{d} || v'(s) || ds =
-			      \text{len}(v([c,d]))
+			      \text{len}(\underline{r}([a,b])) =
+			      \int_{a}^{b} || \underline{r}'(t) || dt =
+			      \int_{c}^{d} || \underline{r}'(\varphi(s))|| \varphi'(s) ds =
+			      \int_{c}^{d} || \underline{v}'(s) || ds =
+			      \text{len}(\underline{v}([c,d]))
 		      \]
 		\item se $\varphi$ è decrescente, allora $\varphi(c) = b > a =
 			      \varphi(d)$ e $\varphi'(s) \leq 0 \quad \forall s \in [c,d]$,
 		      quindi
 		      \[
-			      ||v'(s)|| = -\varphi'(s) || r'(\varphi(s))||
-		      \]
+			      ||\underline{v}'(s)|| = -\varphi'(s) ||
+			      \underline{r}'(\varphi(s))|| \]
 		      \[
-			      \text{len}(r([a,b])) =
-			      \int_{a}^{b} || r'(t) || dt =
-			      \int_{d}^{c} || r'(\varphi(s))|| (-\varphi'(s)) ds =
-			      \int_{c}^{d} || v'(s) || ds =
-			      \text{len}(v([c,d]))
+			      \text{len}(\underline{r}([a,b])) =
+			      \int_{a}^{b} || \underline{r}'(t) || dt =
+			      \int_{d}^{c} || \underline{r}'(\varphi(s))|| \varphi'(s) ds =
+			      \int_{c}^{d} || \underline{v}'(s) || ds =
+			      \text{len}(\underline{v}([c,d]))
 		      \]
 	\end{itemize}
 \end{proof}
@@ -401,7 +405,7 @@
 			      + o(||t \underline{v}||)
 		      \]
 		\item essendo $o(||t \underline{v}||) = o(|t| || \underline{v}||) =
-			      o(t)$, allora
+			      o(t)||\underline{v}||$, allora
 		      \[
 			      \frac{f(\underline{x}_0 + t \underline{v}) -
 				      f(\underline{x}_0)}{t} = \frac{\nabla f (\underline{x}_0) \cdot
@@ -427,8 +431,8 @@
 		\}$) sia il sostegno di una curva regolare $\underline{r}: I \subseteq
 		\mathbb{R} \to A$, allora
 	\[
-		\nabla f(\underline{x}) \cdot \underline{r}'(t) = 0 \quad \forall t \in
-		I , \forall \underline{x} \in I_k
+		\nabla f(\underline{r}(t)) \cdot \underline{r}'(t) = 0 \quad \forall t
+		\in I
 	\]
 \end{theorem}
 \begin{proof} $F = f \circ \underline{r}$ e teorema di derivazione
@@ -445,9 +449,8 @@
 		\item per il teorema di derivazione delle funzioni composte 1-n-1 si
 		      ottiene che
 		      \[
-			      0 = F'(t) = \nabla f(\underline{r}(t)) \cdot \underline{r}'(t) =
-			      \nabla f(\underline{x}) \cdot \underline{r}'(t) \quad \forall t
-			      \in I , \forall \underline{x} \in I_k
+			      0 = F'(t) = \nabla f(\underline{r}(t)) \cdot \underline{r}'(t) 
+			      \quad \forall t \in I
 		      \]
 	\end{itemize}
 \end{proof}
@@ -467,13 +470,14 @@
 		      sella
 	\end{itemize}
 \end{theorem}
-\begin{proof} definizione di forma quadratcia, formula di Taylor e definizione
-	di limite
+\begin{proof} teorema della matrice di rappresentazione, formula di Taylor e
+	limite
 	\begin{itemize}
 		\item $H_f(\underline{x}_0)$ è simmetrica per il teorema di Schwarz
 		\item se $q$ è definita positiva $\Rightarrow$ $H_f(\underline{x}_0)$ ha
 		      autovalori $\lambda > 0 \in \mathbb{R}$
-		\item quindi per la definizione di forma quadratica definita positiva
+		\item quindi per la definizione di forma quadratica definita positiva e
+		      il teromera della matrice di rappresentazione
 		      \[
 			      H_f(\underline{x}_0) \underline{h} \cdot \underline{h} = q
 			      (\underline{h}) \geq \lambda_{min} ||\underline{h}||^2
@@ -531,7 +535,7 @@
 		\to \mathbb{R}$ una funzione continua, se $\underline{T} : U \to
 		V$ è un cambio di varibili tra $U$ e $V$ con $\Omega \subseteq V$
 	\[
-		\underline{T}(\underline{u}) = (\underline{x}),
+		\underline{T}(\underline{u}) = \underline{x},
 	\]
 	allora
 	\[
@@ -579,7 +583,7 @@
 			      det(J_{\underline{T}_c} (\rho, \theta, z)) = \rho
 		      \]
 		\item Sia $\underline{T}_s : \mathbb{R}^+ \times
-			      [0,2\pi) \times [0,\pi] \to \mathbb{R}^3$
+			      [0,\pi) \times [0,2\pi) \to \mathbb{R}^3$
 		      \[
 			      \underline{T}_s(\rho, \varphi, \theta) =
 			      \begin{bmatrix}
