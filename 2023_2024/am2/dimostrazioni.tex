@@ -229,14 +229,14 @@
 		      \end{align*}
 		\item $a_n$
 		      \begin{align*}
-			              & \frac{1}{\pi} \int_{-\pi}^{\pi} f(x) \cos(nx) dx =       \\
+			              & \frac{1}{\pi} \int_{-\pi}^{\pi} f(x) \cos(kx) dx =       \\
 			      = \quad & \frac{1}{\pi} \int_{-\pi}^{\pi} \left[a_0 +
 			      \sum_{n=1}^{\infty} (a_n \cos(nx) + b_n \sin(nx))\right]
-			      \cos(nx) dx =                                                      \\
+			      \cos(kx) dx =                                                      \\
 			      \intertext{per convergenza totale: $| \cos(nx) | \leq 1$ }
-			      = \quad & \frac{1}{\pi} \left( a_0 \int_{-\pi}^{\pi} \cos(nx) dx +
-			      \sum_{n=1}^{\infty} a_n \int_{-\pi}^{\pi} \cos^2(nx) dx +
-			      \sum_{n=1}^{\infty} b_n \int_{-\pi}^{\pi} \cos(nx) \sin(nx)
+			      = \quad & \frac{1}{\pi} \left( a_0 \int_{-\pi}^{\pi} \cos(kx) dx +
+			      \sum_{n=1}^{\infty} a_n \int_{-\pi}^{\pi} \cos(nx) \cos(kx) dx +
+			      \sum_{n=1}^{\infty} b_n \int_{-\pi}^{\pi} \sin(nx) \cos(kx)
 			      \right)                                                 =          \\
 			      \intertext{per le formule di ortogonalità delle serie armoniche
 				      n-esime}
@@ -449,7 +449,7 @@
 		\item per il teorema di derivazione delle funzioni composte 1-n-1 si
 		      ottiene che
 		      \[
-			      0 = F'(t) = \nabla f(\underline{r}(t)) \cdot \underline{r}'(t) 
+			      0 = F'(t) = \nabla f(\underline{r}(t)) \cdot \underline{r}'(t)
 			      \quad \forall t \in I
 		      \]
 	\end{itemize}
