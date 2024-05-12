@@ -1,0 +1,96 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[margin=2cm]{geometry}
+\usepackage{ragged2e}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{hyperref}
+\usepackage{thmtools}
+\usepackage[utf8]{inputenc}
+\usepackage{tocloft}
+\usepackage{mathrsfs}
+
+\renewcommand{\listtheoremname}{Indice}
+\newtheoremstyle{break}
+	{}           %Space above, empty = usual value
+	{}           %Space below
+	{}           %Body font
+	{}           %Indent amount (empty = no indent, \parindent = para indent)
+	{\bfseries}  %Thm head font
+	{.}          %Punctuation after thm head
+	{\newline}   %Space after thm head: \newline = linebreak
+	{}           %Thm head spec
+\renewcommand{\proofname}{Dimostrazione}
+\theoremstyle{break}
+
+\newtheorem{theorem}{Teorema} %[section]
+\newtheorem*{definition}{Definizione}
+\newtheorem*{exercise}{Esercizio}
+\newtheorem*{example}{Esempio}
+
+\title{Introduzione}
+\author{Gabr1313}
+\date{\today}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\justify
+\sloppy
+
+\newpage
+\section{Info}
+Laboratori 2 e 23 Maggio (gli altri giovedì sono liberi)
+Di solito le esercitazioni sono il lunedì
+
+\section{Sistema}
+L'automatica è insieme strumenti che permettono di risolvere un problema di 
+controllo, modelizzati attraverso un modello matematico.
+\begin{definition}[Sistema di controllo] Un sistema di controllo è composto 
+    da:
+    \begin{itemize}
+        \item Variabili in ingresso $\bar{u}$
+            \begin{itemize}
+                \item manipolabili
+                \item distrubi
+            \end{itemize}
+        \item Variabili in uscita $\bar{y}$
+            \begin{itemize}
+                \item controllate
+                \item misure
+            \end{itemize}
+        \item Modello: comportamento del sistema (ingressi $\to$ uscite) \\
+              meglio se non varia nel tempo
+    \end{itemize}
+\end{definition}
+\begin{definition}[Retroazione]
+    Misurare, controntare la misura con un \textbf{set-point}, aggiustare i
+    parametri in ingresso
+\end{definition}
+\begin{definition}[Legge di controllo]
+    Imporre alle variabili un comportamento: può essere fatto manualmente, o 
+    automaticamente.
+\end{definition}
+\begin{definition}[Attuatori]
+    Strumenti che aiutano a modificare le variabili manipolabili
+\end{definition}
+\begin{definition}[Sensori / Trasduttori]
+    Strumenti che aiutano a misurare le varibali di uscita
+\end{definition}
+\begin{definition}[Leggi di controllo]
+    Viene applicata attraverso un HW (calcolatore), che interagisce con
+    attuatori e trasduttori
+\end{definition}
+
+\begin{example} [Resistore] 
+    In un resistore...
+    \begin{itemize}
+        \item $u = i$
+        \item $y = v$
+        \item modello $y = Ru$
+    \end{itemize}
+\end{example}
+
+\end{document}
+
