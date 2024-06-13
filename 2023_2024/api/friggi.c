@@ -1,8 +1,8 @@
-
 #include <stdio.h>
-int main() { // lollll
+
+int main() {
     long long a = 0, j = 1, k = 0, h;
-    for (long long n = 1; n < 100000; n*=2) {
+    for (long long n = 1; n < 20; n*=2) {
         while (j < n) {
             k++;
             for (int i = 1; i <= k; i++) {

@@ -19,3 +19,7 @@
 *.toc
 *_vimtex_selected.tex
 *.thm
+
+# to remove March 2025
+progetto/
+red-black/

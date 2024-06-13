@@ -32,7 +32,7 @@ void string_push(string *s, char ch) {
     s->ptr[s->len++] = ch;
 }
 
-void string_shrink(string* s) {
+void string_shrink(string *s) {
     s->cap = s->len;
     s->ptr = realloc(s->ptr, sizeof(*s->ptr) * s->cap);
     if (!s->ptr) assert(0);
@@ -47,7 +47,7 @@ string string_read() {
     return s;
 }
 
-void string_rev(string* s) {
+void string_rev(string *s) {
     for (ull i = 0; i < s->len - 2 - i; i++) {  // '\0' at the end
         char tmp = s->ptr[i];
         s->ptr[i] = s->ptr[s->len - 2 - i];
@@ -117,7 +117,7 @@ void bignum_set(bigNum *n, ull pos, ull val) {
     else n->ptr[(pos) / 64] &= ~(1ull << ((pos) % 64));
 }
 
-void bignum_shrink(bigNum* n, ull cap) {
+void bignum_shrink(bigNum *n, ull cap) {
     if (cap % 64) n->ptr[(cap - 1) / 64] &= (UINT64_MAX >> (64 - cap % 64));
     cap = (cap + 63) / 64 * 64;
     if (cap != n->cap) {
@@ -152,7 +152,7 @@ void bignum_cpy_increase_cap(bigNum a, ull cap) {
     memset(b.ptr + a.cap / 64, 0, b.cap / 8 - a.cap / 8);
 }
 
-void bignum_sub_eq(bigNum *a, bigNum b) {
+void bignum_sub_eq(const bigNum *const a, bigNum b) {
     assert(a->cap >= b.cap);
     ull carry = 0;
     for (ull i = 0; i < a->cap / 64; i++) {
