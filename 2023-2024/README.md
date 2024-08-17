@@ -1,6 +1,6 @@
 ## Terzo Semestre:
 
-| Corso                                              | Link                      | Professore           | CFU | VOTO |
+| Corso                                              | Link                      | Professore           | CFU | Voto |
 | :-:                                                | :-:                       | :-:                  | :-: | :-:  |
 | Analisi matematica 2                               | [_(AM2)_](am2/)           | Piovano Pierpaolo    | 10  | 30L  |
 | Architettura dei calcolatori e sistemi operativi   | [_(ACSO)_](acso/)         | Donatella Sciuto     | 10  | 30L  |
@@ -9,7 +9,7 @@
 
 ## Quarto semestre:
 
-| Corso                                              | Link                      | Professore           | CFU | VOTO |
+| Corso                                              | Link                      | Professore           | CFU | Voto |
 | :-:                                                | :-:                       | :-:                  | :-: | :-:  |
 | Probabilità e statistica                           | [_(PS)_](ps/)             | Ladelli Lucia        | 10  | 30L  |
 | Fondamenti di Automatica                           | [_(FA)_](fa/)             | Farina Marcello      | 10  | 30L  |
