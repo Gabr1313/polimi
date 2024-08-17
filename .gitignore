@@ -20,9 +20,6 @@
 *_vimtex_selected.tex
 *.thm
 
-# to remove March 2025
+# to remove in March 2025
 progetto/
 red-black/
-
-# to rename whenever I want to public my grades
-*/README.private.md
