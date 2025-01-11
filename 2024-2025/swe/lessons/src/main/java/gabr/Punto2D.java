@@ -1,7 +1,7 @@
 package gabr;
 
 public class Punto2D {
-    // `protected` significa che le sottoclassi ci possono acccedere
+    // `protected` significa che le sottoclassi ci possono accedere
     // ma purtroppo anche tutto il package
     // (facendo le cose per bene dovrei spostarlo in un package a parte)
     protected final double x;

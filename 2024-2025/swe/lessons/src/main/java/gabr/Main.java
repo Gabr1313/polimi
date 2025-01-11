@@ -1,5 +1,7 @@
 package gabr;
 
+// import gabr.pkg.*; // per usare classi in quel package
+
 public class Main {
     public static void main(String[] args) { // metodo statico si chiama sulla classe, non sulle
                                              // istanze (che quindi non devono essere istanziate)
@@ -12,7 +14,7 @@ public class Main {
 
         Person p1 = new Person("Nome", 32, StudentType.ING);
         Student s1 = new Student("Studente", 23, StudentType.ING, 10);
-        // p2 occupa uno spazion in memoria diverso: il compilatore sa che e' uno
+        // p2 occupa uno spazio in memoria diverso: il compilatore sa che e' uno
         // studente, e a run-time lo sfrutta
         Person p2 = new Student("Studente2", 24, StudentType.ING, 8); // compila
         // Student s2 = new Person("Nome2", 44); // NON compila
