@@ -6,10 +6,11 @@ typedef unsigned long u64;
 #define A (i & v[N - 1])
 #define B (i & v[N - 2])
 #define C (i & v[N - 3])
-#define D (i & v[N - 4])
-#define E (i & v[N - 5])
+// #define D (i & v[N - 4])
+// #define E (i & v[N - 5])
 
-#define FORMULA ((!A && B) || (!B && C && !E) || (!A && D && E))
+// #define FORMULA ((!B && C) || (A && B) || (B && !C))
+#define FORMULA ((!B && C) || (A && C) || (B && !C))
 
 int main() {
     u64 v[N];
