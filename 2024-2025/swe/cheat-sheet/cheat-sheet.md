@@ -1141,7 +1141,7 @@ public class MusicAppView {
         = new ArrayList<>();
     public void addClickObsv(ClickObsv clickObsv) 
         { obList.add(clickObsv); }
-    public void clickNext() // user click here
+    public void clickNext() // user clicks here
         { obList.forEach(ClickObsv::onClick); }
     public void updateCurrentSong(Song s) 
         { System.out.println(s.getTitle()); }
@@ -1179,7 +1179,7 @@ public class MusicAppView
         = new ArrayList<>();
     public void addClickObsv(ClickObsv clickObsv) 
         { obList.add(clickObsv); }
-    public void clickNext()  // user click here
+    public void clickNext()  // user clicks here
         { obList.forEach(ClickObsv::onClick); }
     private void updateCurrentSong(Song s) 
         { System.out.println(s.getTitle()); }
