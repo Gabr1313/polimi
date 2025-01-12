@@ -118,117 +118,6 @@ public static <T extends Comparable<T>>
 ```
 
 \newpage
-# Concurrency
-- solo gli oggetti sull'Heap possono usufruire di `synchronized`
-- per avere un Deadlock, è sufficiente che un thread sia per sempre bloccato
-    - **non** che una risorsa condivisa sia per sempre non raggiungibile
-- se ci sono setters, è meglio usare `synchronized` anche per i getters
-- i lock è meglio avvenago su attributi `final`
-    - altrimenti il lock (l'oggetto) può essere sostituito
-- a volte capita di dover mettere tutte le funzioni come `synchronized`  
-    ad esempio se si ha bisogno di un `||` su lock diversi
-
-## Synchronized
-```java
-public void g() {
-    synchronized(x) {
-        x.add(1);
-        /* don't */ x.notify() // only one wakes up
-        x.notifyAll();
-    }
-}
-public void f() throws InterruptedException {
-    synchronized(x) {
-        while(x.isEmpty()) x.wait();
-    }
-}
-public void h() {
-    synchronized(x) {
-        while(x.isEmpty()) {
-            try (x.wait())
-            catch(InterruptedException ex) 
-            { ex.printStackTrace(); }
-        }
-    }
-}
-```
-Oppure si può anche rendere una lista sincronizzata
-```java
-myList = Collections.synchronizedList(myList)
-```
-
-## Read-Write Locks
-accessi simultanei in lettura non vanno in conflitto
-```java
-ReadWriteLock x = new ReentrantReadWriteLock()
-// blocca read and write
-x.writeLock().lock() 
-x.writeLock().unlock()
-// blocca solo read
-x.readLock().lock() 
-x.readLock().unlock()
-```
-
-## Atomic
-```java
-AtomicInteger x;
-x.get() -> int
-x.addAndGet() -> int
-x.set();
-```
-
-## Threads
-```java
-publid void f() throws InterruptedException {
-    Thread t = new Thread(Runnable);
-    t.start();
-    t.join();
-}
-```
-o equivalentemente
-```java
-publid void f() throws InterruptedException {
-    Thread t = new Thread( public void run() {...} );
-    t.start();
-    t.join();
-}
-```
-oppure ancora
-```java
-class Worker implements Runnable { ... }
-
-Worker w = new Worker();
-new Thread(w).start();
-```
-
-## Thread pool
-```java
-public void f() throws ExecutionException { };
-ExecutorService ex = Executors
-    .newFixedThreadPool(int n);
-// returns `null` in the `Future<?>`
-ex.submit(Runnable action); 
-// prima completa i task
-ex.shutdown(); 
-// quanTo aspettare al massimo per shutdown
-// bisogna prima chiamare `shutdown()`
-while (!ex.awaitTermination(10, TimeUnit.SECONDS));
-// non completa i task in sospeso
-ex.shutdownNow(); 
-```
-
-## Futures
-```java
-Future<T> x = ex.submit(Runnable action, T result);
-Future<T> x = ex.submit(Callable<T> action);
-// aspetta finchè non lo ottiene 
-x.get(); // throws `ExecutionException` ...
-Future<T> x = ex.submit(Callable<T> action);
-FutureTask task = new FutureTask(Callable);
-Thread t = new Thread(task);
-task.get();
-```
-
 # Interfaces
 
 ## Comparator\<T\> e Comparable\<T\>
@@ -369,7 +258,6 @@ Function<Integer x, String y> f = (x) -> x.toString();
         - `.map(x -> Book.author(x))` 
     - se entrambi definiti compiler error
 
-\newpage
 ## Stream\<T\>
 - Static
 ```java
@@ -512,8 +400,46 @@ IntStream.iterate(int seed, IntUnaryOperator f)
 .flatMap(Function<T, Optional<U>>) -> Optional<U>
 ```
 
-\newpage
+# IO
+- new
+```java
+Scanner in = new Scanner(System.in);
+Scanner in = new Scanner(new File("file/path");
+PrintStream out = new PrintStream(System.out);
+PrintStream out = new PrintStream(new File("file");
+```
+- read
+```java
+.hasNext() -> boolean
+.next() -> String
+.nextLine() -> String
+.nextInt() -> int
+.hasNextInt() -> boolean
+.close() -> void
+```
+- write
+```java
+.print(Object o)
+.println(Object o)
+.printf(String format, Object... args)
+```
+
 # Data Structures
+## Math
+- `int` si auto-casta a `double`, ma non viceversa
+```java
+Math.max(int x, int y);
+Math.min(int x, int y);
+Math.abs(double x);
+Math.ceil(double x);
+Math.floor(double x);
+System.out.println(double);  // .0
+Integer.compare(int x, int y);
+Double.sum(int x, int y);
+Integer.MIN_VALUE
+Double.MAX_VALUE
+```
+
 ## Enums
 ```java
 public enum Type {
@@ -812,44 +738,117 @@ Optional.empty() -> Optional<T>
 .chars() -> IntStream
 ```
 
-## Math
-- `int` si auto-casta a `double`, ma non viceversa
+# Concurrency
+- solo gli oggetti sull'Heap possono usufruire di `synchronized`
+- per avere un Deadlock, è sufficiente che un thread sia per sempre bloccato
+    - **non** che una risorsa condivisa sia per sempre non raggiungibile
+- se ci sono setters, è meglio usare `synchronized` anche per i getters
+- i lock è meglio avvenago su attributi `final`
+    - altrimenti il lock (l'oggetto) può essere sostituito
+- a volte capita di dover mettere tutte le funzioni come `synchronized`  
+    ad esempio se si ha bisogno di un `||` su lock diversi
+
+## Synchronized
 ```java
-Math.max(int x, int y);
-Math.min(int x, int y);
-Math.abs(double x);
-Math.ceil(double x);
-Math.floor(double x);
-System.out.println(double);  // .0
-Integer.compare(int x, int y);
-Double.sum(int x, int y);
-Integer.MIN_VALUE
-Double.MAX_VALUE
+public void g() {
+    synchronized(x) {
+        x.add(1);
+        /* don't */ x.notify() // only one wakes up
+        x.notifyAll();
+    }
+}
+public void f() throws InterruptedException {
+    synchronized(x) {
+        while(x.isEmpty()) x.wait();
+    }
+}
+public void h() {
+    synchronized(x) {
+        while(x.isEmpty()) {
+            try (x.wait())
+            catch(InterruptedException ex) 
+            { ex.printStackTrace(); }
+        }
+    }
+}
+```
+Oppure si può anche rendere una lista sincronizzata
+```java
+myList = Collections.synchronizedList(myList)
 ```
 
-# IO
-- new
+## Read-Write Locks
+accessi simultanei in lettura non vanno in conflitto
 ```java
-Scanner in = new Scanner(System.in);
-Scanner in = new Scanner(new File("file/path");
-PrintStream out = new PrintStream(System.out);
-PrintStream out = new PrintStream(new File("file");
+ReadWriteLock x = new ReentrantReadWriteLock()
+// blocca read and write
+x.writeLock().lock() 
+x.writeLock().unlock()
+// blocca solo read
+x.readLock().lock() 
+x.readLock().unlock()
 ```
-- read
+
+## Atomic
 ```java
-.hasNext() -> boolean
-.next() -> String
-.nextLine() -> String
-.nextInt() -> int
-.hasNextInt() -> boolean
-.close() -> void
+AtomicInteger x;
+x.get() -> int
+x.addAndGet() -> int
+x.set();
 ```
-- write
+
+## Threads
 ```java
-.print(Object o)
-.println(Object o)
-.printf(String format, Object... args)
+publid void f() throws InterruptedException {
+    Thread t = new Thread(Runnable);
+    t.start();
+    t.join();
+}
 ```
+o equivalentemente
+```java
+publid void f() throws InterruptedException {
+    Thread t = new Thread( public void run() {...} );
+    t.start();
+    t.join();
+}
+```
+oppure ancora
+```java
+class Worker implements Runnable { ... }
+
+Worker w = new Worker();
+new Thread(w).start();
+```
+
+## Thread pool
+```java
+public void f() throws ExecutionException { };
+ExecutorService ex = Executors
+    .newFixedThreadPool(int n);
+// returns `null` in the `Future<?>`
+ex.submit(Runnable action); 
+// prima completa i task
+ex.shutdown(); 
+// quanTo aspettare al massimo per shutdown
+// bisogna prima chiamare `shutdown()`
+while (!ex.awaitTermination(10, TimeUnit.SECONDS));
+// non completa i task in sospeso
+ex.shutdownNow(); 
+```
+
+## Futures
+```java
+Future<T> x = ex.submit(Runnable action, T result);
+Future<T> x = ex.submit(Callable<T> action);
+// aspetta finchè non lo ottiene 
+x.get(); // throws `ExecutionException` ...
+Future<T> x = ex.submit(Callable<T> action);
+FutureTask task = new FutureTask(Callable);
+Thread t = new Thread(task);
+task.get();
+```
+
 
 # Test
 - **statement coverage**: sollecita ogni statement
