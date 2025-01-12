@@ -10,6 +10,13 @@ toc: true
 
 # Object Oriented Programming
 
+## Main
+```java
+public class Main {
+    public static void main(String[] args) { }
+}
+```
+
 ## Keywords
 - `final`: attributo immutabile (**deve** essere inizializzato nel costruttore)
 - `final`: metodo che non può essere sovrascritto
@@ -24,7 +31,7 @@ switch(x) {
     default -> { }
 }
 ```
-- `abstarct`:
+- `abstract`:
 ```java
 public abstract class Poly {
     public abstract void draw();
@@ -44,13 +51,7 @@ public quad implements Printable {
 }
 ```
 
-## Main
-```java
-public class Main {
-    public static void main(String[] args) { }
-}
-```
-
+\newpage
 ## Visibilità
 - `public`: visibile a tutti 
 - `protected`: visibile alle sottoclassi e nel package
@@ -438,9 +439,9 @@ Stream.concat(Stream<T> x, Stream<T> y) -> Stream<T>
 .mapToLong(ToLongFunction<T>) -> LongStream
 .mapToDouble(ToDoubleFunction<T>) -> DoubleStream
 .flatMap(Function<T, Stream<R>>) -> Stream<R>
-.flatToInt(ToIntFunction<T>) -> IntStream
-.flatToLong(ToLongFunction<T>) -> LongStream
-.flatToDouble(ToDoubleFunction<T>) -> DoubleStream
+.flatMapToInt(ToIntFunction<T>) -> IntStream
+.flatMapToLong(ToLongFunction<T>) -> LongStream
+.flatMapToDouble(ToDoubleFunction<T>) -> DoubleStream
 ```
 
 - Predicate
@@ -561,6 +562,28 @@ List<double> l = Arrays.asList(1.0, 2.0)
 .clear()
 ```
 
+- Setters
+```java
+// returns `true` if the set changed;
+.addAll(Collection<T> c) -> boolean 
+// shifts the remaining part 
+// of the original list to the left
+.addAll(int idx, Collection<T> c) -> boolean 
+.add(T value) 
+.add(in idx, T value)
+.replaceAll(UnaryOperator<T>)
+```
+
+- Getters
+```java
+.indexOf(Object o) -> int
+.lastIndexOf(Object o) -> int
+.get(int idx) -> T
+.contains(T value) -> boolean
+.containsAll(Collection<Object> c) -> boolean
+.isEmpty() -> boolean
+```
+
 - Transformer
 ```java
 .toArray() -> T[]
@@ -580,28 +603,9 @@ List<double> l = Arrays.asList(1.0, 2.0)
     .remove() 
     // after the last processed element 
     // in the underlying list
+    .add(T value) 
 ```
 
-- Setters
-```java
-// returns `true` if the set changed;
-.addAll(Collection<T> c) -> boolean 
-// shifts the remaining part 
-// of the original list to the left
-.addAll(int idx, Collection<T> c) -> boolean 
-.add(in idx, T value)
-.add(T value) 
-```
-
-- Getters
-```java
-.indexOf(Object o) -> int
-.lastIndexOf(Object o) -> int
-.get(int idx) -> T
-.contains(T value) -> boolean
-.containsAll(Collection<Object> c) -> boolean
-.isEmpty() -> boolean
-```
 
 - Remove
 ```java
@@ -611,16 +615,12 @@ List<double> l = Arrays.asList(1.0, 2.0)
 .retianAll(Collection<Object>) -> boolean
 ```
 
-- Replace
-```java
-.replaceAll(UnaryOperator<T>)
-```
-
 ## Queue\<T\>
 - Setters
 ```java
 .offer(T value) -> boolean
-.add(T value) -> boolean // throws IllegalStateException
+// throws IllegalStateException
+.add(T value) -> boolean 
 .addAll(Collection<T>) -> boolean // throws ...
 ```
 - Getters
@@ -632,7 +632,7 @@ List<double> l = Arrays.asList(1.0, 2.0)
 ```
 - Remove
 ```java
-// retrive and removes
+// retrives and removes
 .poll() -> T // or null
 .remove() -> T // throws NoSuchElementException
 ```
@@ -712,8 +712,17 @@ Map<T> l = new HashMap<>(Collection<T> other)
 ```java
 .put(K key, V value) -> V // previous or null
 .putIfAbsent(K key, V value) -> V // previous or null
-// replaces
-.putAll(Map<K, V> m)
+.putAll(Map<K, V> m) // replaces
+```
+- Getters
+```java
+.get(K key) -> V // `null` se `!containsKey(K)`
+.getOrDefault(K key, V value) -> V
+.entrySet() -> Set<Entry<K, V>>
+.keySet() -> Set<V>
+.values() -> Collection<V>
+.containsKey(K key) -> boolean
+.containsValue(V value) -> boolean
 ```
 
 - Remove
@@ -729,17 +738,6 @@ Map<T> l = new HashMap<>(Collection<T> other)
 .replaceAll(BiFunction<K, V, V>) -> Set<V>
 ```
 
-- Getters
-```java
-.get(K key) -> V // `null` se `!containsKey(K)`
-.getOrDefault(K key, V value) -> V
-.entrySet() -> Set<Entry<K, V>>
-.keySet() -> Set<V>
-.values() -> Collection<V>
-.containsKey(K key) -> boolean
-.containsValue(V value) -> boolean
-```
-
 ## EntrySet<K, V>
 - Getters
 ```java
@@ -752,7 +750,7 @@ Map<T> l = new HashMap<>(Collection<T> other)
 - Static
 ```java
 Optional.of(T value) -> Optional<T>
-// of, but empty if `value == null`
+// `of()`, but empty if `value == null`
 Optional.ofNullable(T value) -> Optional<T>
 Optional.empty() -> Optional<T>
 ```
@@ -791,7 +789,7 @@ Optional.empty() -> Optional<T>
 - Setter
 ```java
 .replace(String regex, String) -> String
-.replaceFirst(String, String) -> String
+.replaceFirst(String regex, String) -> String
 .concat(String) -> String
 .toUpperCase(String) -> String
 .toLowerCase(String) -> String
@@ -854,17 +852,17 @@ PrintStream out = new PrintStream(new File("file");
 ```
 
 # Test
-- esiste la risposta "non posso coprire tutte le dicisione, siccome ..."
 - **statement coverage**: sollecita ogni statement
 - **decision (edge) coverage**: per ogni branch, prova sia true che false
     - va preso anche il ramo `else` supper "non esista"
+    - "non posso coprire tutte le dicisioni, siccome..."
 - **condition coverage**: per ogni branch, provo ogni combinazione possibile
     - `x && y` => 0_, 10, 11
     - `x || y` => 1_, 01, 00
 - **path coverage**: ogni possibile cammino, da inzio a fine, nella funzione
 
 \newpage
-# Esercizio ereditarietà
+# Ereditarietà
 1) ricopia i metodi: **attenzione** a `this` e `super` nei metodi ereditati
     - `this` è ricopiato con un cast alla classe da cui viene ereditato
     - `super` è riferito alla superclasse da cui viene ereditato
@@ -915,6 +913,7 @@ PrintStream out = new PrintStream(new File("file");
 - `\this`, `(\old f())`, `\result`
 - `(* comment *)`
 
+\newpage
 Siano:
 
 - `<varDecl>` = `T varName`
@@ -978,7 +977,7 @@ Una estensione è valida se:
 # Design Patterns
 ## Factory / Abstract Factory (strutturale)
 - Istanzia una classe astratta, senza riferimenti alle sottoclassi.
-- Una `Abstarct Factory` è semplicemente un insieme di `Factory`  
+- Una `Abstract Factory` è semplicemente un insieme di `Factory`  
     (ovvero una `Factory` che produce più di un oggetto)
 ```java
 public abstract class Student {
