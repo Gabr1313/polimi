@@ -117,6 +117,63 @@ public static <T extends Comparable<T>>
     T getMax(List<T> list) { }
 ```
 
+# IO
+- new
+```java
+Scanner in = new Scanner(System.in);
+Scanner in = new Scanner(new File("file/path");
+PrintStream out = new PrintStream(System.out);
+PrintStream out = new PrintStream(new File("file");
+```
+- read
+```java
+.hasNext() -> boolean
+.next() -> String
+.nextLine() -> String
+.nextInt() -> int
+.hasNextInt() -> boolean
+.close() -> void
+```
+- write
+```java
+.print(Object o)
+.println(Object o)
+.printf(String format, Object... args)
+```
+
+# Math
+- `int` si auto-casta a `double`, ma non viceversa
+```java
+Math.max(int x, int y);
+Math.min(int x, int y);
+Math.abs(double x);
+Math.ceil(double x);
+Math.floor(double x);
+System.out.println(double);  // .0
+Integer.compare(int x, int y);
+Double.sum(int x, int y);
+Integer.MIN_VALUE
+Double.MAX_VALUE
+```
+
+# Ereditarietà
+1) ricopia i metodi: **attenzione** a `this` e `super` nei metodi ereditati
+    - `this` è ricopiato con un cast alla classe da cui viene ereditato
+    - `super` è riferito alla superclasse da cui viene ereditato
+    - `this.m()` cerca il metodo `m()` più specializzato
+        - anche nelle sottoclassi
+        - anche nei metodi ereditati
+    - `super.m()` cerca il metodo `m()` più specializzato nelle superclassi
+        - si ferma a quella appena sopra al chiamante
+        - se ereditato, `super` va considerato  
+            rispetto alla classe in cui il metodo è definito
+2) scegli il metodo statico:
+    - considera il tipo statico (più specializzato) del chiamante
+    - considera il tipo statico (più specializzato) degli argomenti
+    - (cast come `int` -> `float` avvengono solo dopo che 
+        non si trovano match con `int`)
+3) guardando il tipo dinamico, scegli l'Override più specializzato
+
 \newpage
 # Interfaces
 
@@ -252,6 +309,7 @@ Function<Integer x, String y> f = (x) -> x.toString();
     - i puntatori possono comunque cambiare il contenuto
     - nei metodi, siccome `this` è un puntatore,  
         gli attributi possono cambiare
+\newpage
 - Syntactic sugar 
     - `.map(Book::author)` diventa uno tra:
         - `.map(x -> x.author())` (`x` è di tipo Book)
@@ -269,8 +327,7 @@ Stream.concat(Stream<T> x, Stream<T> y) -> Stream<T>
 - General
 ```java
 .parallel() -> Stream<T>
-// opposite of `parallel()`
-.sequential() -> Stream<T> 
+.sequential() -> Stream<T> // not `parallel()`
 .iterator() -> Iterator<T>
 .findFirst() -> Optional<T>
 .findAny() -> Optional<T>
@@ -313,11 +370,14 @@ Stream.concat(Stream<T> x, Stream<T> y) -> Stream<T>
 .toList() -> List<T>
 ```
 
-- Consumer
+- Predicate
 ```java
-.forEach(Consumer<T>)
-// come `forEach` ma non consuma la stream
-.peek(Consumer<T>) -> Stream<T> 
+.filter(Predicate<T>) -> Stream<T>
+.takeWhile(Predicate<T>) -> Stream<T>
+.dropWhile(Predicate<T>) -> Stream<T>
+.anyMatch(Predicate<T>) -> boolean
+.allMatch(Predicate<T>) -> boolean
+.noneMatch(Predicate<T>) -> boolean
 ```
 
 - Function
@@ -332,15 +392,13 @@ Stream.concat(Stream<T> x, Stream<T> y) -> Stream<T>
 .flatMapToDouble(ToDoubleFunction<T>) -> DoubleStream
 ```
 
-- Predicate
+- Consumer
 ```java
-.filter(Predicate<T>) -> Stream<T>
-.takeWhile(Predicate<T>) -> Stream<T>
-.dropWhile(Predicate<T>) -> Stream<T>
-.anyMatch(Predicate<T>) -> boolean
-.allMatch(Predicate<T>) -> boolean
-.noneMatch(Predicate<T>) -> boolean
+.forEach(Consumer<T>)
+// come `forEach` ma non consuma la stream
+.peek(Consumer<T>) -> Stream<T> 
 ```
+
 - Comparator
 ```java
 .sorted() -> Stream<T>
@@ -374,6 +432,8 @@ IntStream.iterate(int seed, IntUnaryOperator f)
 
 - Function
 ```java
+.map(Function<T, R>) -> Optional<R>
+.flatMap(Function<T, Optional<U>>) -> Optional<U>
 .mapToObj(Function<T, R>) -> Stream<R>
 .map(ToIntFunction<T>) -> IntStream
 .mapToLong(ToLongFunction<T>) -> LongStrea-m
@@ -394,51 +454,8 @@ IntStream.iterate(int seed, IntUnaryOperator f)
 .filter(Predicate<T>) -> Optional<T>
 ```
 
-- Function
-```java
-.map(Function<T, R>) -> Optional<R>
-.flatMap(Function<T, Optional<U>>) -> Optional<U>
-```
-
-# IO
-- new
-```java
-Scanner in = new Scanner(System.in);
-Scanner in = new Scanner(new File("file/path");
-PrintStream out = new PrintStream(System.out);
-PrintStream out = new PrintStream(new File("file");
-```
-- read
-```java
-.hasNext() -> boolean
-.next() -> String
-.nextLine() -> String
-.nextInt() -> int
-.hasNextInt() -> boolean
-.close() -> void
-```
-- write
-```java
-.print(Object o)
-.println(Object o)
-.printf(String format, Object... args)
-```
-
+\newpage
 # Data Structures
-## Math
-- `int` si auto-casta a `double`, ma non viceversa
-```java
-Math.max(int x, int y);
-Math.min(int x, int y);
-Math.abs(double x);
-Math.ceil(double x);
-Math.floor(double x);
-System.out.println(double);  // .0
-Integer.compare(int x, int y);
-Double.sum(int x, int y);
-Integer.MIN_VALUE
-Double.MAX_VALUE
-```
 
 ## Enums
 ```java
@@ -465,6 +482,53 @@ arr = (T[]) new Object[10];
 .length -> int // non .length()
 // solo il primo livello, non ricorsivamente
 .clone() -> T[]
+```
+
+## Set\<T\>
+- New
+```java
+Set<T> s = new HashSet<>()
+Set<T> s = new HashSet<>(hs)
+Set<T> l = new HashSet<>(Collection<T> other)
+```
+
+- General
+```java
+// `o` must be Set<_>, 
+// and contain the same elements
+.equals(Object) -> boolean 
+.size() -> int
+.clear()
+.forEach(Consumer<T>)
+```
+
+- Transformer
+```java
+.toArray() -> T[]
+.stream() -> Stream<T>
+.iterator() -> Iterator<T>
+```
+
+- Setters
+```java
+// returns `true` if the set changed
+.add(T value) -> boolean 
+.addAll(Collection<T>) -> boolean
+```
+
+- Getters
+```java
+.contains(T value) -> boolean
+.containsAll(Collection<Object>) -> boolean
+.isEmpty() -> boolean
+```
+
+- Remove
+```java
+.remove(Object) -> boolean
+.removeif(Predicate<T>) -> boolean
+.removeAll(Collecionts<Object>) -> boolean
+.retainAll(Collecionts<Object>) -> boolean
 ```
 
 ## List\<T\>
@@ -532,7 +596,6 @@ List<double> l = Arrays.asList(1.0, 2.0)
     .add(T value) 
 ```
 
-
 - Remove
 ```java
 .remove(Object O)
@@ -569,53 +632,6 @@ Deque<T> extends Queue<T>
 ```
 - come Queue, ma `...First()` and `...Last()`  
     (tranne per `.element()`)
-
-## Set\<T\>
-- New
-```java
-Set<T> s = new HashSet<>()
-Set<T> s = new HashSet<>(hs)
-Set<T> l = new HashSet<>(Collection<T> other)
-```
-
-- General
-```java
-// `o` must be Set<_>, 
-// and contain the same elements
-.equals(Object) -> boolean 
-.size() -> int
-.clear()
-.forEach(Consumer<T>)
-```
-
-- Transformer
-```java
-.toArray() -> T[]
-.stream() -> Stream<T>
-.iterator() -> Iterator<T>
-```
-
-- Setters
-```java
-// returns `true` if the set changed
-.add(T value) -> boolean 
-.addAll(Collection<T>) -> boolean
-```
-
-- Getters
-```java
-.contains(T value) -> boolean
-.containsAll(Collection<Object>) -> boolean
-.isEmpty() -> boolean
-```
-
-- Remove
-```java
-.remove(Object) -> boolean
-.removeif(Predicate<T>) -> boolean
-.removeAll(Collecionts<Object>) -> boolean
-.retainAll(Collecionts<Object>) -> boolean
-```
 
 ## Map<K, V>
 - New
@@ -738,6 +754,7 @@ Optional.empty() -> Optional<T>
 .chars() -> IntStream
 ```
 
+\newpage
 # Concurrency
 - solo gli oggetti sull'Heap possono usufruire di `synchronized`
 - per avere un Deadlock, è sufficiente che un thread sia per sempre bloccato
@@ -849,7 +866,6 @@ Thread t = new Thread(task);
 task.get();
 ```
 
-
 # Test
 - **statement coverage**: sollecita ogni statement
 - **decision (edge) coverage**: per ogni branch, prova sia true che false
@@ -861,25 +877,6 @@ task.get();
 - **path coverage**: ogni possibile cammino, da inzio a fine, nella funzione
 
 \newpage
-# Ereditarietà
-1) ricopia i metodi: **attenzione** a `this` e `super` nei metodi ereditati
-    - `this` è ricopiato con un cast alla classe da cui viene ereditato
-    - `super` è riferito alla superclasse da cui viene ereditato
-    - `this.m()` cerca il metodo `m()` più specializzato
-        - anche nelle sottoclassi
-        - anche nei metodi ereditati
-    - `super.m()` cerca il metodo `m()` più specializzato nelle superclassi
-        - si ferma a quella appena sopra al chiamante
-        - se ereditato, `super` va considerato  
-            rispetto alla classe in cui il metodo è definito
-2) scegli il metodo statico:
-    - considera il tipo statico (più specializzato) del chiamante
-    - considera il tipo statico (più specializzato) degli argomenti
-    - (cast come `int` -> `float` avvengono solo dopo che 
-        non si trovano match con `int`)
-3) guardando il tipo dinamico, scegli l'Override più specializzato
-
-
 # JML
 ## Sezioni
 - I metodi `ground` sono il più piccolo insieme di metodi puri  
@@ -912,7 +909,12 @@ task.get();
 - `\this`, `(\old f())`, `\result`
 - `(* comment *)`
 
-\newpage
+### Predicati e funzioni speciali
+- posso definire predicati: `pred1(x) <==> x == y`
+- posso definire funzioni: `f1(x) == x.size()`
+    - e queste possono anche essere ricorsive
+
+
 Siano:
 
 - `<varDecl>` = `T varName`
@@ -933,17 +935,13 @@ allora:
 - `(\sum <varDecl>; <domain>; <toNum>)`
 - `(\product <varDecl>; <domain>; <toNum>)`
 
-### Predicati e funzioni speciali
-- posso definire predicati: `pred1(x) <==> x == y`
-- posso definire funzioni: `f1(x) == x.size()`
-    - e queste possono anche essere ricorsive
-
 ## Estensioni
 - **Estensione pura** che non modifica la specifica dei metodi ereditati
     - la sottoclasse può usare sono metodi `public` o `protected`
 
 ### Principio di sostituzione di Liskov
 Una estensione è valida se:
+
 - **Signature**: garantita dal compiler 
 - **Metodi**: eredita la specifica con al più le seguenti modifiche:
     - pre-condizioni meno restrittive (`X || Y` e `Y ==> X`)
