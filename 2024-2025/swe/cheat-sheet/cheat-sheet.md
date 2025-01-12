@@ -448,6 +448,7 @@ Stream.concat(Stream<T> x, Stream<T> y) -> Stream<T>
 .filter(Predicate<T>) -> Stream<T>
 .takeWhile(Predicate<T>) -> Stream<T>
 .dropWhile(Predicate<T>) -> Stream<T>
+.anyMatch(Predicate<T>) -> boolean
 .allMatch(Predicate<T>) -> boolean
 .noneMatch(Predicate<T>) -> boolean
 ```
