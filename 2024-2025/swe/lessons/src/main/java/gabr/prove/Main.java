@@ -20,6 +20,7 @@ import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 public class Main {
+
 	public static void main(String[] args) {
 		List<Integer> l = new ArrayList<>();
 		System.out.println(l.stream().findFirst().isEmpty());
@@ -82,17 +83,16 @@ public class Main {
 		m.entrySet().stream().map(x -> x.getKey());
 		System.out.println(m.get(1));
 
+		String s;
+
 		List<Integer> ld = Arrays.asList(1, 2, 1);
 		System.out.println(ld.stream().max(Comparator.naturalOrder()).get());
 		System.out.println(ld.stream().max(Comparator.naturalOrder()));
 		System.out.println(Double.MAX_VALUE);
 		List<Integer> lx = ld.stream().collect(ArrayList<Integer>::new, (x, y) -> x.add(y), (x, y) -> x.addAll(y));
 		Optional<Integer> opt;
-		opt.filter();
 
 		List<String> vowels = List.of("a", "e", "i", "o", "u");
-		vowels.stream().collect(Collectors.toMap(x -> x.foo(),
-				x -> x.bar()));
 
 		ArrayList<String> al = new ArrayList<>();
 		al.add(0, "2");
@@ -103,7 +103,8 @@ public class Main {
 		String result = vowels.stream().collect(StringBuilder::new, (x, y) -> x.append(y),
 				(a, b) -> a.append(",").append(b)).toString();
 		System.out.println(result);
-		StringBuilder result1 = vowels.parallelStream().collect(StringBuilder::new, (x, y) -> x.append(y),
+		StringBuilder result1 = vowels.parallelStream().collect(StringBuilder::new,
+				(x, y) -> x.append(y),
 				(a, b) -> a.append(",").append(b));
 		System.out.println(result1.toString());
 
@@ -122,4 +123,51 @@ public class Main {
 
 		PrintStream x = new PrintStream(System.out);
 	}
+
+	/*
+	 * class Veicolo {
+	 * protected void accensione(int tempoMax) {
+	 * System.out.println("accensione-Veicolo in " + tempoMax);
+	 * }
+	 * 
+	 * public void spegnimento() {
+	 * System.out.println("spengo-Veicolo");
+	 * }
+	 * }
+	 * 
+	 * class VeicoloAMotore extends Veicolo {
+	 * public void accensione(int tempoMax) {
+	 * System.out.println("accensione-VeicoloAMotore in " + tempoMax);
+	 * }
+	 * 
+	 * public void spegnimento(int tempo) {
+	 * System.out.println("spengo-VeicoloAMotore");
+	 * }
+	 * }
+	 * 
+	 * public class Motociclo extends VeicoloAMotore {
+	 * public void accensione(double tempoMax) {
+	 * System.out.println("accensione-Motociclo in " + tempoMax);
+	 * }
+	 * 
+	 * public void spegnimento() {
+	 * System.out.println("spengo-MotoCiclo");
+	 * }
+	 * }
+	 * 
+	 * public static void main(String[] args) {
+	 * Veicolo v = new Main().new Veicolo();
+	 * Veicolo v1 = new Main().new VeicoloAMotore();
+	 * VeicoloAMotore vm2 = new Main().new Motociclo();
+	 * v.accensione(3);
+	 * v1.accensione(3);
+	 * vm2.accensione(3);
+	 * v.spegnimento();
+	 * v1.spegnimento();
+	 * vm2.spegnimento();
+	 * vm2.spegnimento(2);
+	 * Motociclo m = new Main().new Motociclo();
+	 * m.accensione(2.0);
+	 * }
+	 */
 }

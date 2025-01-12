@@ -13,7 +13,9 @@ toc: true
 ## Keywords
 - `final`: attributo immutabile (**deve** essere inizializzato nel costruttore)
 - `final`: metodo che non può essere sovrascritto
-- `static`: si chiama sulla classe, non sugli oggetti
+- `static`: il metodo viene chiamato senza instanziare un oggetto, 
+    ma direttamente sulla classe
+    <!-- (idem `static class` viene chiamata senza instanziare la classe) -->
 - di default tutto inizializzato a `0` o `null`
 - `switch`:
 ```java
@@ -51,9 +53,9 @@ public class Main {
 
 ## Visibilità
 - `public`: visibile a tutti 
-- `protected`: le sottoclassi e tutto il package ci possono accedere 
-- "friendly" by default: visibile a tutte le clasi interne allo stesso package
-- `private`: visibile solo nella classe stessa (non nelle sottoclassi)
+- `protected`: visibile alle sottoclassi e nel package
+- "friendly" by default: visibile nel package
+- `private`: visibile solo alla classe stessa (non nelle sottoclassi)
 
 ## Object
 - Ogni classe è figlia di `Object`, che definisce i seguenti metodi:
@@ -383,7 +385,6 @@ Stream.concat(Stream<T> x, Stream<T> y) -> Stream<T>
 .iterator() -> Iterator<T>
 .findFirst() -> Optional<T>
 .findAny() -> Optional<T>
-.sorted() -> Stream<T>
 .distinct() -> Stream<T>
 .count() -> int
 .toArray() -> T[]
@@ -452,10 +453,11 @@ Stream.concat(Stream<T> x, Stream<T> y) -> Stream<T>
 ```
 - Comparator
 ```java
+.sorted() -> Stream<T>
 .sorted(Comparator<T>) -> Stream<T>
 .min(Comparator<T>) -> Optional<T>
 .max(Comparator<T>) -> Optional<T>
-    .max((a, b) -> Float.compare(b.foo(), b.foo())) 
+    .max((a, b) -> Float.compare(a.foo(), b.foo())) 
         -> Optional<T>
     .max(Comparator.naturalOrder()) -> Optional<T>
 ```
@@ -784,6 +786,33 @@ Optional.empty() -> Optional<T>
 .filter(Predicate<T>) -> Optional<T>
 ```
 
+## String
+- Setter
+```java
+.replace(String regex, String) -> String
+.replaceFirst(String, String) -> String
+.concat(String) -> String
+.toUpperCase(String) -> String
+.toLowerCase(String) -> String
+```
+
+- Getters
+```java
+.length() -> int
+.isEmpty() -> boolean
+.contains(char) -> boolean
+.charAt(int idx) -> char
+.lastIndexOf(int ch) -> int // `-1` if not found
+.lastIndexOf(String) -> int // `-1` if not found
+.matches(String regex) -> boolean
+.indexOf(String) -> int
+.lastIndexOf(String) -> int
+.compareTo(String) -> int
+.compareToIgnoreCase(String) -> int
+.lines() -> Stream<String>
+.chars() -> IntStream
+```
+
 ## Math
 - `int` si auto-casta a `double`, ma non viceversa
 ```java
@@ -793,11 +822,12 @@ Math.abs(double x);
 Math.ceil(double x);
 Math.floor(double x);
 System.out.println(double);  // .0
+Integer.compare(int x, int y);
+Double.sum(int x, int y);
 Integer.MIN_VALUE
 Double.MAX_VALUE
 ```
 
-\newpage
 # IO
 - new
 ```java
@@ -832,6 +862,7 @@ PrintStream out = new PrintStream(new File("file");
     - `x || y` => 1_, 01, 00
 - **path coverage**: ogni possibile cammino, da inzio a fine, nella funzione
 
+\newpage
 # Esercizio ereditarietà
 1) ricopia i metodi: **attenzione** a `this` e `super` nei metodi ereditati
     - `this` è ricopiato con un cast alla classe da cui viene ereditato
@@ -846,10 +877,11 @@ PrintStream out = new PrintStream(new File("file");
 2) scegli il metodo statico:
     - considera il tipo statico (più specializzato) del chiamante
     - considera il tipo statico (più specializzato) degli argomenti
+    - (cast come `int` -> `float` avvengono solo dopo che 
+        non si trovano match con `int`)
 3) guardando il tipo dinamico, scegli l'Override più specializzato
 
 
-\newpage
 # JML
 ## Sezioni
 - I metodi `ground` sono il più piccolo insieme di metodi puri  
@@ -907,7 +939,6 @@ allora:
 - posso definire funzioni: `f1(x) == x.size()`
     - e queste possono anche essere ricorsive
 
-\newpage
 ## Estensioni
 - **Estensione pura** che non modifica la specifica dei metodi ereditati
     - la sottoclasse può usare sono metodi `public` o `protected`
