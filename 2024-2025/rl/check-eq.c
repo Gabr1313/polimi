@@ -10,17 +10,13 @@ typedef unsigned long u64;
 #define D (i & v[N - 4])
 // #define E (i & v[N - 5])
 
-#define FORMULA_1 (!(A || (A && !B) || (C && D)))
-#define FORMULA_2 ((!A && !C) || (!A && !D))
-
-#define FORMULA_3 (A && B && !C || B && C || !A && !B && C)
-#define FORMULA_4 (A && B || !A && C)
+#define FORMULA_1 ((!A && B && !C) || (A && B && D && !C))
+#define FORMULA_2 ((!A && B && !C) || (B && D && !C))
 
 int main() {
     u64 v[N];
     for (u64 i = 0; i < N; i++) v[i] = (1 << i);
     for (u64 i = 0; i < (1 << N); i++) assert(FORMULA_1 == FORMULA_2);
-    for (u64 i = 0; i < (1 << N); i++) assert(FORMULA_3 == FORMULA_4);
     printf("\n");
     return 0;
 }

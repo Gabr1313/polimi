@@ -63,8 +63,10 @@ create table Domini (
     -- bigint
     o bigint,
     -- blob
-    p blob
+    p blob,
     -- ?? clob
+	-- enum
+	q enum('foo', 'bar')
 );
 
 -- create domain `name` as `elementar domain` [`default` `x`][`constraints`]
@@ -82,7 +84,7 @@ create table Domini (
 --     primary key                -- dopo il dominio
 --     primary key(`attr`, `...`) -- alla fine
 --     unique                     -- ~primary eky
---     check `query`
+--     check (`query`)
 create table Studente (
     Matr    char(6)     primary key,
     Nome    varchar(30) not null,
@@ -266,11 +268,12 @@ select distinct X.nome from Studente as X, Esame as Y
 -- order by `attr` [<asc | desc>] [, `attr` [<asc | desc>]]
 -- ovviamente gli `attr` di `oder by` appartengono a quelli della `select`
 select * from Esame order by Voto;
+select * from Esame order by Voto desc, Data asc;
 
 -- QUERY CON AGGREGAZIONE
 --     count(<* | [distinct | all] attr [, attr]>)
 --     all considera tutti i valori diversi da `null`
---     (`all` e' di default, ma mettilo che i prof sono felici quando potrebbero
+--     (`all` è di default, ma mettilo che i prof sono felici quando potrebbero
 --      esserci valori nulli)
 select count(distinct Matr) from Esame;
 --     <sum | max | min | avg>([distinct | all] attr [, attr])
@@ -295,6 +298,7 @@ select S.Matr, E.voto, count(*)
 
 -- QUERY BINARIE
 -- `query` <union [all] | except [all] | intersect>`query`
+--     `all` include i duplicati
 select Nome from Studente where Citta like "B%"
     union all -- se duplicate, ripete le tuple
     select Nome from Studente where CSS = "Inf";
@@ -561,36 +565,38 @@ delimiter ;
 -- ORDINE ESECUZIONE: from - where - group by - having (sui gruppi) - select
 -- specifica quando prendi decisioni sulla semantica
 -- se un nome è ambiguo, si fa riferimento al più vicino (non usare nomi ambigui)
--- `select A, count(*)` senza `group by`
--- `select A, count(*) group by B` se A non e' univoco per B
 -- `max(count(*))` aggregati di aggregati non esistono
 -- gli aggregati possono essere usati senza `group by` se riferiti a tutta la
 --     tabella
 -- `where count(*)` aggregati nella clausola where (violazione dell'ordine
 --      temporale: la `where` viene interpretata prima dell'aggregato)
--- `having max(x)` non e' un predicato!
--- `having count(*) = 0` se non c'e' il gruppo, e' vuoto!
+-- `having max(x)` non è un predicato!
+-- `having count(*) = 0` se non c'è il gruppo, è vuoto!
 -- `group by` vuole che nella select ci siano solo parametri univoci
---            percio' e' suggerito mettere solo aggregati o attributi della 
+--            perciò è suggerito mettere solo aggregati o attributi della 
 --            group by nella select
--- `count(x1 = x2)`, count puo' prendere in ingresso solo
+-- `count(x1 = x2)`, count può prendere in ingresso solo
 --      `*`, `[disinct] attr`, `all`
 -- `count(*)` conta anche i null
 -- clausole where contradditorie
 -- preferisci il `join` al prodotto cartesiano
--- la select puo' anche associare delle costanti ai campi, oltre agli attributi
--- le query possono essere inserite anche in una select, purche' restituiscano
+-- la select può anche associare delle costanti ai campi, oltre agli attributi
+-- le query possono essere inserite anche in una select, purchè restituiscano
 --     valori unitari
+select sid, ( select count(*)
+              from exam
+              where sid = S.sid ) as Passed, Name
+from student S
+group by sid;
 -- meglio evitare le query nella clausola from: usa le view
 -- DATEDIFF(data1, data2): ritorna la diffenenza il giorni
 -- YEAR(data): ritorna l'anno
 -- coalesce(a,b,c,d): diventa il primo valore diverso da null tra a,b,c,d
 select avg(coalesce(DataResa, Today()) - DataPrestito)
 from Prestito;
--- anche se la having e' valutata prima della select, si puo' fare
+-- anche se la having è valutata prima della select, si può fare
 select sum(grade*credits)/sum(credits) as wgpa
 from exam E join course on cid=courseid
--- where E.sid = S.sid
 group by sid
 having wgpa > 24.5;
 -- posso imporre che gli attributi debbano essere uguali a coppie
@@ -598,12 +604,6 @@ select * from course join mdoa on (year,credits) = (y,c);
 -- la query "quanti esami ha dato ogni studente", deve tenere conto anche di
 --     coloro che ne hanno dati 0! usa `coalesce` (o `count(examId)`)
 --     con un `left join`, o `union`
--- sintassi interessante:
-select sid, ( select count(*)
-              from exam
-              where sid = S.sid ) as Passed, Name
-from student S
-group by sid;
 -- per dire "non compare 2 volte ..."
 --     `group by having count(attr) = count(distinct attr)`
 --      (usa il left join per comprendere anche coloro che non matchano)
@@ -611,5 +611,7 @@ group by sid;
 --     dove doppi = util X join util Y on 
 --                  (X.id = Y.id and X.data != Y.data)
 -- intervalli di tempi sovrapposti:
---     not (A.end <  B.start or  B.end <  A.start) 
---         (A.end >= B.start and B.end >= A.start)
+--     - not (A.end <  B.start or  B.end <  A.start) 
+--     -     (A.end >= B.start and B.end >= A.start)
+-- `is null`, non usare `= null`
+-- `count(distinct attr1, attr2)`
