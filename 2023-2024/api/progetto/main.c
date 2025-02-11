@@ -1,12 +1,11 @@
-#define NDEBUG                           // no asserts
-#define CAP_EXP        2                 // >= 1 allocated once
-#define CAP            4                 // >= 1 allocated once
-#define WORD_LEN       256               // max word length
-#define BUFF_LEN       (WORD_LEN * 257)  // > 2
-#define CHECK_SHIFT    5                 // found empirically
-#define PRE_FETCH_DIST 16                // found empirically
-#define P1(x)          __builtin_expect(x, 1)
-#define P0(x)          __builtin_expect(x, 0)
+#define NDEBUG                        // no asserts
+#define CAP_LOG2    2                 // >= 1 allocated once
+#define CAP         4                 // >= 1 allocated once
+#define WORD_LEN    256               // max word length
+#define BUFF_LEN    (WORD_LEN * 257)  // > 2
+#define CHECK_SHIFT 5                 // found empirically
+#define P1(x)       __builtin_expect(x, 1)
+#define P0(x)       __builtin_expect(x, 0)
 
 #include <assert.h>
 #include <stdint.h>
@@ -78,10 +77,10 @@ VecQ    wait_queue;
 Heap    to_deliver, truck;
 int     last_char;
 
-HashMap hm_new(u32 cap_exp, void (*free_inner)(void *inner)) {
+HashMap hm_new(u32 cap_log2, void (*free_inner)(void *inner)) {
     HashMap hm = {
         .size       = 0,
-        .cap        = 1 << cap_exp,
+        .cap        = 1 << cap_log2,
         .free_inner = free_inner,
         .buckets    = calloc(hm.cap, sizeof(*hm.buckets)),
     };
@@ -580,8 +579,8 @@ void parse_input_and_calc() {
 }
 
 int main(void) {
-    warehouse      = hm_new(CAP_EXP, shelf_free);
-    cookbook       = hm_new(CAP_EXP, recipe_free);
+    warehouse      = hm_new(CAP_LOG2, shelf_free);
+    cookbook       = hm_new(CAP_LOG2, recipe_free);
     wait_queue     = vecq_new(CAP);
     to_deliver     = heap_new(CAP, sizeof(Food), food_less_time);
     truck          = heap_new(CAP, sizeof(Food), food_more_weight);
