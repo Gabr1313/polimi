@@ -1,5 +1,5 @@
 #define NDEBUG                        // no asserts
-#define CAP_LOG2    2                 // >= 1 allocated once
+#define CAP_EXP     2                 // >= 1 allocated once
 #define CAP         4                 // >= 1 allocated once
 #define WORD_LEN    256               // max word length
 #define BUFF_LEN    (WORD_LEN * 257)  // > 2
@@ -77,10 +77,10 @@ VecQ    wait_queue;
 Heap    to_deliver, truck;
 int     last_char;
 
-HashMap hm_new(u32 cap_log2, void (*free_inner)(void *inner)) {
+HashMap hm_new(u32 cap_exp, void (*free_inner)(void *inner)) {
     HashMap hm = {
         .size       = 0,
-        .cap        = 1 << cap_log2,
+        .cap        = 1 << cap_exp,
         .free_inner = free_inner,
         .buckets    = calloc(hm.cap, sizeof(*hm.buckets)),
     };
@@ -436,23 +436,14 @@ static inline void test_2(VecQ w, VecQ *v, u32 i) {  // @perf inline
 
 void wq_check(VecQ *v) {
     VecQ w = *v;
-    u32  i;
-    u32  end_1 = (w.size > PRE_FETCH_DIST ? w.size - PRE_FETCH_DIST : 0);
-    u32  end_2 = w.size;
-    // @perf: either of the 2 alternatives can be deleted (with slightly wortst performance)
+    u32  end = w.size;
     if (v->del << CHECK_SHIFT > v->size) {
         u32 j = 0;
-        for (i = 0; i < end_1; i++) {
-            j = test_1(w, v, i, j);
-        }
-        for (; i < end_2; i++) j = test_1(w, v, i, j);
+        for (u32 i = 0; i < end; i++) j = test_1(w, v, i, j);
         v->size = j;
         v->del  = 0;
     } else {
-        for (i = 0; i < end_1; i++) {
-            test_2(w, v, i);
-        }
-        for (; i < end_2; i++) test_2(w, v, i);
+        for (u32 i = 0; i < end; i++) test_2(w, v, i);
     }
 }
 
@@ -579,8 +570,8 @@ void parse_input_and_calc() {
 }
 
 int main(void) {
-    warehouse      = hm_new(CAP_LOG2, shelf_free);
-    cookbook       = hm_new(CAP_LOG2, recipe_free);
+    warehouse      = hm_new(CAP_EXP, shelf_free);
+    cookbook       = hm_new(CAP_EXP, recipe_free);
     wait_queue     = vecq_new(CAP);
     to_deliver     = heap_new(CAP, sizeof(Food), food_less_time);
     truck          = heap_new(CAP, sizeof(Food), food_more_weight);
