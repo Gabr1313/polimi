@@ -8,14 +8,14 @@
 | Reti Logiche                                       | [_(RL)_](rl/)             | Fornaciari William   |  5  |  28  |
 | Basi di Dati                                       | [_(DB)_](db/)             | Ceri Stefano         |  5  |  30  |
 | Fondamenti di Ricerca Operativa                    | [_(FRO)_](fro/)           | Carello Giuliana     |  5  |  30  |
-| GPU101                                             | [_(GPU101)_](gpu101/)     | Branchini Beatrice   |  -  |   -  |
+| GPU101 (Passion in action)                         | [_(GPU101)_](gpu101/)     | Branchini Beatrice   |  -  |   -  |
 
 ## Quarto semestre:
 
 | Corso                                              | Link                      | Professore                | CFU | Voto |
 | :-:                                                | :-:                       | :-:                       | :-: | :-:  |
-| Economica e organizzazione azienadale              | [_(EOA)_](eoa/)           | Lucini Paioni Alessandro  |  8  |      |
-| Progetto di Ingegneria Informatica                 | [_(PII)_](pii/)           | Barenghi Alessandro       |  5  |      |
-| Fondamenti di Calcolo Numerico                     | [_(FCN)_](fcn/)           | Botti Michele             |  5  |      |
-| Progetto di Reti Logiche                           | [_(PFRL)_](pfrl/)         | Fornaciari William        |  1  |      |
-| Progetto di Ingegneria del Software                | [_(PINGSW)_](pingsw/)     | Margara Alessandro        |  3  |      |
+| Economica e organizzazione azienadale              | [_(EOA)_](eoa/)           | Lucini Paioni Alessandro  |  8  | 30L  |
+| Progetto di Ingegneria Informatica                 | [_(PII)_](pii/)           | Barenghi Alessandro       |  5  | 30L  |
+| Fondamenti di Calcolo Numerico                     | [_(FCN)_](fcn/)           | Botti Michele             |  5  | 30   |
+| Progetto di Reti Logiche                           | [_(PFRL)_](rl/progetto)   | Fornaciari William        |  1  | 30L  |
+| Progetto di Ingegneria del Software                | [_(PINGSW)_](pingsw/)     | Margara Alessandro        |  3  | 30L  |

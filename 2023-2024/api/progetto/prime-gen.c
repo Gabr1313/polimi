@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 // #define N 79
-#define N 74051119
+#define N 257
 
 int is_prime(uint64_t n) {
     uint64_t p, i;
