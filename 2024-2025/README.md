@@ -1,4 +1,4 @@
-## Terzo Semestre:
+## Quinto Semestre:
 
 | Corso                                              | Link                      | Professore           | CFU | Voto |
 | :-:                                                | :-:                       | :-:                  | :-: | :-:  |
@@ -10,7 +10,7 @@
 | Fondamenti di Ricerca Operativa                    | [_(FRO)_](fro/)           | Carello Giuliana     |  5  |  30  |
 | GPU101 (Passion in action)                         | [_(GPU101)_](gpu101/)     | Branchini Beatrice   |  -  |   -  |
 
-## Quarto semestre:
+## Sesto semestre:
 
 | Corso                                              | Link                      | Professore                | CFU | Voto |
 | :-:                                                | :-:                       | :-:                       | :-: | :-:  |
